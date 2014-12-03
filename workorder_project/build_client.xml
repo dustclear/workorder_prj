@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project name="cxf_wsdl2java" basedir=".">  
+   <property name="cxf.home" location ="${basedir}/WebRoot/WEB-INF/"/>
+   <path id="cxf.classpath">
+      <fileset dir="${cxf.home}/lib">
+         <include name="*.jar"/>
+      </fileset>
+   </path>     
+   <target name="cxfWSDLToJava">
+      <java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+         <arg value="-d"/>
+         <arg value="src"/>
+      	 <arg value="-p"/>
+      	 <arg value="com.wos.client.stub"/>
+         <arg value="http://localhost:8080/workorder_project/webservice/HelloWorld?wsdl"/>
+         <classpath>
+            <path refid="cxf.classpath"/>
+         </classpath>
+      </java>
+   </target>
+</project>

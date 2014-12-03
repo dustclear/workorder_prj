@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project default="genfiles" basedir=".">
+	<path id="build">
+		<fileset dir="${basedir}\WebRoot\WEB-INF\lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<property name="generated.source.dir" value="${basedir}" />
+
+	<target name="genfiles" description="Generate the files">
+		<taskdef name="mbgenerator" classname="org.mybatis.generator.ant.GeneratorAntTask">
+			<classpath refid="build" />
+		</taskdef>
+		<!--configfile：填你MBG文件名  -->
+		<mbgenerator overwrite="true" configfile="generatorConfig.xml" verbose="false">
+			<propertyset>
+				<propertyref name="generated.source.dir" />
+			</propertyset>
+		</mbgenerator>
+	</target>
+</project>
+

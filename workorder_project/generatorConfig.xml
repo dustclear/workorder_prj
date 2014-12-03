@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<classPathEntry location="WebRoot\WEB-INF\lib/sqljdbc4.jar" />
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+		<jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			connectionURL="jdbc:sqlserver://localhost:1433;databaseName=other_temp" userId="sa"
+			password="sasa">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<!-- 只有一个属于forceBigDecimals，默认false。如果字段精确超过0，生成BigDecimal 如果字段精确是0，总长度10-18生成Long; 
+				如果字段精确是0，总长5-9生成Integer; 如果字段精确是0，总长小于5生成Short; 如果forceBigDecimals为true,统一生成BigDecimal -->
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- Model生成配置 targetPackage：生成包路径，可自己生成目录 targetProject：项目路经，我试过写成"\mybatis"，但总是报找不到，不知原因。 
+			我换成写绝对目录，行的通。 -->
+		<javaModelGenerator targetPackage="com.wos.pojo"
+			targetProject="src">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- sqlMap配置 重复配置，不再提示，下同 -->
+		<sqlMapGenerator targetPackage="com.wos.dao.mapper"
+			targetProject="src">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+		<!-- DAO接口的生成 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.wos.dao.mapper" targetProject="src">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+		<!-- table 数据库table的用户配置，用于配置哪些表需要。 domainObjectName:生成表前缀 -->
+		<table schema="dbo" tableName="AOS_BD_ENUMERATE" domainObjectName="EnumerateInfo" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="AOS_RMS_USER" domainObjectName="RmsUser" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="CM_AreaClass" domainObjectName="AreaClass" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="CM_DEPARTMENT" domainObjectName="Department" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="cm_employee" domainObjectName="employee" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="CM_Material" domainObjectName="Material" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_AddressType" domainObjectName="AddressType" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_Contact" domainObjectName="ContactInfo" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_EnterpriseAddress" domainObjectName="EnterpriseAddress" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_EnterpriseContacts" domainObjectName="EnterpriseContacts" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_EnterpriseManagement" domainObjectName="EnterpriseBaseInfo" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_ExtendedAttribute" domainObjectName="ExtendedAttribute" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_PositionType" domainObjectName="PositionType" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="ITSM_BASE_SURVEY" domainObjectName="Survey" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_SurveyDetail" domainObjectName="SurveyDetail" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_base_TaxOrganization" domainObjectName="TaxOrganization" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_ChargeType" domainObjectName="ChargeType" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_Configuration" domainObjectName="ConfigInfo" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="ITSM_SERVICE_CONFIGUREMANAGEME" domainObjectName="ConfigMgtInfo" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_ConManagerExpand" domainObjectName="ConfigExpandInfo" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_EventManagement" domainObjectName="EventInfo" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_InstallDocuCofing" domainObjectName="InstallDocuCofig" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_InstallDocuDetail" domainObjectName="InstallDocuDetail" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_InstallDocument" domainObjectName="InstallDocument" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_MaintainDocument" domainObjectName="MaintainDocument" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="itsm_service_ServiceResponse" domainObjectName="ServiceResponse" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+		<table schema="dbo" tableName="META_ENTITY" domainObjectName="MetaEntity" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table>
+
+	</context>
+</generatorConfiguration>
+
