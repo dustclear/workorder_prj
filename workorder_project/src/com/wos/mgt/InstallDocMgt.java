@@ -7,14 +7,15 @@ import javax.jws.WebService;
 import com.wos.pojo.ConfigInfo;
 import com.wos.pojo.ContactInfo;
 import com.wos.pojo.EnterpriseAddress;
-import com.wos.pojo.EventInfo;
 import com.wos.pojo.ExtendedAttribute;
+import com.wos.pojo.InstallDocument;
 import com.wos.pojo.TaxOrganization;
  
 @WebService
 public interface InstallDocMgt {
-	public EventInfo loadEventByCode(String eventCodeText);
-	
+    
+    public InstallDocument loadInstallDocumentByEventCode(String eventCodeText);
+    
 	//tax organization
 	public List<TaxOrganization> getAllTaxOrganizations();
 	public List<TaxOrganization> getTaxOrganizationsByParentCode(String parentCodeText);
@@ -37,7 +38,7 @@ public interface InstallDocMgt {
 	public Boolean deleteEnterpriseAddress(String addressIdText);
 	public Boolean selectAsCurrentAddress(String currentAddressText);
 	
-	//
+	//extended attributes
 	public List<ConfigInfo> loadAllInstallTypes();
 	public List<ExtendedAttribute> loadAllExtendedAttrs();
 	public Boolean saveExtendedAttrs(String extendedAttrText);

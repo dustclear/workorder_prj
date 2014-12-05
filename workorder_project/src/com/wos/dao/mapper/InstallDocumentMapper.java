@@ -18,4 +18,6 @@ public interface InstallDocumentMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(InstallDocument record);
+    
+    InstallDocument findInstallDocumentByEventCode(String eventCode);
 }

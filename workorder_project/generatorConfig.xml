@@ -33,7 +33,7 @@
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
 		<!-- table 数据库table的用户配置，用于配置哪些表需要。 domainObjectName:生成表前缀 -->
-		<table schema="dbo" tableName="AOS_BD_ENUMERATE" domainObjectName="EnumerateInfo" enableCountByExample="false"  
+		<!-- <table schema="dbo" tableName="AOS_BD_ENUMERATE" domainObjectName="EnumerateInfo" enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
 		</table>
@@ -136,10 +136,8 @@
 		<table schema="dbo" tableName="itsm_service_ServiceResponse" domainObjectName="ServiceResponse" enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
-		</table>
-		<table schema="dbo" tableName="META_ENTITY" domainObjectName="MetaEntity" enableCountByExample="false"  
-            enableDeleteByExample="false" enableSelectByExample="false"  
-            enableUpdateByExample="false">
+		</table> -->
+		<table schema="dbo" tableName="META_ENTITY" domainObjectName="MetaEntity" >
 		</table>
 
 	</context>

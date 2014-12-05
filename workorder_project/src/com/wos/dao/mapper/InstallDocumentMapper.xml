@@ -289,4 +289,8 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="findInstallDocumentByEventCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from itsm_service_InstallDocument where cEventId=#{eventCode} 
+  </select>
 </mapper>
