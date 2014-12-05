@@ -136,9 +136,21 @@
 		<table schema="dbo" tableName="itsm_service_ServiceResponse" domainObjectName="ServiceResponse" enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
-		</table> -->
+		</table> 
 		<table schema="dbo" tableName="META_ENTITY" domainObjectName="MetaEntity" >
-		</table>
+		-->
+		<table schema="dbo" tableName="itsm_service_ServiceResponse" domainObjectName="ServiceResponse" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table> 
+		<table schema="dbo" tableName="itsm_service_InstallTemplate" domainObjectName="InstallTemplate" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table> 
+		<table schema="dbo" tableName="itsm_service_InstallDetail" domainObjectName="InstallDetail" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table> 
 
 	</context>
 </generatorConfiguration>

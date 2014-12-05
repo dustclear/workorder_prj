@@ -8,8 +8,12 @@ import com.google.gson.reflect.TypeToken;
 public class WosHelper
 {
     private static final WosHelper _instance = new WosHelper();
+    
     private static final Gson _gson = new Gson();
-    private WosHelper(){};
+    
+    private WosHelper()
+    {
+    };
     
     public static WosHelper getInstance()
     {
@@ -19,12 +23,21 @@ public class WosHelper
     public String getValueFromJsonText(String jsonText, String keyText)
     {
         Gson gson = new Gson();
-        Map<String, String> retMap = gson.fromJson(jsonText, new TypeToken<Map<String, String>>(){}.getType());
+        Map<String, String> retMap = gson.fromJson(jsonText,
+                new TypeToken<Map<String, String>>()
+                {}.getType());
         return retMap.get(keyText);
     }
     
     public String toJsonText(Object srcObj, Class srcClass)
     {
-        return _gson.toJson(srcObj, srcClass);
+        if (srcClass != null)
+        {
+            return _gson.toJson(srcObj, srcClass);
+        }
+        else
+        {
+            return _gson.toJson(srcObj);
+        }
     }
 }

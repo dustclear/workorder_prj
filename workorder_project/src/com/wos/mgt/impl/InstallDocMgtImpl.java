@@ -4,16 +4,18 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import com.google.gson.Gson;
 import com.wos.common.WosHelper;
 import com.wos.dao.mapper.AddressTypeMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
+import com.wos.dao.mapper.InstallTemplateMapper;
 import com.wos.mgt.InstallDocMgt;
 import com.wos.pojo.ConfigInfo;
 import com.wos.pojo.ContactInfo;
 import com.wos.pojo.EnterpriseAddress;
 import com.wos.pojo.ExtendedAttribute;
+import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
+import com.wos.pojo.InstallTemplate;
 import com.wos.pojo.TaxOrganization;
 
 @WebService(endpointInterface = "com.wos.mgt.HelloWorld")
@@ -21,6 +23,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
 {
     private AddressTypeMapper _addressType;
     private InstallDocumentMapper _installDocumentMapper;
+    private InstallTemplateMapper _insInstallTemplateMapper;
     
     private WosHelper _helper = WosHelper.getInstance();
     
@@ -41,6 +44,22 @@ public class InstallDocMgtImpl implements InstallDocMgt
         InstallDocument doc = _installDocumentMapper.findInstallDocumentByEventCode(eventCode);
         _helper.toJsonText(doc, InstallDocument.class);
         
+        return null;
+    }
+
+    @Override
+    public List<InstallTemplate> getAllInstallTemplates()
+    {
+        List<InstallTemplate> templates = _insInstallTemplateMapper.loadAllInstallTemplates();
+        _helper.toJsonText(templates, null);
+        return null;
+    }
+
+    @Override
+    public List<InstallDocuDetail> selectInstallTemplate(
+            String installTemplateText)
+    {
+        // TODO Auto-generated method stub
         return null;
     }
 
