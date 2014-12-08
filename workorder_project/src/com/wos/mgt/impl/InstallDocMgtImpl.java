@@ -9,6 +9,7 @@ import com.wos.dao.mapper.AddressTypeMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
 import com.wos.mgt.InstallDocMgt;
+import com.wos.pojo.ChargeType;
 import com.wos.pojo.ConfigInfo;
 import com.wos.pojo.ContactInfo;
 import com.wos.pojo.EnterpriseAddress;
@@ -16,6 +17,7 @@ import com.wos.pojo.ExtendedAttribute;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 import com.wos.pojo.InstallTemplate;
+import com.wos.pojo.ServiceResponse;
 import com.wos.pojo.TaxOrganization;
 
 @WebService(endpointInterface = "com.wos.mgt.HelloWorld")
@@ -56,7 +58,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public List<InstallDocuDetail> selectInstallTemplate(
+    public List<InstallDocuDetail> getInstallDetailByTemplate(
             String installTemplateText)
     {
         // TODO Auto-generated method stub
@@ -185,26 +187,26 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public List<ExtendedAttribute> loadAllExtendedAttrs()
+    public List<ChargeType> loadAllChargeTypes()
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Boolean saveExtendedAttrs(String extendedAttrText)
+    public List<ServiceResponse> loadAllServiceResponses()
     {
         // TODO Auto-generated method stub
         return null;
     }
-    
-    
 
-    
-    
-    
-    
-    
+    @Override
+    public List<ExtendedAttribute> loadExtendedAttributesByMatId(
+            String matIdText)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     public AddressTypeMapper getAddressType()
     {
