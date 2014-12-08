@@ -17,7 +17,7 @@ public class WosHelper
     
     public static WosHelper getInstance()
     {
-        return _instance;
+        return _instance; 
     }
     
     public String getValueFromJsonText(String jsonText, String keyText)
