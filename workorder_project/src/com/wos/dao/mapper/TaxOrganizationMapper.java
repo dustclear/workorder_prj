@@ -24,4 +24,6 @@ public interface TaxOrganizationMapper {
     
     List<TaxOrganization> loadAllTaxOrganizations();
     List<TaxOrganization> findTaxOrganizationByName(String orgName);
+    List<TaxOrganization> findTaxOrganizationsByParentCode(String parentId);
+    
 }

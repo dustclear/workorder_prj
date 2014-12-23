@@ -312,4 +312,14 @@
       </if>
     </trim>
   </insert>
+  
+  
+  <select id="findContactInfoByEnterpriseId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * FROM itsm_base_Contact WHERE cGUID IN 
+		(SELECT cContactID FROM itsm_base_EnterpriseContacts WHERE cEnterpriseID = #{enterpriseId} )
+  </select>
+  
+  <select id="findContactInfoById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * FROM itsm_base_Contact WHERE cGUID = #{cguid}
+  </select>
 </mapper>

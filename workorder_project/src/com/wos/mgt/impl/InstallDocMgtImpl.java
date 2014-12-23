@@ -57,65 +57,64 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public List<InstallTemplate> getAllInstallTemplates()
+    public String getAllInstallTemplates()
     {
         List<InstallTemplate> templates = installTemplate.loadAllInstallTemplates();
-        _helper.toJsonText(templates, null);
-        return null;
+        
+        return _helper.toJsonText(templates, null);
     }
 
     @Override
-    public List<InstallDocuDetail> getInstallDetailByTemplate(
+    public String getInstallDetailByTemplate(
             String argInstallTemplateText)
     {
         String installTemplate = _helper.getValueFromJsonText(argInstallTemplateText, "installTemplate");
         List<InstallDocuDetail> installDocuDetails = installDocuDetail.findInstallDetailByTemplate(installTemplate);
-        _helper.toJsonText(installDocuDetails, null);
         
-        return null;
+        return _helper.toJsonText(installDocuDetails, null);
     }
 
     @Override
-    public List<TaxOrganization> getAllTaxOrganizations()
+    public String getAllTaxOrganizations()
     {
         List<TaxOrganization> taxOrganizations = taxOrganization.loadAllTaxOrganizations();
-        _helper.toJsonText(taxOrganizations, null);
-        return null;
+        return _helper.toJsonText(taxOrganizations, null);
     }
 
     @Override
-    public List<TaxOrganization> getTaxOrganizationsByParentCode(
-            String argParentCodeText)
+    public String getTaxOrganizationsByParentId(
+            String argParentIdText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        String parentId = _helper.getValueFromJsonText(argParentIdText, "cparentid");
+        List<TaxOrganization> taxOrganizations = taxOrganization.findTaxOrganizationsByParentCode(parentId);
+        return _helper.toJsonText(taxOrganizations, null);
     }
 
     @Override
-    public List<TaxOrganization> getTaxOrganizationsByName(String argOrgNameText)
+    public String getTaxOrganizationsByName(String argOrgNameText)
     {
         String orgName = _helper.getValueFromJsonText(argOrgNameText, "cName");
         List<TaxOrganization> taxOrganizations = taxOrganization.findTaxOrganizationByName(orgName);
-        _helper.toJsonText(taxOrganizations, null);
-        return null;
+        
+        return _helper.toJsonText(taxOrganizations, null);
     }
 
     @Override
-    public List<ContactInfo> getEnterpriseContactInfo(String argEnterpriseIdText)
+    public String getEnterpriseContactInfo(String argEnterpriseIdText)
     {
         String enterpriseId = _helper.getValueFromJsonText(argEnterpriseIdText, "cEnterpriseID");
-//        List<ContactInfo> contactInfos = _contactInfoMapper.findContactInfoByEnterpriseId(enterpriseId);
-//        _helper.toJsonText(contactInfos, null);
-        return null;
+        List<ContactInfo> contactInfos = contactInfo.findContactInfoByEnterpriseId(enterpriseId);
+        
+        return _helper.toJsonText(contactInfos, null);
     }
 
     @Override
-    public ContactInfo getContactInfoById(String argContactIdText)
+    public String getContactInfoById(String argContactIdText)
     {
         String contactInfoId = _helper.getValueFromJsonText(argContactIdText, "cGUID");
-//        List<ContactInfo> contactInfos = _contactInfoMapper.findContactInfoById(contactInfoId);
-//        _helper.toJsonText(contactInfos.get(0), null);
-        return null;
+        List<ContactInfo> contactInfos = contactInfo.findContactInfoById(contactInfoId);
+        
+        return _helper.toJsonText(contactInfos.get(0), null);
     }
 
     @Override

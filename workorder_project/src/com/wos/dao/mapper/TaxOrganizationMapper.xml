@@ -132,5 +132,11 @@
   <select id="findTaxOrganizationByName" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select * from itsm_base_TaxOrganization where cName=#{orgName} 
   </select>
+  <select id="loadAllTaxOrganizations" resultMap="BaseResultMap">
+		select * from itsm_base_TaxOrganization
+  </select>
+  <select id="findTaxOrganizationsByParentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from itsm_base_TaxOrganization where cParentID=#{parentId} 
+  </select>
   
 </mapper>

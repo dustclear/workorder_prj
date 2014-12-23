@@ -26,8 +26,8 @@ public interface InstallDocMgt
     public String loadInstallDocumentByEventCode(String eventCodeText);
     
     //template
-    public List<InstallTemplate> getAllInstallTemplates();    
-    public List<InstallDocuDetail> getInstallDetailByTemplate(
+    public String getAllInstallTemplates();    
+    public String getInstallDetailByTemplate(
             String installTemplateText);
     
     //address info
@@ -39,14 +39,14 @@ public interface InstallDocMgt
     public Boolean selectAsCurrentAddress(String currentAddressText);
     
     //tax organization
-    public List<TaxOrganization> getAllTaxOrganizations();    
-    public List<TaxOrganization> getTaxOrganizationsByParentCode(
-            String parentCodeText);    
-    public List<TaxOrganization> getTaxOrganizationsByName(String orgNameText);
+    public String getAllTaxOrganizations();    
+    public String getTaxOrganizationsByParentId(
+            String parentIdText);    
+    public String getTaxOrganizationsByName(String orgNameText);
     
     //contact info
-    public List<ContactInfo> getEnterpriseContactInfo(String enterpriseIdText);    
-    public ContactInfo getContactInfoById(String contactIdText);    
+    public String getEnterpriseContactInfo(String enterpriseIdText);    
+    public String getContactInfoById(String contactIdText);    
     public Boolean saveTelephone(String telephonesText);    
     public Boolean saveCellphone(String cellPhonesText);    
     public Boolean addContactInfo(String contactInfoText);    

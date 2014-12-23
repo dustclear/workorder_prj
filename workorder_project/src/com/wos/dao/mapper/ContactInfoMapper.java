@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.ContactInfo;
 
 public interface ContactInfoMapper {
@@ -18,4 +20,8 @@ public interface ContactInfoMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(ContactInfo record);
+    
+    List<ContactInfo> findContactInfoByEnterpriseId(String enterpriseId);
+    List<ContactInfo> findContactInfoById(String cguid);
+    
 }
