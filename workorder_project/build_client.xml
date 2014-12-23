@@ -12,7 +12,7 @@
          <arg value="src"/>
       	 <arg value="-p"/>
       	 <arg value="com.wos.client.stub"/>
-         <arg value="http://localhost:8080/workorder_project/webservice/HelloWorld?wsdl"/>
+         <arg value="http://localhost:8080/workorder_project/ws/InstallDocument?wsdl"/>
          <classpath>
             <path refid="cxf.classpath"/>
          </classpath>

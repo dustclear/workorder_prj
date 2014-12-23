@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.ChargeType;
 
 public interface ChargeTypeMapper {
@@ -50,4 +52,6 @@ public interface ChargeTypeMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int updateByPrimaryKey(ChargeType record);
+    
+    List<ChargeType> loadAllChargeTypes();
 }

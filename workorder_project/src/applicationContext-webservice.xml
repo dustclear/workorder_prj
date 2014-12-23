@@ -11,12 +11,26 @@
         ">
 
 	<!-- webservice start -->
-	<bean id="hello" class="com.wos.mgt.impl.HelloWorldImpl" >
+	<!-- <bean id="hello" class="com.wos.mgt.impl.HelloWorldImpl" >
 		<property name="addressType" ref="addressTypeMapper"/>
 	</bean>
 
 	<jaxws:endpoint id="helloWorld" implementor="#hello"
-		address="/HelloWorld" />
+		address="/HelloWorld" /> -->
+		
+	<bean id="installDoc" class="com.wos.mgt.impl.InstallDocMgtImpl" >
+		<property name="addressType" ref="addressTypeMapper"/>
+		<property name="installDocument" ref="installDocumentMapper"/>
+		<property name="installTemplate" ref="installTemplateMapper"/>
+		<property name="installDocuDetail" ref="installDocuDetailMapper"/>
+		<property name="taxOrganization" ref="taxOrganizationMapper"/>
+		<property name="configInfo" ref="configInfoMapper"/>
+		<property name="chargeType" ref="chargeTypeMapper"/>
+		<property name="serviceResponse" ref="serviceResponseMapper"/>
+		<property name="contactInfo" ref="contactInfoMapper"/>
+	</bean>
 
+	<jaxws:endpoint id="installDocMgt" implementor="#installDoc"
+		address="/InstallDocument" />
 
 </beans>

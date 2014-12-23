@@ -29,6 +29,7 @@ public class WosHelper
         return retMap.get(keyText);
     }
     
+    
     public String toJsonText(Object srcObj, Class srcClass)
     {
         if (srcClass != null)

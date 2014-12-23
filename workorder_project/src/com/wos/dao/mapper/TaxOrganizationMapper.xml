@@ -128,4 +128,9 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="findTaxOrganizationByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from itsm_base_TaxOrganization where cName=#{orgName} 
+  </select>
+  
 </mapper>

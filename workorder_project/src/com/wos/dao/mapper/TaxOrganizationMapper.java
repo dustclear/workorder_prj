@@ -1,5 +1,8 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
+import com.wos.pojo.InstallTemplate;
 import com.wos.pojo.TaxOrganization;
 
 public interface TaxOrganizationMapper {
@@ -18,4 +21,7 @@ public interface TaxOrganizationMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(TaxOrganization record);
+    
+    List<TaxOrganization> loadAllTaxOrganizations();
+    List<TaxOrganization> findTaxOrganizationByName(String orgName);
 }

@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.InstallDocuDetail;
 
 public interface InstallDocuDetailMapper {
@@ -18,4 +20,6 @@ public interface InstallDocuDetailMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(InstallDocuDetail record);
+    
+    List<InstallDocuDetail> findInstallDetailByTemplate(String argTemplate);
 }

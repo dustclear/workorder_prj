@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.ConfigInfo;
 
 public interface ConfigInfoMapper {
@@ -18,4 +20,6 @@ public interface ConfigInfoMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(ConfigInfo record);
+    
+    List<ConfigInfo> loadAllConfigInfos();
 }

@@ -23,7 +23,7 @@ public interface InstallDocMgt
      * install document base info
      */
     //install document
-    public InstallDocument loadInstallDocumentByEventCode(String eventCodeText);
+    public String loadInstallDocumentByEventCode(String eventCodeText);
     
     //template
     public List<InstallTemplate> getAllInstallTemplates();    
