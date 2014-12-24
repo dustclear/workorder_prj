@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.EnterpriseAddress;
 
 public interface EnterpriseAddressMapper {
@@ -18,4 +20,9 @@ public interface EnterpriseAddressMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(EnterpriseAddress record);
+    List<EnterpriseAddress> getEnterpriseAddresses(String enterpriseId);
+    
+    int deleteByPrimaryKey(String cguid);
+    
+    int updateEnterpriseAddress(EnterpriseAddress record);
 }

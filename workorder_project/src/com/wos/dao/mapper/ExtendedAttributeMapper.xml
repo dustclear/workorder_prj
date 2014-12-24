@@ -167,4 +167,8 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="findExtendedAttributesByMatId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * FROM itsm_base_ExtendedAttribute WHERE cMatID = #{matId}
+  </select>
 </mapper>

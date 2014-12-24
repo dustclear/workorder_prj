@@ -31,11 +31,11 @@ public interface InstallDocMgt
             String installTemplateText);
     
     //address info
-    public List<EnterpriseAddress> getEnterpriseAddresses(
+    public String getEnterpriseAddresses(
             String enterpriseIdText);    
-    public Boolean addEnterpriseAddress(String addressText);    
-    public Boolean updateEnterpriseAddress(String addressText);    
-    public Boolean deleteEnterpriseAddress(String addressIdText);    
+    public String addEnterpriseAddress(String addressText);    
+    public String updateEnterpriseAddress(String addressText);    
+    public String deleteEnterpriseAddress(String addressIdText);    
     public Boolean selectAsCurrentAddress(String currentAddressText);
     
     //tax organization
@@ -47,30 +47,30 @@ public interface InstallDocMgt
     //contact info
     public String getEnterpriseContactInfo(String enterpriseIdText);    
     public String getContactInfoById(String contactIdText);    
-    public Boolean saveTelephone(String telephonesText);    
-    public Boolean saveCellphone(String cellPhonesText);    
-    public Boolean addContactInfo(String contactInfoText);    
-    public Boolean deleteContactInfo(String contactIdText);    
-    public Boolean updateContactInfo(String contactInfoText);    
+    public String saveTelephone(String telephonesText);    
+    public String saveCellphone(String cellPhonesText);    
+    public String addContactInfo(String contactInfoText);    
+    public String deleteContactInfo(String contactIdText);    
+    public String updateContactInfo(String contactInfoText);    
     public Boolean selectAsCurrentContact(String currentContactText);
     
     /*
      * install document detail
      */
     //收费类型
-    public List<ChargeType> loadAllChargeTypes();    
+    public String loadAllChargeTypes();    
     //服务响应类型
-    public List<ServiceResponse> loadAllServiceResponses();
+    public String loadAllServiceResponses();
     
     /*
      * extended attributes
      */
-    public List<ExtendedAttribute> loadExtendedAttributesByMatId(
+    public String loadExtendedAttributesByMatId(
             String matIdText);
     
     /*
      * other
      */
-    public List<ConfigInfo> loadAllInstallTypes();
+    public String loadAllInstallTypes();
     
 }

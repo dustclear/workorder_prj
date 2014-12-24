@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.google.gson.Gson;
 import com.wos.common.WosHelper;
 import com.wos.mgt.InstallDocMgt;
 

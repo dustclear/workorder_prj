@@ -135,4 +135,29 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="getEnterpriseAddresses" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT * FROM itsm_base_EnterpriseAddress where cEnterpriseID=#{enterpriseId} 
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from dbo.itsm_base_EnterpriseAddress
+    where cGUID = #{cguid,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="updateEnterpriseAddress" parameterType="com.wos.pojo.EnterpriseAddress">
+    update dbo.itsm_base_EnterpriseAddress
+    <set>
+      <if test="cadress != null">
+        cAdress = #{cadress,jdbcType=VARCHAR},
+      </if>
+      <if test="czipcode != null">
+        cZipCode = #{czipcode,jdbcType=VARCHAR},
+      </if>
+      <if test="careaid != null">
+        cAreaID = #{careaid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cGUID = #{cguid,jdbcType=VARCHAR}
+  </update>
 </mapper>

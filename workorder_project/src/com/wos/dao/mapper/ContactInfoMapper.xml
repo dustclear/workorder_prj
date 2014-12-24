@@ -322,4 +322,163 @@
   <select id="findContactInfoById" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select * FROM itsm_base_Contact WHERE cGUID = #{cguid}
   </select>
+  
+  <update id="updateContactPhone" parameterType="com.wos.pojo.ContactInfo">
+    update dbo.itsm_base_Contact
+    <set>
+      <if test="cphone1 != null">
+        cPhone1 = #{cphone1,jdbcType=VARCHAR},
+      </if>
+      <if test="cphone2 != null">
+        cPhone2 = #{cphone2,jdbcType=VARCHAR},
+      </if>
+      <if test="cphone3 != null">
+        cPhone3 = #{cphone3,jdbcType=VARCHAR},
+      </if>
+      <if test="cphone4 != null">
+        cPhone4 = #{cphone4,jdbcType=VARCHAR},
+      </if>
+      <if test="cphone5 != null">
+        cPhone5 = #{cphone5,jdbcType=VARCHAR},
+      </if>
+      <if test="ctel1 != null">
+        cTel1 = #{ctel1,jdbcType=VARCHAR},
+      </if>
+      <if test="ctel2 != null">
+        cTel2 = #{ctel2,jdbcType=VARCHAR},
+      </if>
+      <if test="ctel3 != null">
+        cTel3 = #{ctel3,jdbcType=VARCHAR},
+      </if>
+      <if test="ctel4 != null">
+        cTel4 = #{ctel4,jdbcType=VARCHAR},
+      </if>
+      <if test="ctel5 != null">
+        cTel5 = #{ctel5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cGUID = #{cguid,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateContactInfo" parameterType="com.wos.pojo.ContactInfo">
+    update dbo.itsm_base_Contact
+    <set>
+      <if test="ccode != null" >
+        cCode= #{ccode},
+      </if>
+      <if test="cname != null" >
+        cName= #{cname},
+      </if>
+      <if test="cnativeplace != null" >
+        cNativePlace= #{cnativeplace},
+      </if>
+      <if test="cworklife != null" >
+        cWorkLife= #{cworklife},
+      </if>
+      <if test="cphoto != null" >
+        cPhoto= #{cphoto},
+      </if>
+      <if test="cstature != null" >
+        cStature= #{cstature},
+      </if>
+      <if test="cmaritalstatus != null" >
+        cMaritalStatus= #{cmaritalstatus},
+      </if>
+      <if test="cnationality != null" >
+        cNationality= #{cnationality},
+      </if>
+      <if test="chighesteducation != null" >
+        cHighestEducation= #{chighesteducation},
+      </if>
+      <if test="csex != null" >
+        cSex= #{csex},
+      </if>
+      <if test="cage != null" >
+        cAge= #{cage},
+      </if>
+      <if test="cphone1 != null" >
+        cPhone1= #{cphone1},
+      </if>
+      <if test="cphone2 != null" >
+        cPhone2= #{cphone2},
+      </if>
+      <if test="cphone3 != null" >
+        cPhone3= #{cphone3},
+      </if>
+      <if test="cphone4 != null" >
+        cPhone4= #{cphone4},
+      </if>
+      <if test="cphone5 != null" >
+        cPhone5= #{cphone5},
+      </if>
+      <if test="ctel1 != null" >
+        cTel1= #{ctel1},
+      </if>
+      <if test="ctel2 != null" >
+        cTel2= #{ctel2},
+      </if>
+      <if test="ctel3 != null" >
+        cTel3= #{ctel3},
+      </if>
+      <if test="ctel4 != null" >
+        cTel4= #{ctel4},
+      </if>
+      <if test="ctel5 != null" >
+        cTel5= #{ctel5},
+      </if>
+      <if test="cprofessionalguid != null" >
+        cProfessionalGuid= #{cprofessionalguid},
+      </if>
+      <if test="cadress != null" >
+        cAdress= #{cadress},
+      </if>
+      <if test="cbirthday != null" >
+        cBirthDay= #{cbirthday},
+      </if>
+      <if test="cidcard != null" >
+        cIDCard= #{cidcard},
+      </if>
+      <if test="cemail != null" >
+        cEmail= #{cemail},
+      </if>
+      <if test="cqq != null" >
+        cQQ= #{cqq},
+      </if>
+      <if test="cmembershipcard != null" >
+        cMemberShipCard= #{cmembershipcard},
+      </if>
+      <if test="cboss != null" >
+        cBoss= #{cboss},
+      </if>
+      <if test="ccreater != null" >
+        cCreater= #{ccreater},
+      </if>
+      <if test="ccreatedate != null" >
+        cCreateDate= #{ccreatedate},
+      </if>
+      <if test="cupdater != null" >
+        cUpdater= #{cupdater},
+      </if>
+      <if test="cupdatedate != null" >
+        cUpdateDate= #{cupdatedate},
+      </if>
+      <if test="ctimestamp != null" >
+        cTimeStamp= #{ctimestamp},
+      </if>
+      <if test="studentid != null" >
+        StudentID= #{studentid},
+      </if>
+      <if test="crmid != null" >
+        CrmID = #{crmid},
+      </if>
+    </set>
+    where cGUID = #{cguid,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from dbo.itsm_base_Contact
+    where cGUID = #{cguid,jdbcType=VARCHAR}
+  </delete>
+  
 </mapper>

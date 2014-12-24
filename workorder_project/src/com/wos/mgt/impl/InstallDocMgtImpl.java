@@ -10,6 +10,8 @@ import com.wos.dao.mapper.AddressTypeMapper;
 import com.wos.dao.mapper.ChargeTypeMapper;
 import com.wos.dao.mapper.ConfigInfoMapper;
 import com.wos.dao.mapper.ContactInfoMapper;
+import com.wos.dao.mapper.EnterpriseAddressMapper;
+import com.wos.dao.mapper.ExtendedAttributeMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
@@ -39,7 +41,8 @@ public class InstallDocMgtImpl implements InstallDocMgt
     private ChargeTypeMapper chargeType;
     private ServiceResponseMapper serviceResponse;
     private ContactInfoMapper contactInfo;
-    
+    private ExtendedAttributeMapper extendedAttribute;
+    private EnterpriseAddressMapper enterpriseAddress;
     private static final Gson _gson = new Gson();
     
     
@@ -118,44 +121,45 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public Boolean saveTelephone(String argTtelephonesText)
+    public String saveTelephone(String argTtelephonesText)
     {
-        ContactInfo contactInfo =  _gson.fromJson(argTtelephonesText, ContactInfo.class);
+        ContactInfo contactInfoUpdate =  _gson.fromJson(argTtelephonesText, ContactInfo.class);
         
-//        Boolean result = _contactInfoMapper.updateTelephone(contactInfo);
-        return null;
+        int result = contactInfo.updateContactPhone(contactInfoUpdate);
+        return _helper.toJsonText(result, null);
     }
 
     @Override
-    public Boolean saveCellphone(String argCellPhonesText)
+    public String saveCellphone(String argCellPhonesText)
     {
-        ContactInfo contactInfo =  _gson.fromJson(argCellPhonesText, ContactInfo.class);
-        
-//        Boolean result = _contactInfoMapper.updateCellphone(contactInfo);
-        return null;
+        return saveTelephone(argCellPhonesText);
     }
 
     @Override
-    public Boolean addContactInfo(String argContactInfoText)
+    public String addContactInfo(String argContactInfoText)
     {
         ContactInfo contactInfoRes =  _gson.fromJson(argContactInfoText, ContactInfo.class);
         
-        int result = contactInfo.insert(contactInfoRes);
-        return null;
+        int result = contactInfo.insertSelective(contactInfoRes);
+        return _helper.toJsonText(result, null);
     }
 
     @Override
-    public Boolean deleteContactInfo(String argContactIdText)
+    public String deleteContactInfo(String argContactIdText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        String cguid = _helper.getValueFromJsonText(argContactIdText, "cguid");
+        int result = contactInfo.deleteByPrimaryKey(cguid);
+        
+        return _helper.toJsonText(result, null);
     }
 
     @Override
-    public Boolean updateContactInfo(String argContactInfoText)
+    public String updateContactInfo(String argContactInfoText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        ContactInfo contactInfoUpdate =  _gson.fromJson(argContactInfoText, ContactInfo.class);
+        
+        int result = contactInfo.updateContactInfo(contactInfoUpdate);
+        return _helper.toJsonText(result, null);
     }
 
     @Override
@@ -166,32 +170,41 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public List<EnterpriseAddress> getEnterpriseAddresses(
+    public String getEnterpriseAddresses(
             String argEnterpriseIdText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        String enterpriseId = _helper.getValueFromJsonText(argEnterpriseIdText, "centerpriseid");
+        
+        List<EnterpriseAddress> enterpriseAddresses = enterpriseAddress.getEnterpriseAddresses(enterpriseId);
+        
+        return _helper.toJsonText(enterpriseAddresses, null);
     }
 
     @Override
-    public Boolean addEnterpriseAddress(String argAddressText)
+    public String addEnterpriseAddress(String argAddressText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        EnterpriseAddress enterpriseAddressNew =  _gson.fromJson(argAddressText, EnterpriseAddress.class);
+        
+        int result = enterpriseAddress.insertSelective(enterpriseAddressNew);
+        return _helper.toJsonText(result, null);
     }
 
     @Override
-    public Boolean updateEnterpriseAddress(String argAddressText)
+    public String updateEnterpriseAddress(String argAddressText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        EnterpriseAddress enterpriseAddressUpdate =  _gson.fromJson(argAddressText, EnterpriseAddress.class);
+        
+        int result = enterpriseAddress.updateEnterpriseAddress(enterpriseAddressUpdate);
+        return _helper.toJsonText(result, null);
     }
 
     @Override
-    public Boolean deleteEnterpriseAddress(String argAddressIdText)
+    public String deleteEnterpriseAddress(String argAddressIdText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        String cguid = _helper.getValueFromJsonText(argAddressIdText, "cguid");
+        int result = enterpriseAddress.deleteByPrimaryKey(cguid);
+        
+        return _helper.toJsonText(result, null);
     }
 
     @Override
@@ -202,37 +215,45 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public List<ConfigInfo> loadAllInstallTypes()
+    public String loadAllInstallTypes()
     {
         List<ConfigInfo> configInfos = configInfo.loadAllConfigInfos();
-        _helper.toJsonText(configInfos, null);
-        return null;
+        
+        return _helper.toJsonText(configInfos, null);
     }
 
     @Override
-    public List<ChargeType> loadAllChargeTypes()
+    public String loadAllChargeTypes()
     {
         List<ChargeType> chargeTypes = chargeType.loadAllChargeTypes();
-        _helper.toJsonText(chargeTypes, null);
-        return null;
+        
+        return _helper.toJsonText(chargeTypes, null);
     }
 
     @Override
-    public List<ServiceResponse> loadAllServiceResponses()
+    public String loadAllServiceResponses()
     {
         List<ServiceResponse> serviceResponses = serviceResponse.loadAllServiceResponses();
-        _helper.toJsonText(serviceResponses, null);
-        return null;
+        return _helper.toJsonText(serviceResponses, null);
     }
 
     @Override
-    public List<ExtendedAttribute> loadExtendedAttributesByMatId(
+    public String loadExtendedAttributesByMatId(
             String argMatIdText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        String matId = _helper.getValueFromJsonText(argMatIdText, "cmatid");
+        
+        List<ExtendedAttribute> extendedAttributes = extendedAttribute.findExtendedAttributesByMatId(matId);
+        
+        return _helper.toJsonText(extendedAttributes, null);
     }
 
+    
+    
+    /**
+     * get set methods
+     */    
+    
     public AddressTypeMapper getAddressType()
     {
         return addressType;
