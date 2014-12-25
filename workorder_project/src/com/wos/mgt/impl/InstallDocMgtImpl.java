@@ -139,6 +139,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public String addContactInfo(String argContactInfoText)
     {
         ContactInfo contactInfoRes =  _gson.fromJson(argContactInfoText, ContactInfo.class);
+        contactInfoRes.setCguid(_helper.generatePrimaryKey());
         
         int result = contactInfo.insertSelective(contactInfoRes);
         return _helper.toJsonText(result, null);
@@ -184,6 +185,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public String addEnterpriseAddress(String argAddressText)
     {
         EnterpriseAddress enterpriseAddressNew =  _gson.fromJson(argAddressText, EnterpriseAddress.class);
+        enterpriseAddressNew.setCguid(_helper.generatePrimaryKey());
         
         int result = enterpriseAddress.insertSelective(enterpriseAddressNew);
         return _helper.toJsonText(result, null);

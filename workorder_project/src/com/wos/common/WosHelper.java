@@ -2,6 +2,8 @@ package com.wos.common;
 
 import java.util.Map;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,5 +42,10 @@ public class WosHelper
         {
             return _gson.toJson(srcObj);
         }
+    }
+    
+    public String generatePrimaryKey()
+    {
+        return RandomStringUtils.randomNumeric(18);
     }
 }
