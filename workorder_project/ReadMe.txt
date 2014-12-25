@@ -1,6 +1,4 @@
-注意
-1、generatorConfig.xml文件中的classPathEntry元素，选择你自己数据库驱动的位置。
-<classPathEntry location="c:/ojdbc14.jar" />
-
-2、generatorConfig.xml文件中的table标签，选择你自己数据库的表名
-<table schema="hr" tableName="countries" domainObjectName="Customer">
+1. 修改applicationContext-common.xml中的数据库连接信息：url, 用户名，密码；
+2. 启动tomcat，用以下地址访问webservice服务：
+	http://localhost:8080/workorder_project/ws/InstallDocument?wsdl
+3. 调用webservice接口需要传人的参数及返回值数据结构可以参照test文件夹下的TestInstallDocMgt.java。（json 格式数据的key应该和pojo下的类属性名称或数据库字段名称一致。）

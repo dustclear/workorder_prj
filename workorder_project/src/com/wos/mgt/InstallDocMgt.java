@@ -36,7 +36,7 @@ public interface InstallDocMgt
     public String addEnterpriseAddress(String addressText);    
     public String updateEnterpriseAddress(String addressText);    
     public String deleteEnterpriseAddress(String addressIdText);    
-    public Boolean selectAsCurrentAddress(String currentAddressText);
+    public String selectAsCurrentAddress(String currentAddressText);
     
     //tax organization
     public String getAllTaxOrganizations();    
@@ -52,7 +52,7 @@ public interface InstallDocMgt
     public String addContactInfo(String contactInfoText);    
     public String deleteContactInfo(String contactIdText);    
     public String updateContactInfo(String contactInfoText);    
-    public Boolean selectAsCurrentContact(String currentContactText);
+    public String selectAsCurrentContact(String currentContactText);
     
     /*
      * install document detail

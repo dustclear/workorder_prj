@@ -160,4 +160,9 @@
     </set>
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </update>
+  
+  <update id="updateAsCurrentAddress" parameterType="java.lang.String">
+    update dbo.itsm_base_EnterpriseAddress set isNew = 1
+    where cGUID = #{cguid,jdbcType=VARCHAR}
+  </update>
 </mapper>

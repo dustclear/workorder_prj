@@ -22,4 +22,5 @@ public interface ConfigInfoMapper {
     int insertSelective(ConfigInfo record);
     
     List<ConfigInfo> loadAllConfigInfos();
+    
 }

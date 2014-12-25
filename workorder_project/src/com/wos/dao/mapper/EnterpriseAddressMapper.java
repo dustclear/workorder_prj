@@ -25,4 +25,6 @@ public interface EnterpriseAddressMapper {
     int deleteByPrimaryKey(String cguid);
     
     int updateEnterpriseAddress(EnterpriseAddress record);
+    
+    int updateAsCurrentAddress(String cguid);
 }

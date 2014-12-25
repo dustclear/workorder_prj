@@ -481,4 +481,9 @@
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </delete>
   
+  <update id="updateAsCurrentContact" parameterType="java.lang.String">
+    update dbo.itsm_base_Contact set isNew = 1
+    where cGUID = #{cguid,jdbcType=VARCHAR}
+  </update>
+  
 </mapper>

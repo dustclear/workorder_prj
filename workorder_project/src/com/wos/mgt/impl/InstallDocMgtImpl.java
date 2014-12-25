@@ -164,10 +164,12 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public Boolean selectAsCurrentContact(String argCurrentContactText)
+    public String selectAsCurrentContact(String argCurrentContactText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        String cguid =  _helper.getValueFromJsonText(argCurrentContactText, "cguid");
+        int result = contactInfo.updateAsCurrentContact(cguid);
+        
+        return _helper.toJsonText(result, null);
     }
 
     @Override
@@ -210,10 +212,12 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
 
     @Override
-    public Boolean selectAsCurrentAddress(String argCurrentAddressText)
+    public String selectAsCurrentAddress(String argCurrentAddressText)
     {
-        // TODO Auto-generated method stub
-        return null;
+        String cguid =  _helper.getValueFromJsonText(argCurrentAddressText, "cguid");
+        int result = enterpriseAddress.updateAsCurrentAddress(cguid);
+        
+        return _helper.toJsonText(result, null);
     }
 
     @Override

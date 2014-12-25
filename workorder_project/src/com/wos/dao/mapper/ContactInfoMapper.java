@@ -31,4 +31,6 @@ public interface ContactInfoMapper {
     int updateContactInfo(ContactInfo record);
     
     int deleteByPrimaryKey(String cguid);
+    
+    int updateAsCurrentContact(String cguid);
 }
