@@ -29,8 +29,15 @@
 		<property name="serviceResponse" ref="serviceResponseMapper"/>
 		<property name="contactInfo" ref="contactInfoMapper"/>
 	</bean>
+	
+	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >
+		<property name="userDao" ref="rmsUserMapper"/>
+	</bean>
 
 	<jaxws:endpoint id="installDocMgt" implementor="#installDoc"
 		address="/InstallDocument" />
+		
+	<jaxws:endpoint id="loginMgt" implementor="#login"
+		address="/Login" />
 
 </beans>

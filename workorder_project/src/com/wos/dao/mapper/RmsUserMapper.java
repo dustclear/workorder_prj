@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.RmsUser;
 
 public interface RmsUserMapper {
@@ -18,4 +20,8 @@ public interface RmsUserMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(RmsUser record);
+    
+    List<RmsUser> userLogin(RmsUser userInfo);
+    
+    List<RmsUser> findUserByName(String userName);
 }

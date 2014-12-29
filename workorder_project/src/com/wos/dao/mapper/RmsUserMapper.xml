@@ -181,4 +181,14 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="userLogin" parameterType="com.wos.pojo.RmsUser" resultMap="BaseResultMap">
+		select * FROM AOS_RMS_USER WHERE cNAME = #{cname} and cPWD = #{cpwd} 
+  </select>
+  
+  
+  <select id="findUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * FROM AOS_RMS_USER WHERE cNAME = #{userName}
+  </select>
+  
 </mapper>
