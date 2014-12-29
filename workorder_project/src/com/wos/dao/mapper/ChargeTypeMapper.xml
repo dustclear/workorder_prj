@@ -225,4 +225,8 @@
       cInvoiceName = #{cinvoicename,jdbcType=NVARCHAR}
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </update>
+  
+  <select id="loadAllChargeTypes" resultMap="BaseResultMap">
+		select * from itsm_service_ChargeType
+  </select>
 </mapper>
