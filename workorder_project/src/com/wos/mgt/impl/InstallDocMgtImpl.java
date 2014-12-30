@@ -11,6 +11,7 @@ import com.wos.dao.mapper.ChargeTypeMapper;
 import com.wos.dao.mapper.ConfigInfoMapper;
 import com.wos.dao.mapper.ContactInfoMapper;
 import com.wos.dao.mapper.EnterpriseAddressMapper;
+import com.wos.dao.mapper.EnterpriseContactsMapper;
 import com.wos.dao.mapper.ExtendedAttributeMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
@@ -22,6 +23,7 @@ import com.wos.pojo.ChargeType;
 import com.wos.pojo.ConfigInfo;
 import com.wos.pojo.ContactInfo;
 import com.wos.pojo.EnterpriseAddress;
+import com.wos.pojo.EnterpriseContacts;
 import com.wos.pojo.ExtendedAttribute;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
@@ -43,6 +45,8 @@ public class InstallDocMgtImpl implements InstallDocMgt
     private ContactInfoMapper contactInfo;
     private ExtendedAttributeMapper extendedAttribute;
     private EnterpriseAddressMapper enterpriseAddress;
+    private EnterpriseContactsMapper enterpriseContact;
+    
     private static final Gson _gson = new Gson();
     
     
@@ -106,9 +110,10 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public String getEnterpriseContactInfo(String argEnterpriseIdText)
     {
         String enterpriseId = _helper.getValueFromJsonText(argEnterpriseIdText, "cEnterpriseID");
-        List<ContactInfo> contactInfos = contactInfo.findContactInfoByEnterpriseId(enterpriseId);
+//        List<ContactInfo> contactInfos = contactInfo.findContactInfoByEnterpriseId(enterpriseId);
+        List<EnterpriseContacts> enterpriseContactRes = enterpriseContact.findContactInfoByEnterpriseId(enterpriseId);
         
-        return _helper.toJsonText(contactInfos, null);
+        return _helper.toJsonText(enterpriseContactRes, null);
     }
 
     @Override
@@ -167,7 +172,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public String selectAsCurrentContact(String argCurrentContactText)
     {
         String cguid =  _helper.getValueFromJsonText(argCurrentContactText, "cguid");
-        int result = contactInfo.updateAsCurrentContact(cguid);
+        int result = enterpriseContact.updateAsCurrentContact(cguid);
         
         return _helper.toJsonText(result, null);
     }
@@ -348,6 +353,36 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public void setContactInfo(ContactInfoMapper contactInfo)
     {
         this.contactInfo = contactInfo;
+    }
+
+    public ExtendedAttributeMapper getExtendedAttribute()
+    {
+        return extendedAttribute;
+    }
+
+    public void setExtendedAttribute(ExtendedAttributeMapper extendedAttribute)
+    {
+        this.extendedAttribute = extendedAttribute;
+    }
+
+    public EnterpriseAddressMapper getEnterpriseAddress()
+    {
+        return enterpriseAddress;
+    }
+
+    public void setEnterpriseAddress(EnterpriseAddressMapper enterpriseAddress)
+    {
+        this.enterpriseAddress = enterpriseAddress;
+    }
+
+    public EnterpriseContactsMapper getEnterpriseContact()
+    {
+        return enterpriseContact;
+    }
+
+    public void setEnterpriseContact(EnterpriseContactsMapper enterpriseContact)
+    {
+        this.enterpriseContact = enterpriseContact;
     }
     
     

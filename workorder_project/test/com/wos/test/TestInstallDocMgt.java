@@ -16,6 +16,7 @@ import com.wos.mgt.InstallDocMgt;
 public class TestInstallDocMgt
 {
     private static InstallDocMgt service;
+    private WosHelper _helper = WosHelper.getInstance();
     
     @BeforeClass
     public static void init()
@@ -30,7 +31,7 @@ public class TestInstallDocMgt
         
         Map<String, String> map = new HashMap<String, String>();
         map.put("ceventid", "222");
-        String eventCode = WosHelper.getInstance().toJsonText(map, null);
+        String eventCode = _helper.toJsonText(map, null);
         
         String resStr=service.loadInstallDocumentByEventCode(eventCode);
         System.out.println(eventCode); //{"ceventid":"222"}
@@ -43,6 +44,17 @@ public class TestInstallDocMgt
         String resStr=service.getAllTaxOrganizations();
         System.out.println(resStr);     //[{"cguid":"165120663464490419","ccode":"szsguqgffj","cname":"苏州市姑苏区国税分局","corganizationcode":"1","cparentid":"2001","cinnercode":"jssgjswj!jssszsgjswj!szsguqgffj","ileaf":1,"ccreater":"1","ccreatedate":"Dec 9, 2013 3:11:52 PM","ctimestamp":"165120663464490418"},{"cguid":"102102","ccode":"szsdefj","cname":"苏州市第二国税分局","corganizationcode":"111","cparentid":"2001","cinnercode":"jssgjswj!jssszsgjswj!szsdefj","ileaf":1,"ccreater":"1","ccreatedate":"Dec 25, 2013 2:54:55 PM","ctimestamp":"102780964199954128","cfullname":"苏州市第二分局"},{"cguid":"920623803615892447","ccode":"00001","cname":"其他","corganizationcode":"0001","cparentid":"000000","cinnercode":"00001","ileaf":1,"ccreater":"1","ccreatedate":"Jan 17, 2014 2:16:27 PM","ctimestamp":"920623803615892446","cfullname":"其他"},{"cguid":"8329","ccode":"tcsgslfj","cname":"太仓市国税六分局","cparentid":"2032","cinnercode":"jssgjswj!jssszsgjswj!tcsgjswj!tcsgslfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"8330","ccode":"cssgsbfj","cname":"常熟市国税八分局","cparentid":"2013","cinnercode":"jssgjswj!jssszsgjswj!cssgjswj!cssgsbfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7785","ccode":"kssgsyfj","cname":"昆山市国税一分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgsyfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7786","ccode":"kssgsefj","cname":"昆山市国税二分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgsefj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7787","ccode":"kssgssfj","cname":"昆山市国税三分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgssfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7788","ccode":"kssgssfj","cname":"昆山市国税四分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgssfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7789","ccode":"kssgswfj","cname":"昆山市国税五分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgswfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"}]
         
+    }
+    
+    @Test
+    public void testGetEnterpriseContactInfo()
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("cEnterpriseID", "23632");
+        String enterpriseIdText = _helper.toJsonText(map, null);
+        
+        String resStr=service.getEnterpriseContactInfo(enterpriseIdText);
+        System.out.println(resStr); //[{"cguid":"192972","centerpriseid":"23632","ccontactid":"126493","cisonjob":1,"ccreater":"1","ccreatedate":"Dec 7, 2013 12:16:47 AM","cupdater":"620634323740596598","cupdatedate":"Jan 1, 2014 6:19:46 PM","isnew":0,"contactInfo":{"cguid":"126493","ccode":"gmf1264","cname":"顾美芬","cphone3":"0","ctel1":"13375157506","ctel2":"13375157506","cadress":"昆山开发区黄河北路81号保昆公寓活动中心3楼西单元","ccreater":"1","ccreatedate":"Dec 7, 2013 12:16:47 AM","cupdater":"620634323740596598","cupdatedate":"Jan 1, 2014 6:19:46 PM"}}]
     }
     
 }

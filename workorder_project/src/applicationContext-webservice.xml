@@ -28,6 +28,7 @@
 		<property name="chargeType" ref="chargeTypeMapper"/>
 		<property name="serviceResponse" ref="serviceResponseMapper"/>
 		<property name="contactInfo" ref="contactInfoMapper"/>
+		<property name="enterpriseContact" ref="enterpriseContactsMapper"/>
 	</bean>
 	
 	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >

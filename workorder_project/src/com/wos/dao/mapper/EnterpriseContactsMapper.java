@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.EnterpriseContacts;
 
 public interface EnterpriseContactsMapper {
@@ -18,4 +20,8 @@ public interface EnterpriseContactsMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(EnterpriseContacts record);
+    
+    int updateAsCurrentContact(String cguid);
+    
+    List<EnterpriseContacts> findContactInfoByEnterpriseId(String enterpriseId);
 }
