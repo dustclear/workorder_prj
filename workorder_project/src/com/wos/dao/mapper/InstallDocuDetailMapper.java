@@ -22,4 +22,6 @@ public interface InstallDocuDetailMapper {
     int insertSelective(InstallDocuDetail record);
     
     List<InstallDocuDetail> findInstallDetailByTemplate(String argTemplate);
+    
+    int updateByPrimaryKeySelective(InstallDocuDetail record);
 }

@@ -57,4 +57,14 @@ public class TestInstallDocMgt
         System.out.println(resStr); //[{"cguid":"192972","centerpriseid":"23632","ccontactid":"126493","cisonjob":1,"ccreater":"1","ccreatedate":"Dec 7, 2013 12:16:47 AM","cupdater":"620634323740596598","cupdatedate":"Jan 1, 2014 6:19:46 PM","isnew":0,"contactInfo":{"cguid":"126493","ccode":"gmf1264","cname":"顾美芬","cphone3":"0","ctel1":"13375157506","ctel2":"13375157506","cadress":"昆山开发区黄河北路81号保昆公寓活动中心3楼西单元","ccreater":"1","ccreatedate":"Dec 7, 2013 12:16:47 AM","cupdater":"620634323740596598","cupdatedate":"Jan 1, 2014 6:19:46 PM"}}]
     }
     
+    @Test
+    public void testSelectAsCurrentContact()
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("cguid", "192999");
+        String currentContactText = _helper.toJsonText(map, null);
+        String resStr = service.selectAsCurrentContact(currentContactText);
+        System.out.println(resStr);
+    }
+    
 }

@@ -22,6 +22,9 @@ public interface EnterpriseContactsMapper {
     int insertSelective(EnterpriseContacts record);
     
     int updateAsCurrentContact(String cguid);
+    int removeCurrentContact(String cguid);
     
     List<EnterpriseContacts> findContactInfoByEnterpriseId(String enterpriseId);
+    
+    EnterpriseContacts findContactInfoByPrimaryId(String cguid);
 }

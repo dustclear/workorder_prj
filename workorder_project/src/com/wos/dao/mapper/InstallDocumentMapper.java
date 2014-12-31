@@ -1,5 +1,8 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
+import com.wos.pojo.ContactInfo;
 import com.wos.pojo.InstallDocument;
 
 public interface InstallDocumentMapper {
@@ -20,4 +23,10 @@ public interface InstallDocumentMapper {
     int insertSelective(InstallDocument record);
     
     InstallDocument findInstallDocumentByEventCode(String eventCode);
+    
+    List<InstallDocument> findInstallDocumentByEnterpriseId(String enterpriseId);
+    
+    int updateContactInfo(InstallDocument newContactInfo);
+    
+    int updateByPrimaryKeySelective(InstallDocument newContactInfo);
 }

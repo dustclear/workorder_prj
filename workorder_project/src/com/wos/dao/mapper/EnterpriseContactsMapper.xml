@@ -160,4 +160,15 @@
     update dbo.itsm_base_EnterpriseContacts set isNew = 1
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </update>
+  
+  <update id="removeCurrentContact" parameterType="java.lang.String">
+    update dbo.itsm_base_EnterpriseContacts set isNew = 0
+    where cEnterpriseid in (select cEnterpriseid from itsm_base_EnterpriseContacts where cGuid= #{cguid,jdbcType=VARCHAR} )
+  </update>
+  
+  
+  <select id="findContactInfoByPrimaryId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT *
+		from itsm_base_EnterpriseContacts where cguid = #{cguid}
+  </select>
 </mapper>

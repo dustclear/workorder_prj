@@ -17,19 +17,19 @@
 		</javaTypeResolver>
 		<!-- Model生成配置 targetPackage：生成包路径，可自己生成目录 targetProject：项目路经，我试过写成"\mybatis"，但总是报找不到，不知原因。 
 			我换成写绝对目录，行的通。 -->
-		<javaModelGenerator targetPackage="com.wos.pojo"
+		<javaModelGenerator targetPackage="com.test.pojo"
 			targetProject="src">
 			<property name="enableSubPackages" value="false" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 		<!-- sqlMap配置 重复配置，不再提示，下同 -->
-		<sqlMapGenerator targetPackage="com.wos.dao.mapper"
+		<sqlMapGenerator targetPackage="com.test.mapper"
 			targetProject="src">
 			<property name="enableSubPackages" value="false" />
 		</sqlMapGenerator>
 		<!-- DAO接口的生成 -->
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.wos.dao.mapper" targetProject="src">
+			targetPackage="com.test.mapper" targetProject="src">
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
 		<!-- table 数据库table的用户配置，用于配置哪些表需要。 domainObjectName:生成表前缀 -->
@@ -121,10 +121,7 @@
             enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
 		</table>
-		<table schema="dbo" tableName="itsm_service_InstallDocuDetail" domainObjectName="InstallDocuDetail" enableCountByExample="false"  
-            enableDeleteByExample="false" enableSelectByExample="false"  
-            enableUpdateByExample="false">
-		</table>
+		
 		<table schema="dbo" tableName="itsm_service_InstallDocument" domainObjectName="InstallDocument" enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
@@ -143,15 +140,23 @@
             enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
 		</table>  -->
-		<table schema="dbo" tableName="itsm_service_InstallTemplate" domainObjectName="InstallTemplate" enableCountByExample="false"  
+		<!-- <table schema="dbo" tableName="itsm_service_InstallTemplate" domainObjectName="InstallTemplate" enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="true"  
             enableUpdateByExample="false">
-		</table> 
+		</table>  -->
 		<!-- <table schema="dbo" tableName="itsm_service_InstallDetail" domainObjectName="InstallDetail" enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="true">
+		</table>   -->
+		<!-- <table schema="dbo" tableName="itsm_service_InstallDocuDetail" domainObjectName="InstallDocuDetail" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="true">
+		</table> -->
+		
+		<table schema="dbo" tableName="itsm_service_InstallDocument" domainObjectName="InstallDocument" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
-		</table>  -->
-
+		</table>
 	</context>
 </generatorConfiguration>
 

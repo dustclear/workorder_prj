@@ -62,6 +62,10 @@ public interface InstallDocMgt
     //服务响应类型
     public String loadAllServiceResponses();
     
+    public String saveInstallDocDetail(String installDetailText);
+    
+    public String addInstallDocDetail(String installDetailText);
+    
     /*
      * extended attributes
      */
@@ -72,5 +76,7 @@ public interface InstallDocMgt
      * other
      */
     public String loadAllInstallTypes();
+    
+    public String saveInstallDocument(String installDocumentText);
     
 }

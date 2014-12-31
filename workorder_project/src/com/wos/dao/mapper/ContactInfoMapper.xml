@@ -527,6 +527,4 @@
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </delete>
   
-
-  
 </mapper>
