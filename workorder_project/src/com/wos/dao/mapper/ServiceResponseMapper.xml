@@ -121,4 +121,12 @@
       </if>
     </trim>
   </insert>
+  
+  
+  
+  <select id="loadAllServiceResponses" resultMap="BaseResultMap">
+    select 
+    *
+    from dbo.itsm_service_ServiceResponse
+  </select>
 </mapper>

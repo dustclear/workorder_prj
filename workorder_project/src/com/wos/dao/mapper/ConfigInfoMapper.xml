@@ -89,4 +89,12 @@
       </if>
     </trim>
   </insert>
+  
+  
+  
+  <select id="loadAllConfigInfos" resultMap="BaseResultMap">
+    select 
+    *
+    from dbo.itsm_service_Configuration
+  </select>
 </mapper>
