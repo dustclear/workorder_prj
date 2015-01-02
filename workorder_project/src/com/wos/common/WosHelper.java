@@ -5,13 +5,14 @@ import java.util.Map;
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 public class WosHelper
 {
     private static final WosHelper _instance = new WosHelper();
     
-    private static final Gson _gson = new Gson();
+    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
     
     private WosHelper()
     {

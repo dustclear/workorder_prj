@@ -25,7 +25,7 @@ public interface InstallDocMgt
     /**
      * 根据事件编码查询出安装单信息。
      * @param eventCodeText
-     * @return
+     * @return string 注意返回值的输出结果，这是一个复杂的数据结构，其中包含了最深三层的结构：installdocument~enterpriseBaseInfo~currentContact~contactInfo,前端解析时请注意。。
      */
     public String loadInstallDocumentByEventCode(String eventCodeText);
     
@@ -37,7 +37,7 @@ public interface InstallDocMgt
     public String getAllInstallTemplates();    
     
     /**
-     * 选择“管理软件安装单模板”后加载相应的配置项信息。
+     * 选择“管理软件安装单模板”后加载相应的配置项信息。传人参数需包括安装单id:cmainid和安装单模板id:installTemplateId
      * @param installTemplateText
      * @return
      */

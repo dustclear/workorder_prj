@@ -41,6 +41,7 @@
     <result column="isAuditingEffective" property="isauditingeffective" jdbcType="INTEGER" />
     <result column="NoQualifiedReason" property="noqualifiedreason" jdbcType="VARCHAR" />
     <result column="CustomerSignature" property="customersignature" jdbcType="VARCHAR" />
+    <association property ="enterpriseBaseInfo" column="cEnterpriseID" select ="com.wos.dao.mapper.EnterpriseBaseInfoMapper.getEnterpriseInfoById"/>	
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.InstallDocument" >
     <!--

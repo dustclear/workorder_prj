@@ -139,4 +139,8 @@
 		select * from itsm_base_TaxOrganization where cParentID=#{parentId} 
   </select>
   
+  <select id="findTaxOrganizationsById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select top 1 * from itsm_base_TaxOrganization where cGUID=#{cguid} 
+  </select>
+  
 </mapper>

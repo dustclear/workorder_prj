@@ -26,6 +26,10 @@
     <result column="cGuaranteeEndDate" property="cguaranteeenddate" jdbcType="TIMESTAMP" />
     <result column="cBarCode" property="cbarcode" jdbcType="VARCHAR" />
     <result column="cisinput" property="cisinput" jdbcType="INTEGER" />
+    <association property ="relateMaterial" column="cRelationMatID" select ="com.wos.dao.mapper.MaterialMapper.getMaterialByPrimaryId"/>	
+    <association property ="contactInfo" column="cContactID" select ="com.wos.dao.mapper.EnterpriseContactsMapper.getContactInfoByPrimaryId"/>
+    <association property ="chargeType" column="cChargeTypeID" select ="com.wos.dao.mapper.ChargeTypeMapper.selectByPrimaryKey"/>
+    <association property ="serviceResponse" column="cResponseID" select ="com.wos.dao.mapper.ServiceResponseMapper.findServiceResponseByPrimaryId"/>
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.InstallDocuDetail" >
     <!--
@@ -174,6 +178,12 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="findInstallDetailByTemplate" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT *
+		from itsm_service_InstallDocuDetail where cMainID = #{cmainid,jdbcType=VARCHAR} and cRelationMatID in (select cMatID from itsm_service_InstallDetail where cmainid = #{installTemplateId,jdbcType=VARCHAR})
+  </select>
+  
   
   <update id="updateByPrimaryKeySelective" parameterType="com.wos.pojo.InstallDocuDetail">
     <!--

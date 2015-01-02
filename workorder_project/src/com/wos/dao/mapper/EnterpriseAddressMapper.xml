@@ -140,6 +140,10 @@
 		SELECT * FROM itsm_base_EnterpriseAddress where cEnterpriseID=#{enterpriseId} 
   </select>
   
+  <select id="getCurrentEnterpriseAddress" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT top 1 * FROM itsm_base_EnterpriseAddress where cEnterpriseID=#{enterpriseId} and Isnew = '1'
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from dbo.itsm_base_EnterpriseAddress
     where cGUID = #{cguid,jdbcType=VARCHAR}

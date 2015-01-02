@@ -46,6 +46,9 @@
     <result column="cTimeStamp" property="ctimestamp" jdbcType="VARCHAR" />
     <result column="cFastCode1" property="cfastcode1" jdbcType="VARCHAR" />
     <result column="CrmID" property="crmid" jdbcType="VARCHAR" />
+    <association property ="currentAddress" column="cGUID" select ="com.wos.dao.mapper.EnterpriseAddressMapper.getCurrentEnterpriseAddress"/>	
+    <association property ="currentContact" column="cGUID" select ="com.wos.dao.mapper.EnterpriseContactsMapper.getCurrentEnterpriseContact"/>	
+    <association property ="currentTaxOrganization" column="cTaxationID" select ="com.wos.dao.mapper.TaxOrganizationMapper.findTaxOrganizationsById"/>
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.EnterpriseBaseInfo" >
     <!--
@@ -328,4 +331,8 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="getEnterpriseInfoById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from itsm_base_EnterpriseManagement where cguid=#{cguid} 
+  </select>
 </mapper>

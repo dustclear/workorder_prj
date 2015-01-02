@@ -14,10 +14,10 @@
 		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver">
 		</property>
 		<property name="url"
-			value="jdbc:sqlserver://localhost:1433;databaseName=other_temp">
+			value="jdbc:sqlserver://localhost:1433;databaseName=temp_other">
 		</property>
 		<property name="username" value="sa"></property>
-		<property name="password" value="sasa"></property>
+		<property name="password" value="sa"></property>
 	</bean>
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

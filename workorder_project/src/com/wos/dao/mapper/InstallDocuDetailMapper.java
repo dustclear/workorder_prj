@@ -1,6 +1,7 @@
 package com.wos.dao.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.wos.pojo.InstallDocuDetail;
 
@@ -21,7 +22,7 @@ public interface InstallDocuDetailMapper {
      */
     int insertSelective(InstallDocuDetail record);
     
-    List<InstallDocuDetail> findInstallDetailByTemplate(String argTemplate);
+    List<InstallDocuDetail> findInstallDetailByTemplate(Map<String, String> param);
     
     int updateByPrimaryKeySelective(InstallDocuDetail record);
 }

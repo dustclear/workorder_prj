@@ -171,4 +171,16 @@
 		SELECT *
 		from itsm_base_EnterpriseContacts where cguid = #{cguid}
   </select>
+  
+   <select id="getCurrentEnterpriseContact" parameterType="java.lang.String" resultMap="GetBaseContactResultMap">
+		SELECT top 1 ec.*, 
+		<include refid="Base_Contact_Column_List" />
+		from itsm_base_EnterpriseContacts ec, itsm_base_Contact bc where ec.ccontactid = bc.cguid and ec.centerpriseid = #{enterpriseId} and ec.isNew = '1'
+  </select>
+  
+  <select id="getContactInfoByPrimaryId" parameterType="java.lang.String" resultMap="GetBaseContactResultMap">
+		SELECT top 1 ec.*, 
+		<include refid="Base_Contact_Column_List" />
+		from itsm_base_EnterpriseContacts ec, itsm_base_Contact bc where ec.ccontactid = bc.cguid and ec.cguid = #{cguid}
+  </select>
 </mapper>

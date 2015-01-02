@@ -1,6 +1,8 @@
 package com.wos.mgt.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
@@ -12,6 +14,7 @@ import javax.xml.ws.handler.MessageContext;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
 import com.wos.dao.mapper.AddressTypeMapper;
@@ -69,7 +72,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     
     private EnterpriseContactsMapper enterpriseContact;
     
-    private static final Gson _gson = new Gson();
+    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
     
     private WosHelper _helper = WosHelper.getInstance();
     
@@ -102,9 +105,15 @@ public class InstallDocMgtImpl implements InstallDocMgt
     @Override
     public String getInstallDetailByTemplate(String argInstallTemplateText)
     {
-        String installTemplate = _helper.getValueFromJsonText(argInstallTemplateText,
-                "installTemplate");
-        List<InstallDocuDetail> installDocuDetails = installDocuDetail.findInstallDetailByTemplate(installTemplate);
+//        String installTemplate = _helper.getValueFromJsonText(argInstallTemplateText,
+//                "installTemplate");
+//        String cMainId = _helper.getValueFromJsonText(argInstallTemplateText,
+//                "cMainId");
+        
+        Map<String, String> param = _gson.fromJson(argInstallTemplateText,
+                Map.class);
+        
+        List<InstallDocuDetail> installDocuDetails = installDocuDetail.findInstallDetailByTemplate(param);
         
         return _helper.toJsonText(installDocuDetails, null);
     }
