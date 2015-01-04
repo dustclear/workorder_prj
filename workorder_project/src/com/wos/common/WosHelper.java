@@ -45,8 +45,18 @@ public class WosHelper
         }
     }
     
+    public String gernerateInstallCode()
+    {
+        return WosConstant.PREFIX_INSTALL_CODE+generateRadomStr(12);
+    }
+    
     public String generatePrimaryKey()
     {
-        return RandomStringUtils.randomNumeric(18);
+        return generateRadomStr(18);
+    }
+    
+    private String generateRadomStr(int length)
+    {
+        return RandomStringUtils.randomNumeric(length);
     }
 }

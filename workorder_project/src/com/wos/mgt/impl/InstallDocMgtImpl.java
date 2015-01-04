@@ -1,17 +1,11 @@
 package com.wos.mgt.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
-
-import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,10 +17,12 @@ import com.wos.dao.mapper.ConfigInfoMapper;
 import com.wos.dao.mapper.ContactInfoMapper;
 import com.wos.dao.mapper.EnterpriseAddressMapper;
 import com.wos.dao.mapper.EnterpriseContactsMapper;
+import com.wos.dao.mapper.EventInfoMapper;
 import com.wos.dao.mapper.ExtendedAttributeMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
+import com.wos.dao.mapper.RmsUserMapper;
 import com.wos.dao.mapper.ServiceResponseMapper;
 import com.wos.dao.mapper.TaxOrganizationMapper;
 import com.wos.mgt.InstallDocMgt;
@@ -35,10 +31,12 @@ import com.wos.pojo.ConfigInfo;
 import com.wos.pojo.ContactInfo;
 import com.wos.pojo.EnterpriseAddress;
 import com.wos.pojo.EnterpriseContacts;
+import com.wos.pojo.EventInfo;
 import com.wos.pojo.ExtendedAttribute;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 import com.wos.pojo.InstallTemplate;
+import com.wos.pojo.RmsUser;
 import com.wos.pojo.ServiceResponse;
 import com.wos.pojo.TaxOrganization;
 
@@ -47,6 +45,9 @@ public class InstallDocMgtImpl implements InstallDocMgt
 {
     @Resource
     WebServiceContext wsContext;
+    
+    private RmsUserMapper rmsUserMapper;
+    private EventInfoMapper eventInfoMapper;
     
     private AddressTypeMapper addressType;
     
@@ -76,13 +77,24 @@ public class InstallDocMgtImpl implements InstallDocMgt
     
     private WosHelper _helper = WosHelper.getInstance();
     
+    private RmsUser currentUser;
+    
     @Override
     public String loadInstallDocumentByEventCode(String argEventCodeText)
     {
         String eventCode = _helper.getValueFromJsonText(argEventCodeText,
-                "ceventid");
+                "ccode");
+        String userId = _helper.getValueFromJsonText(argEventCodeText,
+                "cguid"); //此处的cguid对应表AOS_RMS_USER的cguid
+        currentUser = rmsUserMapper.findUserById(userId);
         
-        InstallDocument doc = installDocument.findInstallDocumentByEventCode(eventCode);
+        EventInfo eventInfo = eventInfoMapper.loadEventInfoByEventCode(eventCode);
+        
+        
+//        InstallDocument doc = installDocument.findInstallDocumentByEventCode(eventCode);
+        
+        InstallDocument doc = createInstallDocumentFromEventInfo(eventInfo);
+        
         /*   
            if (getSession() != null)
            {
@@ -515,5 +527,74 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         this.enterpriseContact = enterpriseContact;
     }
+
+    public EventInfoMapper getEventInfoMapper()
+    {
+        return eventInfoMapper;
+    }
+
+    public void setEventInfoMapper(EventInfoMapper eventInfoMapper)
+    {
+        this.eventInfoMapper = eventInfoMapper;
+    }
+    
+    
+    
+    
+    public RmsUserMapper getRmsUserMapper()
+    {
+        return rmsUserMapper;
+    }
+
+    public void setRmsUserMapper(RmsUserMapper rmsUserMapper)
+    {
+        this.rmsUserMapper = rmsUserMapper;
+    }
+
+    private InstallDocument createInstallDocumentFromEventInfo(EventInfo eventInfo)
+    {
+        InstallDocument newInstallDocument = null;
+        if (eventInfo!=null)
+        {
+            try
+            {
+                newInstallDocument = new InstallDocument();
+                
+                
+                newInstallDocument.setCeventid(eventInfo.getCguid());
+                //纸质单号
+                newInstallDocument.setCcode(_helper.gernerateInstallCode());
+                //企业信息
+                newInstallDocument.setEnterpriseBaseInfo(eventInfo.getEnterpriseBaseInfo());
+                //企业信息快照
+                newInstallDocument.setCenterpriseid(eventInfo.getCenterpriseid());
+                newInstallDocument.setCenterprisename(eventInfo.getCenterprisename());
+                newInstallDocument.setCtaxcode(eventInfo.getCtaxcode());
+                
+                newInstallDocument.setCenterpriseadress(eventInfo.getCenterpriseadress());
+                newInstallDocument.setCenterprisedepartment(null);
+                newInstallDocument.setCcontactid(eventInfo.getCcontactid());
+                newInstallDocument.setCcontactname(eventInfo.getCcontactname());
+                newInstallDocument.setCcontacttel(eventInfo.getCcontacttel());
+                newInstallDocument.setCcontactphone(eventInfo.getCcontactphone());
+                
+                newInstallDocument.setEmployee(currentUser.getEmployee());
+                newInstallDocument.setCdepartment(currentUser.getEmployee().getDepartment().getCname());
+                newInstallDocument.setCarea(eventInfo.getAreaClass().getCname());
+                newInstallDocument.setCemployeeid(currentUser.getEmployee().getCguid());
+                
+                
+                newInstallDocument.setCbelongtax(eventInfo.getEnterpriseBaseInfo().getCurrentTaxOrganization().getCguid());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            
+        }
+        
+        return newInstallDocument;
+    }
+    
     
 }

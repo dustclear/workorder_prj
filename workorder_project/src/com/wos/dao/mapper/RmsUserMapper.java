@@ -24,4 +24,6 @@ public interface RmsUserMapper {
     List<RmsUser> userLogin(RmsUser userInfo);
     
     List<RmsUser> findUserByName(String userName);
+    
+    RmsUser findUserById(String userName);
 }

@@ -23,9 +23,9 @@ public interface InstallDocMgt
      * install document base info
      */
     /**
-     * 根据事件编码查询出安装单信息。
+     * 根据事件编码查询出安装单信息。 此处的cguid对应表AOS_RMS_USER的cguid， ccode对应表itsm_service_EventManagement的cCode，就是事件编码
      * @param eventCodeText
-     * @return string 注意返回值的输出结果，这是一个复杂的数据结构，其中包含了最深三层的结构：installdocument~enterpriseBaseInfo~currentContact~contactInfo,前端解析时请注意。。
+     * @return string 注意输出结果，这是一个复杂的数据结构，包含：installdocument~enterpriseBaseInfo以及department，area等信息,前端解析时请注意。。
      */
     public String loadInstallDocumentByEventCode(String eventCodeText);
     

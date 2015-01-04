@@ -27,6 +27,7 @@
     <result column="cDESCP" property="cdescp" jdbcType="VARCHAR" />
     <result column="iIfLoginSys" property="iifloginsys" jdbcType="INTEGER" />
     <result column="iSystemUser" property="isystemuser" jdbcType="INTEGER" />
+    <association property ="employee" column="cEMP" select ="com.wos.dao.mapper.EmployeeMapper.selectByPrimaryKey"/>
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.RmsUser" >
     <!--
@@ -190,5 +191,10 @@
   <select id="findUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select * FROM AOS_RMS_USER WHERE cNAME = #{userName}
   </select>
+  
+  <select id="findUserById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select top 1 * FROM AOS_RMS_USER WHERE cGUID = #{cguid}
+  </select>
+  
   
 </mapper>

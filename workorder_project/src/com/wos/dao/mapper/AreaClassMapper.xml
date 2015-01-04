@@ -128,4 +128,8 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="getAreaClassById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select top 1 * from CM_AreaClass where cGUID=#{cguid} 
+  </select>
 </mapper>

@@ -18,4 +18,6 @@ public interface EventInfoMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(EventInfo record);
+    
+    EventInfo loadEventInfoByEventCode(String eventCode);
 }

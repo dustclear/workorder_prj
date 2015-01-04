@@ -36,6 +36,8 @@
     <result column="cTimeStamp" property="ctimestamp" jdbcType="VARCHAR" />
     <result column="ActionDate" property="actiondate" jdbcType="TIMESTAMP" />
     <result column="CrmID" property="crmid" jdbcType="VARCHAR" />
+    <association property ="enterpriseBaseInfo" column="cEnterpriseID" select ="com.wos.dao.mapper.EnterpriseBaseInfoMapper.getEnterpriseInfoById"/>
+    <association property ="areaClass" column="cAreaID" select ="com.wos.dao.mapper.AreaClassMapper.getAreaClassById"/>
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.EventInfo" >
     <!--
@@ -250,4 +252,8 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="loadEventInfoByEventCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select top 1 * from itsm_service_EventManagement where cCode=#{ccode} 
+  </select>
 </mapper>

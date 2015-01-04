@@ -18,7 +18,7 @@
 	<jaxws:endpoint id="helloWorld" implementor="#hello"
 		address="/HelloWorld" /> -->
 		
-	<bean id="installDoc" class="com.wos.mgt.impl.InstallDocMgtImpl" >
+	<bean id="installDoc" class="com.wos.mgt.impl.InstallDocMgtImpl" scope="prototype">
 		<property name="addressType" ref="addressTypeMapper"/>
 		<property name="installDocument" ref="installDocumentMapper"/>
 		<property name="installTemplate" ref="installTemplateMapper"/>
@@ -29,6 +29,8 @@
 		<property name="serviceResponse" ref="serviceResponseMapper"/>
 		<property name="contactInfo" ref="contactInfoMapper"/>
 		<property name="enterpriseContact" ref="enterpriseContactsMapper"/>
+		<property name="eventInfoMapper" ref="eventInfoMapper"/>
+		<property name="rmsUserMapper" ref="rmsUserMapper"/>
 	</bean>
 	
 	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >
