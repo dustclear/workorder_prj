@@ -229,4 +229,9 @@
   <select id="loadAllChargeTypes" resultMap="BaseResultMap">
 		select * from itsm_service_ChargeType
   </select>
+  
+    <select id="getChargeTypeByPrimaryId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT *
+		from itsm_service_ChargeType where cguid = #{cguid}
+  </select>
 </mapper>

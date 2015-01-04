@@ -15,6 +15,10 @@
     <result column="cChargeType" jdbcType="VARCHAR" property="cchargetype" />
     <result column="cResponseID" jdbcType="VARCHAR" property="cresponseid" />
     <result column="cInstallTypeID" jdbcType="VARCHAR" property="cinstalltypeid" />
+    <association property ="material" column="cMatID" select ="com.wos.dao.mapper.MaterialMapper.getMaterialByPrimaryId"/>
+    <association property ="chargeType" column="cChargeType" select ="com.wos.dao.mapper.ChargeTypeMapper.getChargeTypeByPrimaryId"/>
+    <association property ="serviceResponse" column="cResponseID" select ="com.wos.dao.mapper.ServiceResponseMapper.findServiceResponseByPrimaryId"/>
+    <association property ="installType" column="cInstallTypeID" select ="com.wos.dao.mapper.ConfigInfoMapper.findConfigInfoByPrimaryId"/>
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -165,4 +169,12 @@
       cInstallTypeID = #{cinstalltypeid,jdbcType=VARCHAR}
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </update>
+  
+  
+  <select id="findInstallDetailByTemplateId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dbo.itsm_service_InstallDetail
+    where cMainID = #{cmainid,jdbcType=VARCHAR}
+  </select>
 </mapper>

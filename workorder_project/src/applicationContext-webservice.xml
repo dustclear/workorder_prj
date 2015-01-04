@@ -31,6 +31,7 @@
 		<property name="enterpriseContact" ref="enterpriseContactsMapper"/>
 		<property name="eventInfoMapper" ref="eventInfoMapper"/>
 		<property name="rmsUserMapper" ref="rmsUserMapper"/>
+		<property name="installDetailMapper" ref="installDetailMapper"/>
 	</bean>
 	
 	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >

@@ -19,6 +19,7 @@ import com.wos.dao.mapper.EnterpriseAddressMapper;
 import com.wos.dao.mapper.EnterpriseContactsMapper;
 import com.wos.dao.mapper.EventInfoMapper;
 import com.wos.dao.mapper.ExtendedAttributeMapper;
+import com.wos.dao.mapper.InstallDetailMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
@@ -33,6 +34,7 @@ import com.wos.pojo.EnterpriseAddress;
 import com.wos.pojo.EnterpriseContacts;
 import com.wos.pojo.EventInfo;
 import com.wos.pojo.ExtendedAttribute;
+import com.wos.pojo.InstallDetail;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 import com.wos.pojo.InstallTemplate;
@@ -54,6 +56,8 @@ public class InstallDocMgtImpl implements InstallDocMgt
     private InstallDocumentMapper installDocument;
     
     private InstallTemplateMapper installTemplate;
+    
+    private InstallDetailMapper installDetailMapper;
     
     private InstallDocuDetailMapper installDocuDetail;
     
@@ -119,13 +123,15 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
 //        String installTemplate = _helper.getValueFromJsonText(argInstallTemplateText,
 //                "installTemplate");
-//        String cMainId = _helper.getValueFromJsonText(argInstallTemplateText,
-//                "cMainId");
+        String cMainId = _helper.getValueFromJsonText(argInstallTemplateText,
+                "cMainId");
         
-        Map<String, String> param = _gson.fromJson(argInstallTemplateText,
-                Map.class);
+        List<InstallDetail> installDetails = installDetailMapper.findInstallDetailByTemplateId(cMainId);
         
-        List<InstallDocuDetail> installDocuDetails = installDocuDetail.findInstallDetailByTemplate(param);
+       /* Map<String, String> param = _gson.fromJson(argInstallTemplateText,
+                Map.class);*/
+        
+        List<InstallDocuDetail> installDocuDetails = createInstallDocDetailsFromInstallDetail(installDetails);/*installDocuDetail.findInstallDetailByTemplate(param);*/
         
         return _helper.toJsonText(installDocuDetails, null);
     }
@@ -541,7 +547,15 @@ public class InstallDocMgtImpl implements InstallDocMgt
     
     
     
-    public RmsUserMapper getRmsUserMapper()
+    public InstallDetailMapper getInstallDetailMapper() {
+		return installDetailMapper;
+	}
+
+	public void setInstallDetailMapper(InstallDetailMapper installDetailMapper) {
+		this.installDetailMapper = installDetailMapper;
+	}
+
+	public RmsUserMapper getRmsUserMapper()
     {
         return rmsUserMapper;
     }
@@ -596,5 +610,9 @@ public class InstallDocMgtImpl implements InstallDocMgt
         return newInstallDocument;
     }
     
+    private List<InstallDocuDetail> createInstallDocDetailsFromInstallDetail(List<InstallDetail> argInstallDetails)
+    {
+    	return null;
+    }
     
 }

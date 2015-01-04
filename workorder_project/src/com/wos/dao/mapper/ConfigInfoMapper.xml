@@ -90,7 +90,10 @@
     </trim>
   </insert>
   
-  
+  <select id="findConfigInfoByPrimaryId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT *
+		from itsm_service_Configuration where cguid = #{cguid}
+  </select>
   
   <select id="loadAllConfigInfos" resultMap="BaseResultMap">
     select 

@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.InstallDetail;
 
 public interface InstallDetailMapper {
@@ -50,4 +52,6 @@ public interface InstallDetailMapper {
      * @mbggenerated Fri Dec 05 17:20:59 CST 2014
      */
     int updateByPrimaryKey(InstallDetail record);
+    
+    List<InstallDetail> findInstallDetailByTemplateId(String cMainId);
 }

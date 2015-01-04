@@ -145,6 +145,8 @@
     <result column="CrmID" property="crmid" jdbcType="VARCHAR" />
     <result column="iExtendTabFlag" property="iextendtabflag" jdbcType="SMALLINT" />
     <result column="udef_0027" property="udef0027" jdbcType="VARCHAR" />
+    <collection column="cGUID" property="extendedAttributes" select="com.wos.dao.mapper.ExtendedAttributeMapper.findExtendedAttributesByMatId" />
+    
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.Material" >
     <!--
