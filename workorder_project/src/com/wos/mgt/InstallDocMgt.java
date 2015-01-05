@@ -15,6 +15,12 @@ import com.wos.pojo.InstallTemplate;
 import com.wos.pojo.ServiceResponse;
 import com.wos.pojo.TaxOrganization;
 
+/**
+ * 安装单管理API，业务逻辑：客户输入事件编码，加载出企业基本信息，然后选择安装单模板，生成一份新的安装单，同一个事件编码可以生成多个安装单，每次生成的都是新安装单（生成新的纸质单号）<br>
+ * 用户点击保存后，会将当前安装单的信息保存到数据库表中，主表：itsm_service_InstallDocument，子表：itsm_service_InstallDocuDetail， itsm_service_InstallDocuCofing
+ * @author machenike
+ *
+ */
 @WebService
 public interface InstallDocMgt
 {
@@ -37,7 +43,7 @@ public interface InstallDocMgt
     public String getAllInstallTemplates();    
     
     /**
-     * 选择“管理软件安装单模板”后加载相应的配置项信息。传人参数需包括安装单id:cmainid和安装单模板id:installTemplateId
+     * 选择“管理软件安装单模板”后加载相应的配置项信息。传人参数为安装单模板id:installTemplateId
      * @param installTemplateText
      * @return
      */
