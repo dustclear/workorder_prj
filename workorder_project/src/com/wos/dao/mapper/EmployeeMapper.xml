@@ -509,4 +509,5 @@
       CrmID = #{crmid,jdbcType=VARCHAR}
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </update>
+  
 </mapper>

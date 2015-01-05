@@ -19,16 +19,16 @@
 		address="/HelloWorld" /> -->
 		
 	<bean id="installDoc" class="com.wos.mgt.impl.InstallDocMgtImpl" scope="prototype">
-		<property name="addressType" ref="addressTypeMapper"/>
-		<property name="installDocument" ref="installDocumentMapper"/>
-		<property name="installTemplate" ref="installTemplateMapper"/>
-		<property name="installDocuDetail" ref="installDocuDetailMapper"/>
-		<property name="taxOrganization" ref="taxOrganizationMapper"/>
-		<property name="configInfo" ref="configInfoMapper"/>
-		<property name="chargeType" ref="chargeTypeMapper"/>
-		<property name="serviceResponse" ref="serviceResponseMapper"/>
-		<property name="contactInfo" ref="contactInfoMapper"/>
-		<property name="enterpriseContact" ref="enterpriseContactsMapper"/>
+		<property name="addressTypeMapper" ref="addressTypeMapper"/>
+		<property name="installDocumentMapper" ref="installDocumentMapper"/>
+		<property name="installTemplateMapper" ref="installTemplateMapper"/>
+		<property name="installDocuDetailMapper" ref="installDocuDetailMapper"/>
+		<property name="taxOrganizationMapper" ref="taxOrganizationMapper"/>
+		<property name="configInfoMapper" ref="configInfoMapper"/>
+		<property name="chargeTypeMapper" ref="chargeTypeMapper"/>
+		<property name="serviceResponseMapper" ref="serviceResponseMapper"/>
+		<property name="contactInfoMapper" ref="contactInfoMapper"/>
+		<property name="enterpriseContactMapper" ref="enterpriseContactsMapper"/>
 		<property name="eventInfoMapper" ref="eventInfoMapper"/>
 		<property name="rmsUserMapper" ref="rmsUserMapper"/>
 		<property name="installDetailMapper" ref="installDetailMapper"/>

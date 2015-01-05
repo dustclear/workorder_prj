@@ -2,12 +2,15 @@ package com.wos.mgt.impl;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.Gson;
 import com.wos.common.MD5Util;
+import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
 import com.wos.dao.mapper.RmsUserMapper;
 import com.wos.mgt.LoginMgt;
@@ -16,6 +19,9 @@ import com.wos.pojo.RmsUser;
 @WebService(endpointInterface = "com.wos.mgt.LoginMgt")
 public class LoginMgtImpl implements LoginMgt
 {
+    @Resource
+    WebServiceContext wsContext;
+    
     private RmsUserMapper userDao;
     
     private WosHelper _helper = WosHelper.getInstance();
@@ -27,7 +33,10 @@ public class LoginMgtImpl implements LoginMgt
     {
         RmsUser userInfo = _gson.fromJson(loginInfoText, RmsUser.class);
         
-        return _helper.toJsonText(loginByUserInfo(userInfo), RmsUser.class);
+        RmsUser result = loginByUserInfo(userInfo);
+        _helper.getSession(wsContext).setAttribute(WosConstant.CURRENT_USER, result);
+        
+        return _helper.toJsonText(result, RmsUser.class);
     }
     
     private RmsUser loginByUserInfo(RmsUser userInfo)

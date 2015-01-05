@@ -410,6 +410,10 @@
 		select * from itsm_service_InstallDocument where centerpriseid=#{enterpriseId} 
   </select>
   
+  <select id="findInstallDocumentByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select top 1 * from itsm_service_InstallDocument where cguid=#{cguid} 
+  </select>
+  
   <update id="updateContactInfo" parameterType="com.wos.pojo.InstallDocument">
     update dbo.itsm_service_InstallDocument
     <set>

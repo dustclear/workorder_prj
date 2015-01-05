@@ -24,6 +24,8 @@ public interface InstallDocumentMapper {
     
     InstallDocument findInstallDocumentByEventCode(String eventCode);
     
+    InstallDocument findInstallDocumentByPrimaryKey(String cguid);
+    
     List<InstallDocument> findInstallDocumentByEnterpriseId(String enterpriseId);
     
     int updateContactInfo(InstallDocument newContactInfo);

@@ -2,7 +2,13 @@ package com.wos.common;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -58,5 +64,25 @@ public class WosHelper
     private String generateRadomStr(int length)
     {
         return RandomStringUtils.randomNumeric(length);
+    }
+    
+    public HttpSession getSession(WebServiceContext wsContext)
+    {
+        HttpSession session = null;
+        if (getRequest(wsContext) != null)
+        {
+            session = getRequest(wsContext).getSession(true);
+        }
+        return session;
+    }
+    
+    public HttpServletRequest getRequest(WebServiceContext wsContext)
+    {
+        MessageContext mc;
+        mc = wsContext.getMessageContext();
+        
+        HttpServletRequest request = (HttpServletRequest)mc.get(AbstractHTTPDestination.HTTP_REQUEST);
+        
+        return request;
     }
 }

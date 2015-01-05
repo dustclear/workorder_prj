@@ -52,8 +52,8 @@ public class TestInstallDocMgt
     public void testGetInstallDetailByTemplate() { 
         
         Map<String, String> map = new HashMap<String, String>();
-        map.put("cmainid", "187011891516931393");
-        map.put("installTemplateId", "271441751171043777");
+        map.put("installTemplateId", "905840966170754569");
+        map.put("installDocumentId", "271441751171043777");
         String installTemplateText = _helper.toJsonText(map, null);
         
         String resStr=service.getInstallDetailByTemplate(installTemplateText);

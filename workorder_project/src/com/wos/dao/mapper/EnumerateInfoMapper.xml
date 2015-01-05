@@ -151,4 +151,10 @@
       </if>
     </trim>
   </insert>
+  
+   <select id="getEnumerateInfoByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT *
+		from AOS_BD_ENUMERATE where centypeguid = #{centypeguid}
+  </select>
+  
 </mapper>

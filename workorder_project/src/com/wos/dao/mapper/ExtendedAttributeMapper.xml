@@ -25,6 +25,7 @@
     <result column="cEntityId" property="centityid" jdbcType="VARCHAR" />
     <result column="cDefutValue" property="cdefutvalue" jdbcType="VARCHAR" />
     <result column="inumber" property="inumber" jdbcType="INTEGER" />
+    <collection column="cGUID" property="enumerateInfos" select="com.wos.dao.mapper.EnumerateInfoMapper.getEnumerateInfoByType" />
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.ExtendedAttribute" >
     <!--

@@ -1,11 +1,18 @@
 package com.wos.mgt.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,6 +42,7 @@ import com.wos.pojo.EnterpriseContacts;
 import com.wos.pojo.EventInfo;
 import com.wos.pojo.ExtendedAttribute;
 import com.wos.pojo.InstallDetail;
+import com.wos.pojo.InstallDocuCofig;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 import com.wos.pojo.InstallTemplate;
@@ -49,71 +57,73 @@ public class InstallDocMgtImpl implements InstallDocMgt
     WebServiceContext wsContext;
     
     private RmsUserMapper rmsUserMapper;
+    
     private EventInfoMapper eventInfoMapper;
     
-    private AddressTypeMapper addressType;
+    private AddressTypeMapper addressTypeMapper;
     
-    private InstallDocumentMapper installDocument;
+    private InstallDocumentMapper installDocumentMapper;
     
-    private InstallTemplateMapper installTemplate;
+    private InstallTemplateMapper installTemplateMapper;
     
     private InstallDetailMapper installDetailMapper;
     
-    private InstallDocuDetailMapper installDocuDetail;
+    private InstallDocuDetailMapper installDocuDetailMapper;
     
-    private TaxOrganizationMapper taxOrganization;
+    private TaxOrganizationMapper taxOrganizationMapper;
     
-    private ConfigInfoMapper configInfo;
+    private ConfigInfoMapper configInfoMapper;
     
-    private ChargeTypeMapper chargeType;
+    private ChargeTypeMapper chargeTypeMapper;
     
-    private ServiceResponseMapper serviceResponse;
+    private ServiceResponseMapper serviceResponseMapper;
     
-    private ContactInfoMapper contactInfo;
+    private ContactInfoMapper contactInfoMapper;
     
-    private ExtendedAttributeMapper extendedAttribute;
+    private ExtendedAttributeMapper extendedAttributeMapper;
     
-    private EnterpriseAddressMapper enterpriseAddress;
+    private EnterpriseAddressMapper enterpriseAddressMapper;
     
-    private EnterpriseContactsMapper enterpriseContact;
+    private EnterpriseContactsMapper enterpriseContactMapper;
     
-    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
+    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT)
+            .create();
     
     private WosHelper _helper = WosHelper.getInstance();
     
     private RmsUser currentUser;
     
+    private InstallDocument currentInstallDocument;
+    
     @Override
     public String loadInstallDocumentByEventCode(String argEventCodeText)
     {
+        
         String eventCode = _helper.getValueFromJsonText(argEventCodeText,
                 "ccode");
-        String userId = _helper.getValueFromJsonText(argEventCodeText,
-                "cguid"); //此处的cguid对应表AOS_RMS_USER的cguid
-        currentUser = rmsUserMapper.findUserById(userId);
+        String userId = _helper.getValueFromJsonText(argEventCodeText, "cguid"); //此处的cguid对应表AOS_RMS_USER的cguid
+        if (StringUtils.isNotEmpty(userId))
+        {
+            currentUser = rmsUserMapper.findUserById(userId);
+        }
         
         EventInfo eventInfo = eventInfoMapper.loadEventInfoByEventCode(eventCode);
-        
-        
-//        InstallDocument doc = installDocument.findInstallDocumentByEventCode(eventCode);
-        
         InstallDocument doc = createInstallDocumentFromEventInfo(eventInfo);
         
-        /*   
-           if (getSession() != null)
-           {
-               getSession().setAttribute(WosConstant.INSTALL_DOCUMENT, doc);
-           }*/
         
+        if (_helper.getSession(wsContext) != null)
+        {
+            _helper.getSession(wsContext).setAttribute(WosConstant.CURRENT_INSTALL_DOCUMENT, doc);
+        }
+        currentInstallDocument = doc;
         _helper.toJsonText(doc, InstallDocument.class);
-        
         return _helper.toJsonText(doc, InstallDocument.class);
     }
     
     @Override
     public String getAllInstallTemplates()
     {
-        List<InstallTemplate> templates = installTemplate.loadAllInstallTemplates();
+        List<InstallTemplate> templates = installTemplateMapper.loadAllInstallTemplates();
         
         return _helper.toJsonText(templates, null);
     }
@@ -121,17 +131,15 @@ public class InstallDocMgtImpl implements InstallDocMgt
     @Override
     public String getInstallDetailByTemplate(String argInstallTemplateText)
     {
-//        String installTemplate = _helper.getValueFromJsonText(argInstallTemplateText,
-//                "installTemplate");
-        String cMainId = _helper.getValueFromJsonText(argInstallTemplateText,
-                "cMainId");
+        String installTemplateId = _helper.getValueFromJsonText(argInstallTemplateText,
+                "installTemplateId");
         
-        List<InstallDetail> installDetails = installDetailMapper.findInstallDetailByTemplateId(cMainId);
+//        String installDocumentId = _helper.getValueFromJsonText(argInstallTemplateText,
+//                "installDocumentId");
         
-       /* Map<String, String> param = _gson.fromJson(argInstallTemplateText,
-                Map.class);*/
+        List<InstallDetail> installDetails = installDetailMapper.findInstallDetailByTemplateId(installTemplateId);
         
-        List<InstallDocuDetail> installDocuDetails = createInstallDocDetailsFromInstallDetail(installDetails);/*installDocuDetail.findInstallDetailByTemplate(param);*/
+        List<InstallDocuDetail> installDocuDetails = createInstallDocDetailsFromInstallDetail(installDetails);
         
         return _helper.toJsonText(installDocuDetails, null);
     }
@@ -139,7 +147,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     @Override
     public String getAllTaxOrganizations()
     {
-        List<TaxOrganization> taxOrganizations = taxOrganization.loadAllTaxOrganizations();
+        List<TaxOrganization> taxOrganizations = taxOrganizationMapper.loadAllTaxOrganizations();
         return _helper.toJsonText(taxOrganizations, null);
     }
     
@@ -148,7 +156,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         String parentId = _helper.getValueFromJsonText(argParentIdText,
                 "cparentid");
-        List<TaxOrganization> taxOrganizations = taxOrganization.findTaxOrganizationsByParentCode(parentId);
+        List<TaxOrganization> taxOrganizations = taxOrganizationMapper.findTaxOrganizationsByParentCode(parentId);
         return _helper.toJsonText(taxOrganizations, null);
     }
     
@@ -156,7 +164,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public String getTaxOrganizationsByName(String argOrgNameText)
     {
         String orgName = _helper.getValueFromJsonText(argOrgNameText, "cName");
-        List<TaxOrganization> taxOrganizations = taxOrganization.findTaxOrganizationByName(orgName);
+        List<TaxOrganization> taxOrganizations = taxOrganizationMapper.findTaxOrganizationByName(orgName);
         
         return _helper.toJsonText(taxOrganizations, null);
     }
@@ -167,7 +175,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         String enterpriseId = _helper.getValueFromJsonText(argEnterpriseIdText,
                 "cEnterpriseID");
         //        List<ContactInfo> contactInfos = contactInfo.findContactInfoByEnterpriseId(enterpriseId);
-        List<EnterpriseContacts> enterpriseContactRes = enterpriseContact.findContactInfoByEnterpriseId(enterpriseId);
+        List<EnterpriseContacts> enterpriseContactRes = enterpriseContactMapper.findContactInfoByEnterpriseId(enterpriseId);
         
         return _helper.toJsonText(enterpriseContactRes, null);
     }
@@ -177,7 +185,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         String contactInfoId = _helper.getValueFromJsonText(argContactIdText,
                 "cGUID");
-        List<ContactInfo> contactInfos = contactInfo.findContactInfoById(contactInfoId);
+        List<ContactInfo> contactInfos = contactInfoMapper.findContactInfoById(contactInfoId);
         
         return _helper.toJsonText(contactInfos.get(0), null);
     }
@@ -188,7 +196,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         ContactInfo contactInfoUpdate = _gson.fromJson(argTtelephonesText,
                 ContactInfo.class);
         
-        int result = contactInfo.updateContactPhone(contactInfoUpdate);
+        int result = contactInfoMapper.updateContactPhone(contactInfoUpdate);
         return _helper.toJsonText(result, null);
     }
     
@@ -205,7 +213,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 ContactInfo.class);
         contactInfoRes.setCguid(_helper.generatePrimaryKey());
         
-        int result = contactInfo.insertSelective(contactInfoRes);
+        int result = contactInfoMapper.insertSelective(contactInfoRes);
         return _helper.toJsonText(result, null);
     }
     
@@ -213,7 +221,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public String deleteContactInfo(String argContactIdText)
     {
         String cguid = _helper.getValueFromJsonText(argContactIdText, "cguid");
-        int result = contactInfo.deleteByPrimaryKey(cguid);
+        int result = contactInfoMapper.deleteByPrimaryKey(cguid);
         
         return _helper.toJsonText(result, null);
     }
@@ -224,7 +232,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         ContactInfo contactInfoUpdate = _gson.fromJson(argContactInfoText,
                 ContactInfo.class);
         
-        int result = contactInfo.updateContactInfo(contactInfoUpdate);
+        int result = contactInfoMapper.updateContactInfo(contactInfoUpdate);
         return _helper.toJsonText(result, null);
     }
     
@@ -234,10 +242,10 @@ public class InstallDocMgtImpl implements InstallDocMgt
         String cguid = _helper.getValueFromJsonText(argCurrentContactText,
                 "cguid");
         
-        enterpriseContact.removeCurrentContact(cguid);
-        int result = enterpriseContact.updateAsCurrentContact(cguid);
+        enterpriseContactMapper.removeCurrentContact(cguid);
+        int result = enterpriseContactMapper.updateAsCurrentContact(cguid);
         
-        EnterpriseContacts newEnterpriseContact = enterpriseContact.findContactInfoByPrimaryId(cguid);
+        EnterpriseContacts newEnterpriseContact = enterpriseContactMapper.findContactInfoByPrimaryId(cguid);
         
         updateContactToInstallDoc(newEnterpriseContact.getCcontactid(),
                 newEnterpriseContact.getCenterpriseid());
@@ -248,13 +256,13 @@ public class InstallDocMgtImpl implements InstallDocMgt
     private void updateContactToInstallDoc(String newContactId,
             String enterpriseId)
     {
-        List<ContactInfo> newContactInfos = contactInfo.findContactInfoById(newContactId);
+        List<ContactInfo> newContactInfos = contactInfoMapper.findContactInfoById(newContactId);
         
         //update contact info in install document
         if (newContactInfos != null && newContactInfos.size() > 0)
         {
             ContactInfo newContactInfo = newContactInfos.get(0);
-            List<InstallDocument> documents = installDocument.findInstallDocumentByEnterpriseId(enterpriseId);
+            List<InstallDocument> documents = installDocumentMapper.findInstallDocumentByEnterpriseId(enterpriseId);
             for (InstallDocument document : documents)
             {
                 if (document != null)
@@ -264,7 +272,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
                     document.setCcontactphone(newContactInfo.getCphone1());
                     document.setCcontacttel(newContactInfo.getCtel1());
                     
-                    installDocument.updateContactInfo(document);
+                    installDocumentMapper.updateContactInfo(document);
                 }
             }
             
@@ -277,7 +285,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         String enterpriseId = _helper.getValueFromJsonText(argEnterpriseIdText,
                 "centerpriseid");
         
-        List<EnterpriseAddress> enterpriseAddresses = enterpriseAddress.getEnterpriseAddresses(enterpriseId);
+        List<EnterpriseAddress> enterpriseAddresses = enterpriseAddressMapper.getEnterpriseAddresses(enterpriseId);
         
         return _helper.toJsonText(enterpriseAddresses, null);
     }
@@ -289,7 +297,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 EnterpriseAddress.class);
         enterpriseAddressNew.setCguid(_helper.generatePrimaryKey());
         
-        int result = enterpriseAddress.insertSelective(enterpriseAddressNew);
+        int result = enterpriseAddressMapper.insertSelective(enterpriseAddressNew);
         return _helper.toJsonText(result, null);
     }
     
@@ -299,7 +307,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         EnterpriseAddress enterpriseAddressUpdate = _gson.fromJson(argAddressText,
                 EnterpriseAddress.class);
         
-        int result = enterpriseAddress.updateEnterpriseAddress(enterpriseAddressUpdate);
+        int result = enterpriseAddressMapper.updateEnterpriseAddress(enterpriseAddressUpdate);
         return _helper.toJsonText(result, null);
     }
     
@@ -307,7 +315,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     public String deleteEnterpriseAddress(String argAddressIdText)
     {
         String cguid = _helper.getValueFromJsonText(argAddressIdText, "cguid");
-        int result = enterpriseAddress.deleteByPrimaryKey(cguid);
+        int result = enterpriseAddressMapper.deleteByPrimaryKey(cguid);
         
         return _helper.toJsonText(result, null);
     }
@@ -317,7 +325,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         String cguid = _helper.getValueFromJsonText(argCurrentAddressText,
                 "cguid");
-        int result = enterpriseAddress.updateAsCurrentAddress(cguid);
+        int result = enterpriseAddressMapper.updateAsCurrentAddress(cguid);
         
         return _helper.toJsonText(result, null);
     }
@@ -325,7 +333,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     @Override
     public String loadAllInstallTypes()
     {
-        List<ConfigInfo> configInfos = configInfo.loadAllConfigInfos();
+        List<ConfigInfo> configInfos = configInfoMapper.loadAllConfigInfos();
         
         return _helper.toJsonText(configInfos, null);
     }
@@ -333,7 +341,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     @Override
     public String loadAllChargeTypes()
     {
-        List<ChargeType> chargeTypes = chargeType.loadAllChargeTypes();
+        List<ChargeType> chargeTypes = chargeTypeMapper.loadAllChargeTypes();
         
         return _helper.toJsonText(chargeTypes, null);
     }
@@ -341,7 +349,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     @Override
     public String loadAllServiceResponses()
     {
-        List<ServiceResponse> serviceResponses = serviceResponse.loadAllServiceResponses();
+        List<ServiceResponse> serviceResponses = serviceResponseMapper.loadAllServiceResponses();
         return _helper.toJsonText(serviceResponses, null);
     }
     
@@ -350,32 +358,11 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         String matId = _helper.getValueFromJsonText(argMatIdText, "cmatid");
         
-        List<ExtendedAttribute> extendedAttributes = extendedAttribute.findExtendedAttributesByMatId(matId);
+        List<ExtendedAttribute> extendedAttributes = extendedAttributeMapper.findExtendedAttributesByMatId(matId);
         
         return _helper.toJsonText(extendedAttributes, null);
     }
     
-    
-    
-    /* private HttpSession getSession()
-     {
-         HttpSession session = null;
-         if (getRequest() != null)
-         {
-             session = getRequest().getSession(true);
-         }
-         return session;
-     }
-     
-     private HttpServletRequest getRequest()
-     {
-         MessageContext mc;
-         mc = wsContext.getMessageContext();
-         
-         HttpServletRequest request = (HttpServletRequest)mc.get(AbstractHTTPDestination.HTTP_REQUEST);
-         
-         return request;
-     }*/
     
     @Override
     public String saveInstallDocDetail(String installDetailText)
@@ -383,10 +370,10 @@ public class InstallDocMgtImpl implements InstallDocMgt
         InstallDocuDetail installDocuDetailUpdate = _gson.fromJson(installDetailText,
                 InstallDocuDetail.class);
         
-        int result = installDocuDetail.updateByPrimaryKeySelective(installDocuDetailUpdate);
+        int result = installDocuDetailMapper.updateByPrimaryKeySelective(installDocuDetailUpdate);
         return _helper.toJsonText(result, null);
     }
-
+    
     @Override
     public String addInstallDocDetail(String installDetailText)
     {
@@ -394,186 +381,192 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 InstallDocuDetail.class);
         installDocuDetailNew.setCguid(_helper.generatePrimaryKey());
         
-        int result = installDocuDetail.insertSelective(installDocuDetailNew);
+        int result = installDocuDetailMapper.insertSelective(installDocuDetailNew);
         return _helper.toJsonText(result, null);
     }
-
+    
     @Override
     public String saveInstallDocument(String installDocumentText)
     {
         InstallDocument installDocumentUpdate = _gson.fromJson(installDocumentText,
                 InstallDocument.class);
         
-        int result = installDocument.updateByPrimaryKeySelective(installDocumentUpdate);
+        int result = installDocumentMapper.updateByPrimaryKeySelective(installDocumentUpdate);
         return _helper.toJsonText(result, null);
     }
     
-    
-
     /**
      * get set methods
      */
     
-    public AddressTypeMapper getAddressType()
-    {
-        return addressType;
-    }
-    
-    public void setAddressType(AddressTypeMapper argAddressType)
-    {
-        this.addressType = argAddressType;
-    }
-    
-    public InstallDocumentMapper getInstallDocument()
-    {
-        return installDocument;
-    }
-    
-    public void setInstallDocument(InstallDocumentMapper installDocument)
-    {
-        this.installDocument = installDocument;
-    }
-    
-    public InstallTemplateMapper getInstallTemplate()
-    {
-        return installTemplate;
-    }
-    
-    public void setInstallTemplate(InstallTemplateMapper installTemplate)
-    {
-        this.installTemplate = installTemplate;
-    }
-    
-    public InstallDocuDetailMapper getInstallDocuDetail()
-    {
-        return installDocuDetail;
-    }
-    
-    public void setInstallDocuDetail(InstallDocuDetailMapper installDocuDetail)
-    {
-        this.installDocuDetail = installDocuDetail;
-    }
-    
-    public TaxOrganizationMapper getTaxOrganization()
-    {
-        return taxOrganization;
-    }
-    
-    public void setTaxOrganization(TaxOrganizationMapper taxOrganization)
-    {
-        this.taxOrganization = taxOrganization;
-    }
-    
-    public ConfigInfoMapper getConfigInfo()
-    {
-        return configInfo;
-    }
-    
-    public void setConfigInfo(ConfigInfoMapper configInfo)
-    {
-        this.configInfo = configInfo;
-    }
-    
-    public ChargeTypeMapper getChargeType()
-    {
-        return chargeType;
-    }
-    
-    public void setChargeType(ChargeTypeMapper chargeType)
-    {
-        this.chargeType = chargeType;
-    }
-    
-    public ServiceResponseMapper getServiceResponse()
-    {
-        return serviceResponse;
-    }
-    
-    public void setServiceResponse(ServiceResponseMapper serviceResponse)
-    {
-        this.serviceResponse = serviceResponse;
-    }
-    
-    public ContactInfoMapper getContactInfo()
-    {
-        return contactInfo;
-    }
-    
-    public void setContactInfo(ContactInfoMapper contactInfo)
-    {
-        this.contactInfo = contactInfo;
-    }
-    
-    public ExtendedAttributeMapper getExtendedAttribute()
-    {
-        return extendedAttribute;
-    }
-    
-    public void setExtendedAttribute(ExtendedAttributeMapper extendedAttribute)
-    {
-        this.extendedAttribute = extendedAttribute;
-    }
-    
-    public EnterpriseAddressMapper getEnterpriseAddress()
-    {
-        return enterpriseAddress;
-    }
-    
-    public void setEnterpriseAddress(EnterpriseAddressMapper enterpriseAddress)
-    {
-        this.enterpriseAddress = enterpriseAddress;
-    }
-    
-    public EnterpriseContactsMapper getEnterpriseContact()
-    {
-        return enterpriseContact;
-    }
-    
-    public void setEnterpriseContact(EnterpriseContactsMapper enterpriseContact)
-    {
-        this.enterpriseContact = enterpriseContact;
-    }
-
     public EventInfoMapper getEventInfoMapper()
     {
         return eventInfoMapper;
     }
-
+    
+    public AddressTypeMapper getAddressTypeMapper()
+    {
+        return addressTypeMapper;
+    }
+    
+    public void setAddressTypeMapper(AddressTypeMapper addressTypeMapper)
+    {
+        this.addressTypeMapper = addressTypeMapper;
+    }
+    
+    public InstallDocumentMapper getInstallDocumentMapper()
+    {
+        return installDocumentMapper;
+    }
+    
+    public void setInstallDocumentMapper(
+            InstallDocumentMapper installDocumentMapper)
+    {
+        this.installDocumentMapper = installDocumentMapper;
+    }
+    
+    public InstallTemplateMapper getInstallTemplateMapper()
+    {
+        return installTemplateMapper;
+    }
+    
+    public void setInstallTemplateMapper(
+            InstallTemplateMapper installTemplateMapper)
+    {
+        this.installTemplateMapper = installTemplateMapper;
+    }
+    
+    public InstallDocuDetailMapper getInstallDocuDetailMapper()
+    {
+        return installDocuDetailMapper;
+    }
+    
+    public void setInstallDocuDetailMapper(
+            InstallDocuDetailMapper installDocuDetailMapper)
+    {
+        this.installDocuDetailMapper = installDocuDetailMapper;
+    }
+    
+    public TaxOrganizationMapper getTaxOrganizationMapper()
+    {
+        return taxOrganizationMapper;
+    }
+    
+    public void setTaxOrganizationMapper(
+            TaxOrganizationMapper taxOrganizationMapper)
+    {
+        this.taxOrganizationMapper = taxOrganizationMapper;
+    }
+    
+    public ConfigInfoMapper getConfigInfoMapper()
+    {
+        return configInfoMapper;
+    }
+    
+    public void setConfigInfoMapper(ConfigInfoMapper configInfoMapper)
+    {
+        this.configInfoMapper = configInfoMapper;
+    }
+    
+    public ChargeTypeMapper getChargeTypeMapper()
+    {
+        return chargeTypeMapper;
+    }
+    
+    public void setChargeTypeMapper(ChargeTypeMapper chargeTypeMapper)
+    {
+        this.chargeTypeMapper = chargeTypeMapper;
+    }
+    
+    public ServiceResponseMapper getServiceResponseMapper()
+    {
+        return serviceResponseMapper;
+    }
+    
+    public void setServiceResponseMapper(
+            ServiceResponseMapper serviceResponseMapper)
+    {
+        this.serviceResponseMapper = serviceResponseMapper;
+    }
+    
+    public ContactInfoMapper getContactInfoMapper()
+    {
+        return contactInfoMapper;
+    }
+    
+    public void setContactInfoMapper(ContactInfoMapper contactInfoMapper)
+    {
+        this.contactInfoMapper = contactInfoMapper;
+    }
+    
+    public ExtendedAttributeMapper getExtendedAttributeMapper()
+    {
+        return extendedAttributeMapper;
+    }
+    
+    public void setExtendedAttributeMapper(
+            ExtendedAttributeMapper extendedAttributeMapper)
+    {
+        this.extendedAttributeMapper = extendedAttributeMapper;
+    }
+    
+    public EnterpriseAddressMapper getEnterpriseAddressMapper()
+    {
+        return enterpriseAddressMapper;
+    }
+    
+    public void setEnterpriseAddressMapper(
+            EnterpriseAddressMapper enterpriseAddressMapper)
+    {
+        this.enterpriseAddressMapper = enterpriseAddressMapper;
+    }
+    
+    public EnterpriseContactsMapper getEnterpriseContactMapper()
+    {
+        return enterpriseContactMapper;
+    }
+    
+    public void setEnterpriseContactMapper(
+            EnterpriseContactsMapper enterpriseContactMapper)
+    {
+        this.enterpriseContactMapper = enterpriseContactMapper;
+    }
+    
     public void setEventInfoMapper(EventInfoMapper eventInfoMapper)
     {
         this.eventInfoMapper = eventInfoMapper;
     }
     
+    public InstallDetailMapper getInstallDetailMapper()
+    {
+        return installDetailMapper;
+    }
     
+    public void setInstallDetailMapper(InstallDetailMapper installDetailMapper)
+    {
+        this.installDetailMapper = installDetailMapper;
+    }
     
-    
-    public InstallDetailMapper getInstallDetailMapper() {
-		return installDetailMapper;
-	}
-
-	public void setInstallDetailMapper(InstallDetailMapper installDetailMapper) {
-		this.installDetailMapper = installDetailMapper;
-	}
-
-	public RmsUserMapper getRmsUserMapper()
+    public RmsUserMapper getRmsUserMapper()
     {
         return rmsUserMapper;
     }
-
+    
     public void setRmsUserMapper(RmsUserMapper rmsUserMapper)
     {
         this.rmsUserMapper = rmsUserMapper;
     }
-
-    private InstallDocument createInstallDocumentFromEventInfo(EventInfo eventInfo)
+    
+    private InstallDocument createInstallDocumentFromEventInfo(
+            EventInfo eventInfo)
     {
         InstallDocument newInstallDocument = null;
-        if (eventInfo!=null)
+        if (eventInfo != null)
         {
             try
             {
                 newInstallDocument = new InstallDocument();
-                
+                newInstallDocument.setCguid(_helper.generatePrimaryKey());
                 
                 newInstallDocument.setCeventid(eventInfo.getCguid());
                 //纸质单号
@@ -593,12 +586,16 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 newInstallDocument.setCcontactphone(eventInfo.getCcontactphone());
                 
                 newInstallDocument.setEmployee(currentUser.getEmployee());
-                newInstallDocument.setCdepartment(currentUser.getEmployee().getDepartment().getCname());
+                newInstallDocument.setCdepartment(currentUser.getEmployee()
+                        .getDepartment()
+                        .getCname());
                 newInstallDocument.setCarea(eventInfo.getAreaClass().getCname());
-                newInstallDocument.setCemployeeid(currentUser.getEmployee().getCguid());
+                newInstallDocument.setCemployeeid(currentUser.getEmployee()
+                        .getCguid());
                 
-                
-                newInstallDocument.setCbelongtax(eventInfo.getEnterpriseBaseInfo().getCurrentTaxOrganization().getCguid());
+                newInstallDocument.setCbelongtax(eventInfo.getEnterpriseBaseInfo()
+                        .getCurrentTaxOrganization()
+                        .getCguid());
             }
             catch (Exception e)
             {
@@ -610,9 +607,81 @@ public class InstallDocMgtImpl implements InstallDocMgt
         return newInstallDocument;
     }
     
-    private List<InstallDocuDetail> createInstallDocDetailsFromInstallDetail(List<InstallDetail> argInstallDetails)
+    private List<InstallDocuDetail> createInstallDocDetailsFromInstallDetail(
+            List<InstallDetail> argInstallDetails)
     {
-    	return null;
+        List<InstallDocuDetail> installDocuDetails = new ArrayList<InstallDocuDetail>();
+        
+        for (InstallDetail installDetail : argInstallDetails)
+        {
+            try
+            {
+                InstallDocuDetail newInstallDocuDetail = new InstallDocuDetail();
+                newInstallDocuDetail.setCguid(_helper.generatePrimaryKey());
+                
+                newInstallDocuDetail.setCmainid(currentInstallDocument.getCguid());
+                newInstallDocuDetail.setCcode(null);
+                newInstallDocuDetail.setCname(installDetail.getMaterial()
+                        .getCname());
+                newInstallDocuDetail.setCrelationmatid(installDetail.getCmatid());
+                newInstallDocuDetail.setRelateMaterial(installDetail.getMaterial());
+                
+                newInstallDocuDetail.setCcontactid(currentInstallDocument.getCcontactid());
+                newInstallDocuDetail.setCinstalltypeid(installDetail.getCinstalltypeid());
+                newInstallDocuDetail.setCversion(installDetail.getMaterial()
+                        .getCspec());
+                newInstallDocuDetail.setCismain(installDetail.getCismain());
+                newInstallDocuDetail.setCisstatus(null);
+                newInstallDocuDetail.setCchargetypeid(installDetail.getCchargetype());
+                newInstallDocuDetail.setChargeType(installDetail.getChargeType());
+                newInstallDocuDetail.setCresponseid(installDetail.getCresponseid());
+                newInstallDocuDetail.setServiceResponse(installDetail.getServiceResponse());
+                newInstallDocuDetail.setCservicedata(new Date());
+                newInstallDocuDetail.setCservicestartdate(new Date());
+                newInstallDocuDetail.setCguaranteestartdate(new Date());
+                newInstallDocuDetail.setCguaranteeenddate(new Date());
+                
+                newInstallDocuDetail.setContactInfo(currentInstallDocument.getEnterpriseBaseInfo()
+                        .getCurrentContact());
+                
+                //创建扩展属性
+                createExtendedAttrsForInstallDocDetail(newInstallDocuDetail);
+                
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            
+        }
+        
+        return installDocuDetails;
+    }
+    
+    private void createExtendedAttrsForInstallDocDetail(InstallDocuDetail installDocuDetail)
+    {
+        List<ExtendedAttribute> extendedAttrs = installDocuDetail.getRelateMaterial().getExtendedAttributes();
+        if (extendedAttrs!=null && extendedAttrs.size()>0)
+        {
+            List<InstallDocuCofig> installDocuCofigs = new ArrayList<InstallDocuCofig>();
+            for (ExtendedAttribute extendedAttr : extendedAttrs)
+            {
+                InstallDocuCofig installDocuCofig = new InstallDocuCofig();
+                installDocuCofig.setCguid(_helper.generatePrimaryKey());
+                
+                installDocuCofig.setCname(extendedAttr.getCname());
+                installDocuCofig.setCvalue(null);
+                installDocuCofig.setCid(null);
+                installDocuCofig.setCmainid(installDocuDetail.getCguid());
+                installDocuCofig.setCextid(null);
+                //扩展属性可选值
+                installDocuCofig.setEnumerateInfos(extendedAttr.getEnumerateInfos());
+                
+                installDocuCofigs.add(installDocuCofig);
+            }
+            installDocuDetail.setInstallDocuCofigs(installDocuCofigs);
+            
+        }
     }
     
 }
