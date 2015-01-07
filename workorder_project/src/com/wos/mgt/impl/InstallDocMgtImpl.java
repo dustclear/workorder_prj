@@ -1,5 +1,6 @@
 package com.wos.mgt.impl;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
 import com.wos.dao.mapper.AddressTypeMapper;
@@ -24,6 +26,7 @@ import com.wos.dao.mapper.EnterpriseContactsMapper;
 import com.wos.dao.mapper.EventInfoMapper;
 import com.wos.dao.mapper.ExtendedAttributeMapper;
 import com.wos.dao.mapper.InstallDetailMapper;
+import com.wos.dao.mapper.InstallDocuCofigMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
@@ -66,6 +69,8 @@ public class InstallDocMgtImpl implements InstallDocMgt
     private InstallDetailMapper installDetailMapper;
     
     private InstallDocuDetailMapper installDocuDetailMapper;
+    
+    private InstallDocuCofigMapper installDocuCofigMapper;
     
     private TaxOrganizationMapper taxOrganizationMapper;
     
@@ -135,10 +140,13 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         String installTemplateId = _helper.getValueFromJsonText(argInstallTemplateText,
                 "installTemplateId");
+        String installDocumentId = _helper.getValueFromJsonText(argInstallTemplateText,
+                "installDocumentId");
+        
         
         List<InstallDetail> installDetails = installDetailMapper.findInstallDetailByTemplateId(installTemplateId);
         
-        List<InstallDocuDetail> installDocuDetails = createInstallDocDetailsFromInstallDetail(installDetails);
+        List<InstallDocuDetail> installDocuDetails = createInstallDocDetailsFromInstallDetail(installDetails, installDocumentId);
         
         return _helper.toJsonText(installDocuDetails, null);
     }
@@ -366,10 +374,21 @@ public class InstallDocMgtImpl implements InstallDocMgt
     @Override
     public String saveInstallDocDetail(String installDetailText)
     {
-        InstallDocuDetail installDocuDetailUpdate = _gson.fromJson(installDetailText,
-                InstallDocuDetail.class);
-        
-        int result = installDocuDetailMapper.updateByPrimaryKeySelective(installDocuDetailUpdate);
+    	int result = 0;
+    	 Type type = new TypeToken<ArrayList<InstallDocuDetail>>() {}.getType();  
+         List<InstallDocuDetail> docuDetaillist = _gson.fromJson(installDetailText, type);
+         for (InstallDocuDetail installDocuDetail : docuDetaillist) {
+        	 
+        	 result = installDocuDetailMapper.updateByPrimaryKeySelective(installDocuDetail);
+        	 if (installDocuDetail.getInstallDocuCofigs()!=null)
+        	 {
+        		 for (InstallDocuCofig installDocuCofig : installDocuDetail.getInstallDocuCofigs()) {
+					installDocuCofigMapper.insertSelective(installDocuCofig);
+				}
+        	 }
+			
+		}
+    	
         return _helper.toJsonText(result, null);
     }
     
@@ -390,7 +409,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         InstallDocument installDocumentUpdate = _gson.fromJson(installDocumentText,
                 InstallDocument.class);
         
-        int result = installDocumentMapper.updateByPrimaryKeySelective(installDocumentUpdate);
+        int result = installDocumentMapper.insertSelective(installDocumentUpdate);
         return _helper.toJsonText(result, null);
     }
     
@@ -556,7 +575,18 @@ public class InstallDocMgtImpl implements InstallDocMgt
         this.rmsUserMapper = rmsUserMapper;
     }
     
-    private InstallDocument createInstallDocumentFromEventInfo(
+    
+    
+    public InstallDocuCofigMapper getInstallDocuCofigMapper() {
+		return installDocuCofigMapper;
+	}
+
+	public void setInstallDocuCofigMapper(
+			InstallDocuCofigMapper installDocuCofigMapper) {
+		this.installDocuCofigMapper = installDocuCofigMapper;
+	}
+
+	private InstallDocument createInstallDocumentFromEventInfo(
             EventInfo eventInfo)
     {
         InstallDocument newInstallDocument = null;
@@ -620,7 +650,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     }
     
     private List<InstallDocuDetail> createInstallDocDetailsFromInstallDetail(
-            List<InstallDetail> argInstallDetails)
+            List<InstallDetail> argInstallDetails, String installDocumentId)
     {
         List<InstallDocuDetail> installDocuDetails = new ArrayList<InstallDocuDetail>();
         
@@ -666,8 +696,12 @@ public class InstallDocMgtImpl implements InstallDocMgt
                                 .getCurrentContact());
                     }
                 }
+                else {
+                	newInstallDocuDetail.setCmainid(installDocumentId);
+				}
                 // 创建扩展属性
                 createExtendedAttrsForInstallDocDetail(newInstallDocuDetail);
+                installDocuDetails.add(newInstallDocuDetail);
                 
             }
             catch (Exception e)

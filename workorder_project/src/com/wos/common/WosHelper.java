@@ -79,10 +79,14 @@ public class WosHelper
     public HttpServletRequest getRequest(WebServiceContext wsContext)
     {
         MessageContext mc;
+        if (wsContext!=null)
+        {
         mc = wsContext.getMessageContext();
         
         HttpServletRequest request = (HttpServletRequest)mc.get(AbstractHTTPDestination.HTTP_REQUEST);
         
         return request;
+        }
+        return null;
     }
 }
