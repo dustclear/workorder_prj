@@ -632,14 +632,19 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 newInstallDocuDetail.setCguid(_helper.generatePrimaryKey());
                 
                 newInstallDocuDetail.setCcode(null);
-                newInstallDocuDetail.setCname(installDetail.getMaterial()
-                        .getCname());
+                if(installDetail.getMaterial()!=null)
+                {
+                	newInstallDocuDetail.setCname(installDetail.getMaterial()
+                            .getCname());
+                	newInstallDocuDetail.setCversion(installDetail.getMaterial()
+                            .getCspec());
+                }
+                
                 newInstallDocuDetail.setCrelationmatid(installDetail.getCmatid());
                 newInstallDocuDetail.setRelateMaterial(installDetail.getMaterial());
                 
                 newInstallDocuDetail.setCinstalltypeid(installDetail.getCinstalltypeid());
-                newInstallDocuDetail.setCversion(installDetail.getMaterial()
-                        .getCspec());
+                
                 newInstallDocuDetail.setCismain(installDetail.getCismain());
                 newInstallDocuDetail.setCisstatus(null);
                 newInstallDocuDetail.setCchargetypeid(installDetail.getCchargetype());
