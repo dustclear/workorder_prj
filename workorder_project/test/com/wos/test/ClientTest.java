@@ -54,6 +54,8 @@ public class ClientTest {
 		}
 		System.out.println(service.loadInstallDocumentByEventCode(eventCode));
 		getInstallDetailByTemplate(service);
+		
+		getAddress(service);
 	}
 
 	private static void getInstallDetailByTemplate(InstallDocMgt service) {
@@ -71,4 +73,16 @@ public class ClientTest {
 
 		System.out.println(resStr); // [{"cguid":"187011891516931394","cmainid":"187011891516931393","ccode":"1100791392","cname":"远程抄报软件","crelationmatid":"454832402342498298","ccontactid":"905840966170201044","cinstalldate":"Dec 10, 2013 12:00:00 AM","cismain":0,"cisstatus":1,"cservicedata":"Dec 10, 2013 12:00:00 AM","cservicestartdate":"Dec 10, 2013 12:00:00 AM","cguaranteestartdate":"Dec 10, 2013 12:00:00 AM","cguaranteeenddate":"Dec 10, 2013 12:00:00 AM"}]
 	}
+	
+	
+	private static void getAddress(InstallDocMgt service)
+	{
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("centerpriseid", "20121122110027770");
+		String addressText = _helper.toJsonText(map, null);
+		
+		String resStr = service.getEnterpriseAddresses(addressText);
+		System.out.println(resStr);
+	}
+	
 }
