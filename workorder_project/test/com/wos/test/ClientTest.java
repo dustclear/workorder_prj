@@ -27,11 +27,6 @@ public class ClientTest {
 			WosConstant.DATE_TIME_FORMAT).create();
 
 	public static void main(String[] args) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("ccode", "1312070104");
-		map.put("cguid", "145293406198134209");
-		String eventCode = _helper.toJsonText(map, null);
-
 		InstallDocMgt service = new InstallDocMgtImplService()
 				.getInstallDocMgtImplPort();
 		((BindingProvider) service).getRequestContext().put(
@@ -41,21 +36,27 @@ public class ClientTest {
 		((BindingProvider) service2).getRequestContext().put(
 				BindingProvider.SESSION_MAINTAIN_PROPERTY, true);
 
-		Map<String, String> map2 = new HashMap<String, String>();
-		map2.put("cname", "admin");
-		map2.put("cpwd", "123");
-		String loginInfoText = WosHelper.getInstance().toJsonText(map2, null);
-		service2.login(loginInfoText);
-		System.out.println(service.loadInstallDocumentByEventCode(eventCode));
-		try {
-			Thread.currentThread().sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println(service.loadInstallDocumentByEventCode(eventCode));
-		getInstallDetailByTemplate(service);
 		
+		getInstallDetailByTemplate(service);
 		getAddress(service);
+	}
+	
+	private static void loadInstallDocument(InstallDocMgt service)
+	{
+	    Map<String, String> map = new HashMap<String, String>();
+        map.put("ccode", "1312070104");
+        map.put("cguid", "145293406198134209");
+        String eventCode = _helper.toJsonText(map, null);
+        System.out.println(service.loadInstallDocumentByEventCode(eventCode));
+	}
+	
+	private static void login(LoginMgt service)
+	{
+	    Map<String, String> map2 = new HashMap<String, String>();
+        map2.put("cname", "admin");
+        map2.put("cpwd", "123");
+        String loginInfoText = WosHelper.getInstance().toJsonText(map2, null);
+        System.out.println(service.login(loginInfoText));
 	}
 
 	private static void getInstallDetailByTemplate(InstallDocMgt service) {

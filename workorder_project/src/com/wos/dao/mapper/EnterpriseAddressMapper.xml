@@ -21,6 +21,7 @@
     <result column="cTimeStamp" property="ctimestamp" jdbcType="VARCHAR" />
     <result column="Isnew" property="isnew" jdbcType="SMALLINT" />
     <result column="CrmID" property="crmid" jdbcType="VARCHAR" />
+    <association property ="areaClass" column="cAreaID" select ="com.wos.dao.mapper.AreaClassMapper.getAreaClassById"/>
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.EnterpriseAddress" >
     <!--

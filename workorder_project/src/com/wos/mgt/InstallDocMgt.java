@@ -59,6 +59,13 @@ public interface InstallDocMgt
      */
     public String getEnterpriseAddresses(
             String enterpriseIdText);   
+    
+    /**
+     * 加载所有的区域信息
+     * @return
+     */
+    public String getAllAreaInfo();   
+    
     /**
      * 新增企业地址信息
      * @param addressText

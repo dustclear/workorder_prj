@@ -101,4 +101,21 @@ public class TestInstallDocMgt
         System.out.println(resStr);
     }
     
+    @Test
+    public void testGetAllAreaInfo()
+    {
+        String resStr=service.getAllAreaInfo();
+        System.out.println(resStr); 
+    }
+    
+    @Test
+    public void testGetEnterpriseAddresses()
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("centerpriseid", "20110415140253670");
+        String addresses = _helper.toJsonText(map, null);
+        String resStr = service.getEnterpriseAddresses(addresses);
+        System.out.println(resStr);
+    }
+    
 }

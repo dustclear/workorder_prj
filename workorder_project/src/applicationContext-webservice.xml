@@ -35,6 +35,7 @@
 		<property name="installDocuCofigMapper" ref="installDocuCofigMapper"/>
 		<property name="enterpriseAddressMapper" ref="enterpriseAddressMapper"/>
 		<property name="extendedAttributeMapper" ref="extendedAttributeMapper"/>
+		<property name="areaClassMapper" ref="areaClassMapper"/>
 	</bean>
 	
 	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >

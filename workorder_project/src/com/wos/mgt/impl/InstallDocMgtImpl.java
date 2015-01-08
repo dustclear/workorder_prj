@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
 import com.wos.dao.mapper.AddressTypeMapper;
+import com.wos.dao.mapper.AreaClassMapper;
 import com.wos.dao.mapper.ChargeTypeMapper;
 import com.wos.dao.mapper.ConfigInfoMapper;
 import com.wos.dao.mapper.ContactInfoMapper;
@@ -34,6 +35,7 @@ import com.wos.dao.mapper.RmsUserMapper;
 import com.wos.dao.mapper.ServiceResponseMapper;
 import com.wos.dao.mapper.TaxOrganizationMapper;
 import com.wos.mgt.InstallDocMgt;
+import com.wos.pojo.AreaClass;
 import com.wos.pojo.ChargeType;
 import com.wos.pojo.ConfigInfo;
 import com.wos.pojo.ContactInfo;
@@ -87,6 +89,8 @@ public class InstallDocMgtImpl implements InstallDocMgt
     private EnterpriseAddressMapper enterpriseAddressMapper;
     
     private EnterpriseContactsMapper enterpriseContactMapper;
+    
+    private AreaClassMapper areaClassMapper;
     
     private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT)
             .create();
@@ -156,6 +160,13 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         List<TaxOrganization> taxOrganizations = taxOrganizationMapper.loadAllTaxOrganizations();
         return _helper.toJsonText(taxOrganizations, null);
+    }
+    
+    @Override
+    public String getAllAreaInfo()
+    {
+        List<AreaClass> areaClasses = areaClassMapper.findAllAreaClasses();
+        return _helper.toJsonText(areaClasses, null);
     }
     
     @Override
@@ -577,6 +588,16 @@ public class InstallDocMgtImpl implements InstallDocMgt
     
     
     
+    public AreaClassMapper getAreaClassMapper()
+    {
+        return areaClassMapper;
+    }
+
+    public void setAreaClassMapper(AreaClassMapper areaClassMapper)
+    {
+        this.areaClassMapper = areaClassMapper;
+    }
+
     public InstallDocuCofigMapper getInstallDocuCofigMapper() {
 		return installDocuCofigMapper;
 	}
