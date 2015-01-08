@@ -113,6 +113,7 @@ public class TestInstallDocMgt
     {
         Map<String, String> map = new HashMap<String, String>();
         map.put("centerpriseid", "20110415140253670");
+        System.out.println("------"+map.get("noKey"));
         String addresses = _helper.toJsonText(map, null);
         String resStr = service.getEnterpriseAddresses(addresses);
         System.out.println(resStr);
