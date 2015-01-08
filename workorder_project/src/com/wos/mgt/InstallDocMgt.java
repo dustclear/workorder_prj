@@ -43,7 +43,7 @@ public interface InstallDocMgt
     public String getAllInstallTemplates();    
     
     /**
-     * 选择“管理软件安装单模板”后加载相应的配置项信息。传人参数为安装单模板id:installTemplateId
+     * 选择“管理软件安装单模板”后加载相应的配置项信息。传人参数为安装单模板id:installTemplateId, 之前获得的安装单id：installDocumentId
      * @param installTemplateText
      * @return
      */
@@ -189,6 +189,7 @@ public interface InstallDocMgt
      * @param installDetailText
      * @return
      */
+    @Deprecated
     public String addInstallDocDetail(String installDetailText);
     
     /**

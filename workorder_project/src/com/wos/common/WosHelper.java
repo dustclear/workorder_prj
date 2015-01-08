@@ -18,8 +18,7 @@ public class WosHelper
 {
     private static final WosHelper _instance = new WosHelper();
     
-    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT)
-            .create();
+    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
     
     private WosHelper()
     {
@@ -27,7 +26,7 @@ public class WosHelper
     
     public static WosHelper getInstance()
     {
-        return _instance;
+        return _instance; 
     }
     
     public String getValueFromJsonText(String jsonText, String keyText)
@@ -35,10 +34,10 @@ public class WosHelper
         Gson gson = new Gson();
         Map<String, String> retMap = gson.fromJson(jsonText,
                 new TypeToken<Map<String, String>>()
-                {
-                }.getType());
+                {}.getType());
         return retMap.get(keyText);
     }
+    
     
     public String toJsonText(Object srcObj, Class srcClass)
     {
@@ -54,7 +53,7 @@ public class WosHelper
     
     public String gernerateInstallCode()
     {
-        return WosConstant.PREFIX_INSTALL_CODE + generateRadomStr(12);
+        return WosConstant.PREFIX_INSTALL_CODE+generateRadomStr(12);
     }
     
     public String generatePrimaryKey()
@@ -80,13 +79,13 @@ public class WosHelper
     public HttpServletRequest getRequest(WebServiceContext wsContext)
     {
         MessageContext mc;
-        if (wsContext != null)
+        if (wsContext!=null)
         {
-            mc = wsContext.getMessageContext();
-            
-            HttpServletRequest request = (HttpServletRequest)mc.get(AbstractHTTPDestination.HTTP_REQUEST);
-            
-            return request;
+        mc = wsContext.getMessageContext();
+        
+        HttpServletRequest request = (HttpServletRequest)mc.get(AbstractHTTPDestination.HTTP_REQUEST);
+        
+        return request;
         }
         return null;
     }

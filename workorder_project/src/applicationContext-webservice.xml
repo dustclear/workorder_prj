@@ -32,6 +32,9 @@
 		<property name="eventInfoMapper" ref="eventInfoMapper"/>
 		<property name="rmsUserMapper" ref="rmsUserMapper"/>
 		<property name="installDetailMapper" ref="installDetailMapper"/>
+		<property name="installDocuCofigMapper" ref="installDocuCofigMapper"/>
+		<property name="enterpriseAddressMapper" ref="enterpriseAddressMapper"/>
+		<property name="extendedAttributeMapper" ref="extendedAttributeMapper"/>
 	</bean>
 	
 	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >

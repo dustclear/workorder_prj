@@ -1,22 +1,32 @@
 package com.wos.test;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
 import com.wos.mgt.InstallDocMgt;
+import com.wos.pojo.InstallDocuDetail;
+import com.wos.pojo.InstallDocument;
 
 public class TestInstallDocMgt
 {
     private static InstallDocMgt service;
     private WosHelper _helper = WosHelper.getInstance();
+    
+    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT)
+            .create();
     
     @BeforeClass
     public static void init()
@@ -35,6 +45,12 @@ public class TestInstallDocMgt
         String eventCode = _helper.toJsonText(map, null);
         
         String resStr=service.loadInstallDocumentByEventCode(eventCode);
+        
+        InstallDocument installDocumentUpdate = _gson.fromJson(resStr,
+                InstallDocument.class);
+        
+        System.out.println(installDocumentUpdate);
+        
         //注意resStr的输出结果，这是一个复杂的数据结构，包含：installdocument~enterpriseBaseInfo以及department，area等信息,前端解析时请注意。。
         System.out.println(eventCode); //{"cguid":"145293406198134209","ccode":"1312070104"}
         System.out.println(resStr);    //{"ceventid":"158098265383583058","ccode":"mobile413693232123","centerpriseid":"20121122110027770","ctaxcode":"321600608254201","centerprisename":"张家港保税区华祥纺织印染国际贸易有限公司","centerpriseadress":"张家港杨舍镇向阳新村33栋202","ccontactid":"158098265383583010","ccontactname":"陆卫芳","ccontacttel":"58155580","ccontactphone":"18962270770","cdepartment":"服务部","carea":"张家港保税区","cemployeeid":"145246972521717801","enterpriseBaseInfo":{"cguid":"20121122110027770","ccode":"1","cname":"苏州丽航国际货运代理有限公司","cfastcode":"szlhgjhydlyxgs","ctypeid":"000000000000000001","ctel1":"68322575","ctaxcode":"320500692553043","careaid":"705106892172137892","ctaxationid":"2035","cregisteredaddress":"苏州市珠江南路378号天隆大厦447","cisoverdue":0,"ccreater":"1","ccreatedate":"2013-12-06 23:24:44","crmid":"9560723"},"employee":{"cguid":"145246972521717801","ccode":"577","cname":"张黎","cdeptguid":"10","ctimestamp":"145246972521717800","istatus":1,"ileaf":1,"cparentid":"000000","isex":"0","iforeigner":0,"istoppayment":0,"idimission":0,"cmobile":"18013166773","chotcode":"zl","crmid":"296553","department":{"csname":"服务部","cname":"服务部","ccode":"fwb","cguid":"10","ileaf":1,"cparentid":"7","istatus":1,"cpathcode":"qyglrjsyb!fwb","ilevel":1,"ccompguid":"1","cfullcode":"qyglrjsyb!fwb","cinnercode":"qyglrjsyb!fwb","crmid":"39657"}}}
@@ -57,6 +73,10 @@ public class TestInstallDocMgt
         String installTemplateText = _helper.toJsonText(map, null);
         
         String resStr=service.getInstallDetailByTemplate(installTemplateText);
+        
+        Type type = new TypeToken<ArrayList<InstallDocuDetail>>() {}.getType();  
+        List<InstallDocuDetail> list = _gson.fromJson(resStr, type);
+        
         System.out.println(resStr);    //[{"cguid":"187011891516931394","cmainid":"187011891516931393","ccode":"1100791392","cname":"远程抄报软件","crelationmatid":"454832402342498298","ccontactid":"905840966170201044","cinstalldate":"Dec 10, 2013 12:00:00 AM","cismain":0,"cisstatus":1,"cservicedata":"Dec 10, 2013 12:00:00 AM","cservicestartdate":"Dec 10, 2013 12:00:00 AM","cguaranteestartdate":"Dec 10, 2013 12:00:00 AM","cguaranteeenddate":"Dec 10, 2013 12:00:00 AM"}]
     }
     
