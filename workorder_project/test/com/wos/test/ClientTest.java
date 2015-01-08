@@ -79,7 +79,7 @@ public class ClientTest {
 	private static void getAddress(InstallDocMgt service)
 	{
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("centerpriseid", "20121122110027770");
+		map.put("centerpriseid", "20110415140253670");
 		String addressText = _helper.toJsonText(map, null);
 		
 		String resStr = service.getEnterpriseAddresses(addressText);
