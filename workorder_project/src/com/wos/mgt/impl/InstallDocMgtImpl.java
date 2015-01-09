@@ -92,7 +92,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
     
     private AreaClassMapper areaClassMapper;
     
-    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT)
+    private static final Gson _gson = new GsonBuilder().serializeNulls().setDateFormat(WosConstant.DATE_TIME_FORMAT)
             .create();
     
     private WosHelper _helper = WosHelper.getInstance();
@@ -620,7 +620,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 
                 newInstallDocument.setCeventid(eventInfo.getCguid());
                 // 纸质单号
-                newInstallDocument.setCcode(_helper.gernerateInstallCode());
+                newInstallDocument.setCcode(_helper.generateInstallCode());
                 // 企业信息
                 newInstallDocument.setEnterpriseBaseInfo(eventInfo.getEnterpriseBaseInfo());
                 // 企业信息快照
@@ -682,7 +682,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 InstallDocuDetail newInstallDocuDetail = new InstallDocuDetail();
                 newInstallDocuDetail.setCguid(_helper.generatePrimaryKey());
                 
-                newInstallDocuDetail.setCcode(null);
+                createDetailCode(newInstallDocuDetail, installDetail);
                 if(installDetail.getMaterial()!=null)
                 {
                 	newInstallDocuDetail.setCname(installDetail.getMaterial()
@@ -763,6 +763,20 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 installDocuDetail.setInstallDocuCofigs(installDocuCofigs);
                 
             }
+        }
+    }
+    
+    private void createDetailCode(InstallDocuDetail docuDetail, InstallDetail detail)
+    {
+        String matId = detail.getCmatid();
+        if (StringUtils.isNotBlank(matId) &&
+                (("247902721710531367".equals(matId)||("247902721710531372").equals(matId)||
+                ("132433004857549195").equals(matId)||("132433004857549462").equals(matId))))
+                {
+                     docuDetail.setCcode("");
+                }
+        else {
+            docuDetail.setCcode(_helper.generateInstallDetailCode());
         }
     }
     

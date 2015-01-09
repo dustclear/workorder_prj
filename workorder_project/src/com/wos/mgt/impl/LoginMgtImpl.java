@@ -9,6 +9,7 @@ import javax.xml.ws.WebServiceContext;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wos.common.MD5Util;
 import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
@@ -26,7 +27,8 @@ public class LoginMgtImpl implements LoginMgt
     
     private WosHelper _helper = WosHelper.getInstance();
     
-    private static final Gson _gson = new Gson();
+    private static final Gson _gson = new GsonBuilder().serializeNulls().setDateFormat(WosConstant.DATE_TIME_FORMAT)
+            .create();
     
     @Override
     public String login(String loginInfoText)

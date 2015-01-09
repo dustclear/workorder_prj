@@ -18,7 +18,7 @@ public class WosHelper
 {
     private static final WosHelper _instance = new WosHelper();
     
-    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
+    private static final Gson _gson = new GsonBuilder().serializeNulls().setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
     
     private WosHelper()
     {
@@ -51,9 +51,14 @@ public class WosHelper
         }
     }
     
-    public String gernerateInstallCode()
+    public String generateInstallCode()
     {
         return WosConstant.PREFIX_INSTALL_CODE+generateRadomStr(12);
+    }
+    
+    public String generateInstallDetailCode()
+    {
+        return generateRadomStr(18);
     }
     
     public String generatePrimaryKey()

@@ -25,7 +25,7 @@ public class TestInstallDocMgt
     private static InstallDocMgt service;
     private WosHelper _helper = WosHelper.getInstance();
     
-    private static final Gson _gson = new GsonBuilder().setDateFormat(WosConstant.DATE_TIME_FORMAT)
+    private static final Gson _gson = new GsonBuilder().serializeNulls().setDateFormat(WosConstant.DATE_TIME_FORMAT)
             .create();
     
     @BeforeClass
