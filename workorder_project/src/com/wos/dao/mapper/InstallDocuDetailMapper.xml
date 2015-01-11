@@ -30,6 +30,7 @@
     <association property ="contactInfo" column="cContactID" select ="com.wos.dao.mapper.EnterpriseContactsMapper.getContactInfoByPrimaryId"/>
     <association property ="chargeType" column="cChargeTypeID" select ="com.wos.dao.mapper.ChargeTypeMapper.selectByPrimaryKey"/>
     <association property ="serviceResponse" column="cResponseID" select ="com.wos.dao.mapper.ServiceResponseMapper.findServiceResponseByPrimaryId"/>
+    <association property ="installType" column="cInstallTypeID" select ="com.wos.dao.mapper.ConfigInfoMapper.findConfigInfoByPrimaryId"/>
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.InstallDocuDetail" >
     <!--

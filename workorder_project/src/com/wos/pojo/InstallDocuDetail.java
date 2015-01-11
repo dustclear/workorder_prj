@@ -165,6 +165,8 @@ public class InstallDocuDetail {
     
     private ServiceResponse serviceResponse;
     
+    private ConfigInfo installType;
+    
     //扩展属性
     private List<InstallDocuCofig> installDocuCofigs;
 
@@ -665,6 +667,14 @@ public class InstallDocuDetail {
     {
         this.installDocuCofigs = installDocuCofigs;
     }
+
+	public ConfigInfo getInstallType() {
+		return installType;
+	}
+
+	public void setInstallType(ConfigInfo installType) {
+		this.installType = installType;
+	}
     
     
 }

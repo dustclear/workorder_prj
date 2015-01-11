@@ -695,6 +695,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 newInstallDocuDetail.setRelateMaterial(installDetail.getMaterial());
                 
                 newInstallDocuDetail.setCinstalltypeid(installDetail.getCinstalltypeid());
+                newInstallDocuDetail.setInstallType(installDetail.getInstallType());
                 
                 newInstallDocuDetail.setCismain(installDetail.getCismain());
                 newInstallDocuDetail.setCisstatus(null);
