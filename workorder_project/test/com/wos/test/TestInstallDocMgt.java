@@ -84,7 +84,7 @@ public class TestInstallDocMgt
     public void testGetEnterpriseContactInfo()
     {
         Map<String, String> map = new HashMap<String, String>();
-        map.put("cEnterpriseID", "23632");
+        map.put("cEnterpriseID", "108129");
         String enterpriseIdText = _helper.toJsonText(map, null);
         
         String resStr=service.getEnterpriseContactInfo(enterpriseIdText);
@@ -116,6 +116,19 @@ public class TestInstallDocMgt
         System.out.println("------"+map.get("noKey"));
         String addresses = _helper.toJsonText(map, null);
         String resStr = service.getEnterpriseAddresses(addresses);
+        System.out.println(resStr);
+    }
+    
+    @Test
+    public void testAddEnterpriseAddress()
+    { 
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("centerpriseid", "192999");
+        map.put("cAdress", "test");
+        map.put("cZipCode", "21000");
+        map.put("cAreaID", "001");
+        String addressText = _helper.toJsonText(map, null);
+        String resStr = service.addEnterpriseAddress(addressText);
         System.out.println(resStr);
     }
     

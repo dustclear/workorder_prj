@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
@@ -230,8 +231,31 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         ContactInfo contactInfoRes = _gson.fromJson(argContactInfoText,
                 ContactInfo.class);
-        contactInfoRes.setCguid(_helper.generatePrimaryKey());
         
+        Map<String, String> mapRes = _gson.fromJson(argContactInfoText, new TypeToken<Map<String, String>>() {  
+        }.getType());
+        
+        String baseContactId = _helper.generatePrimaryKey();
+        contactInfoRes.setCguid(baseContactId);
+        
+        EnterpriseContacts enterpriseContact = new EnterpriseContacts();
+        enterpriseContact.setCguid(_helper.generatePrimaryKey());
+        enterpriseContact.setCcontactid(baseContactId);
+        if (mapRes!=null)
+        {
+            enterpriseContact.setCenterpriseid(mapRes.get("centerpriseid"));
+            if (mapRes.get("cisonjob")!=null)
+            {
+                enterpriseContact.setCisonjob(Integer.valueOf(mapRes.get("cisonjob")));
+            }
+            if (mapRes.get("isnew")!=null)
+            {
+                enterpriseContact.setIsnew(Short.valueOf(mapRes.get("isnew")));
+            }
+            
+        }
+        
+        enterpriseContactMapper.insertSelective(enterpriseContact);
         int result = contactInfoMapper.insertSelective(contactInfoRes);
         return _helper.toJsonText(result, null);
     }

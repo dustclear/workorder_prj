@@ -36,9 +36,11 @@ public class ClientTest {
 		((BindingProvider) service2).getRequestContext().put(
 				BindingProvider.SESSION_MAINTAIN_PROPERTY, true);
 
-		
+		/*
 		getInstallDetailByTemplate(service);
-		getAddress(service);
+		getAddress(service);*/
+//		addEnterpriseAddress(service);
+		addEnterpriseContact(service);
 	}
 	
 	private static void loadInstallDocument(InstallDocMgt service)
@@ -85,5 +87,25 @@ public class ClientTest {
 		String resStr = service.getEnterpriseAddresses(addressText);
 		System.out.println(resStr);
 	}
+	
+	private static void  addEnterpriseAddress(InstallDocMgt service)
+    { 
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("centerpriseid", "192999");
+        map.put("cadress", "test");
+        map.put("czipcode", "21000");
+        map.put("careaid", "001");
+        String addressText = _helper.toJsonText(map, null);
+        String resStr = service.addEnterpriseAddress(addressText);
+        System.out.println(resStr);
+    }
+	
+	private static void  addEnterpriseContact(InstallDocMgt service)
+    {
+	    String contacText ="{\"centerpriseid\":\"108129\",\"cisonjob\":1,\"isnew\":0,\"cname\":\"谢\",\"csex\":1,\"cage\":null,\"cphone1\":\"111222222\",\"ctel1\":\"63088756\",\"cadress\":null,\"cbirthday\":null,\"cidcard\":\"\",\"cemail\":\"\",\"cqq\":null}";
+	    String resStr = service.addContactInfo(contacText);
+        System.out.println(resStr);
+    }
+	//{"centerpriseid":"108129","cisonjob":1,"isnew":0,"cname":"谢","csex":1,"cage":null,"cphone1":"111222222","ctel1":"63088756","cadress":null,"cbirthday":null,"cidcard":"","cemail":"","cqq":null}
 	
 }
