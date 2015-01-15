@@ -2,6 +2,8 @@ package com.wos.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.springframework.util.DigestUtils;
 /*
  * MD5 算法
 */
@@ -61,5 +63,6 @@ public class MD5Util {
     public static void main(String[] args) {
         MD5Util getMD5 = new MD5Util();
         System.out.println(getMD5.GetMD5Code("000000"));
+        System.out.println(DigestUtils.md5DigestAsHex("000000".getBytes()));
     }
 }
