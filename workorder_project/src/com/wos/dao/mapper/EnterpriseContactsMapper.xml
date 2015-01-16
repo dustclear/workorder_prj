@@ -183,4 +183,14 @@
 		<include refid="Base_Contact_Column_List" />
 		from itsm_base_EnterpriseContacts ec, itsm_base_Contact bc where ec.ccontactid = bc.cguid and ec.cguid = #{cguid}
   </select>
+  
+  <delete id="deleteByContactId" parameterType="java.lang.String">
+    delete from dbo.itsm_base_EnterpriseContacts
+    where ccontactid = #{contactid,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="updateJobStatus" parameterType="java.lang.String">
+    update dbo.itsm_base_EnterpriseContacts set cisonjob = #{isOnJob,jdbcType=INTEGER}
+    where ccontactid = #{ccontactid,jdbcType=VARCHAR};
+  </update>
 </mapper>

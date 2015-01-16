@@ -1,6 +1,7 @@
 package com.wos.dao.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.wos.pojo.EnterpriseContacts;
 
@@ -27,4 +28,8 @@ public interface EnterpriseContactsMapper {
     List<EnterpriseContacts> findContactInfoByEnterpriseId(String enterpriseId);
     
     EnterpriseContacts findContactInfoByPrimaryId(String cguid);
+    
+    int deleteByContactId(String contactId);
+    
+    int updateJobStatus(Map<String, Object> params);
 }

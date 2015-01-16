@@ -132,4 +132,15 @@ public class TestInstallDocMgt
         System.out.println(resStr);
     }
     
+    @Test
+    public void testUpdateContactInfo()
+    { 
+    	Map<String, String> map = new HashMap<String, String>();
+        map.put("cisonjob", "1");
+        map.put("cguid", "126494");
+        String contaxtText = _helper.toJsonText(map, null);
+        String resStr = service.updateContactInfo(contaxtText);
+        System.out.println(resStr);
+    }
+    
 }
