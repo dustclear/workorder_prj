@@ -1095,4 +1095,9 @@
 		from CM_Material where cguid = #{cguid}
   </select>
   
+  <select id="getMaterialByCodeOrName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT *
+		from CM_Material where cMatCode like CONCAT(CONCAT('%',#{codeOrName}),'%' ) or cMatName like CONCAT(CONCAT('%',#{codeOrName}),'%' )
+  </select>
+  
 </mapper>

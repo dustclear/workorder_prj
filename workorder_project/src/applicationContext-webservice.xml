@@ -36,6 +36,7 @@
 		<property name="enterpriseAddressMapper" ref="enterpriseAddressMapper"/>
 		<property name="extendedAttributeMapper" ref="extendedAttributeMapper"/>
 		<property name="areaClassMapper" ref="areaClassMapper"/>
+		<property name="materialMapper" ref="materialMapper"/>
 	</bean>
 	
 	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >

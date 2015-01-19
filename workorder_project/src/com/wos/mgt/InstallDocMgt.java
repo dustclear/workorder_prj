@@ -207,6 +207,8 @@ public interface InstallDocMgt
     public String loadExtendedAttributesByMatId(
             String matIdText);
     
+    public String loadMaterialByCodeOrName(String codeOrNameText);
+    
     /*
      * other
      */

@@ -33,6 +33,7 @@ import com.wos.dao.mapper.InstallDocuCofigMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
+import com.wos.dao.mapper.MaterialMapper;
 import com.wos.dao.mapper.RmsUserMapper;
 import com.wos.dao.mapper.ServiceResponseMapper;
 import com.wos.dao.mapper.TaxOrganizationMapper;
@@ -50,6 +51,7 @@ import com.wos.pojo.InstallDocuCofig;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 import com.wos.pojo.InstallTemplate;
+import com.wos.pojo.Material;
 import com.wos.pojo.RmsUser;
 import com.wos.pojo.ServiceResponse;
 import com.wos.pojo.TaxOrganization;
@@ -92,6 +94,8 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 	private EnterpriseContactsMapper enterpriseContactMapper;
 
 	private AreaClassMapper areaClassMapper;
+	
+	private MaterialMapper materialMapper;
 
 	private static final Gson _gson = new GsonBuilder().serializeNulls()
 			.setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
@@ -458,6 +462,17 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		return _helper.toJsonText(result, null);
 	}
 
+	
+	
+	@Override
+	public String loadMaterialByCodeOrName(String codeOrNameText) {
+		String codeOrName = _helper.getValueFromJsonText(codeOrNameText, "codeOrName");
+
+		List<Material> materials = materialMapper.getMaterialByCodeOrName(codeOrName);
+
+		return _helper.toJsonText(materials, null);
+	}
+
 	/**
 	 * get set methods
 	 */
@@ -777,5 +792,15 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 			docuDetail.setCcode(_helper.generateInstallDetailCode());
 		}
 	}
+
+	public MaterialMapper getMaterialMapper() {
+		return materialMapper;
+	}
+
+	public void setMaterialMapper(MaterialMapper materialMapper) {
+		this.materialMapper = materialMapper;
+	}
+	
+	
 
 }
