@@ -40,16 +40,19 @@ public class ClientTest {
 		getInstallDetailByTemplate(service);
 		getAddress(service);*/
 //		addEnterpriseAddress(service);
-		addEnterpriseContact(service);
+//		addEnterpriseContact(service);
+		SaveInstallDocument(service);
 	}
 	
-	private static void loadInstallDocument(InstallDocMgt service)
+	private static String loadInstallDocument(InstallDocMgt service)
 	{
 	    Map<String, String> map = new HashMap<String, String>();
         map.put("ccode", "1312070104");
         map.put("cguid", "145293406198134209");
         String eventCode = _helper.toJsonText(map, null);
-        System.out.println(service.loadInstallDocumentByEventCode(eventCode));
+        String reString = service.loadInstallDocumentByEventCode(eventCode);
+        System.out.println(reString);
+        return reString;
 	}
 	
 	private static void login(LoginMgt service)
@@ -61,11 +64,11 @@ public class ClientTest {
         System.out.println(service.login(loginInfoText));
 	}
 
-	private static void getInstallDetailByTemplate(InstallDocMgt service) {
+	private static String getInstallDetailByTemplate(InstallDocMgt service) {
 
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("installTemplateId", "905840966170754569");
-		map.put("installDocumentId", "271441751171043777");
+		map.put("installDocumentId", "222676258641485788");
 		String installTemplateText = _helper.toJsonText(map, null);
 
 		String resStr = service.getInstallDetailByTemplate(installTemplateText);
@@ -75,6 +78,7 @@ public class ClientTest {
 		List<InstallDocuDetail> list = _gson.fromJson(resStr, type);
 
 		System.out.println(resStr); // [{"cguid":"187011891516931394","cmainid":"187011891516931393","ccode":"1100791392","cname":"远程抄报软件","crelationmatid":"454832402342498298","ccontactid":"905840966170201044","cinstalldate":"Dec 10, 2013 12:00:00 AM","cismain":0,"cisstatus":1,"cservicedata":"Dec 10, 2013 12:00:00 AM","cservicestartdate":"Dec 10, 2013 12:00:00 AM","cguaranteestartdate":"Dec 10, 2013 12:00:00 AM","cguaranteeenddate":"Dec 10, 2013 12:00:00 AM"}]
+		return resStr;
 	}
 	
 	
@@ -108,4 +112,26 @@ public class ClientTest {
     }
 	//{"centerpriseid":"108129","cisonjob":1,"isnew":0,"cname":"谢","csex":1,"cage":null,"cphone1":"111222222","ctel1":"63088756","cadress":null,"cbirthday":null,"cidcard":"","cemail":"","cqq":null}
 	
+	
+	private static void SaveInstallDocument(InstallDocMgt service)
+	{
+	    String insatllDocument = loadInstallDocument(service);
+	    InstallDocument document = _gson.fromJson(insatllDocument, InstallDocument.class);
+	    
+	    String installDetails = getInstallDetailByTemplate(service);
+	    Type type = new TypeToken<ArrayList<InstallDocuDetail>>() {
+        }.getType();
+        List<InstallDocuDetail> docuDetaillist = _gson.fromJson(
+                installDetails, type);
+        for (InstallDocuDetail installDocuDetail : docuDetaillist)
+        {
+            installDocuDetail.setCmainid(document.getCguid());
+        }
+        
+	    
+	    //save install document
+	    service.saveInstallDocument(_gson.toJson(document));
+	    service.saveInstallDocDetail(_gson.toJson(docuDetaillist));
+	}
+
 }

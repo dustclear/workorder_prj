@@ -422,9 +422,9 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		List<InstallDocuDetail> docuDetaillist = _gson.fromJson(
 				installDetailText, type);
 		for (InstallDocuDetail installDocuDetail : docuDetaillist) {
-
+		    
 			result = installDocuDetailMapper
-					.updateByPrimaryKeySelective(installDocuDetail);
+					.insertSelective(installDocuDetail);
 			if (installDocuDetail.getInstallDocuCofigs() != null) {
 				for (InstallDocuCofig installDocuCofig : installDocuDetail
 						.getInstallDocuCofigs()) {
@@ -453,6 +453,7 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		InstallDocument installDocumentUpdate = _gson.fromJson(
 				installDocumentText, InstallDocument.class);
 
+		installDocumentUpdate.setCcreatedate(new Date());
 		int result = installDocumentMapper
 				.insertSelective(installDocumentUpdate);
 		return _helper.toJsonText(result, null);
