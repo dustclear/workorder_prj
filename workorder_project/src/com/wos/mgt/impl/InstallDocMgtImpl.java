@@ -94,7 +94,7 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 	private EnterpriseContactsMapper enterpriseContactMapper;
 
 	private AreaClassMapper areaClassMapper;
-	
+
 	private MaterialMapper materialMapper;
 
 	private static final Gson _gson = new GsonBuilder().serializeNulls()
@@ -280,17 +280,17 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			
+
 			// update enterprise contact info too
 			String isOnJob = _helper.getValueFromJsonText(argContactInfoText,
 					"cisonjob");
 			if (StringUtils.isNotBlank(isOnJob)
 					&& StringUtils.isNotBlank(contactInfoUpdate.getCguid())) {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("ccontactid", contactInfoUpdate.getCguid());
-			params.put("isOnJob", Integer.valueOf(isOnJob));
-			enterpriseContactMapper.updateJobStatus(params);
-			
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("ccontactid", contactInfoUpdate.getCguid());
+				params.put("isOnJob", Integer.valueOf(isOnJob));
+				enterpriseContactMapper.updateJobStatus(params);
+
 			}
 			return _helper.toJsonText(result, null);
 		}
@@ -426,12 +426,16 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		List<InstallDocuDetail> docuDetaillist = _gson.fromJson(
 				installDetailText, type);
 		for (InstallDocuDetail installDocuDetail : docuDetaillist) {
-
-			result = installDocuDetailMapper
-					.insertSelective(installDocuDetail);
+			if (StringUtils.isBlank(installDocuDetail.getCguid())) {
+				installDocuDetail.setCguid(_helper.generatePrimaryKey());
+			}
+			result = installDocuDetailMapper.insertSelective(installDocuDetail);
 			if (installDocuDetail.getInstallDocuCofigs() != null) {
 				for (InstallDocuCofig installDocuCofig : installDocuDetail
 						.getInstallDocuCofigs()) {
+					if (StringUtils.isBlank(installDocuCofig.getCguid())) {
+						installDocuCofig.setCguid(_helper.generatePrimaryKey());
+					}
 					installDocuCofigMapper.insertSelective(installDocuCofig);
 				}
 			}
@@ -463,13 +467,13 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		return _helper.toJsonText(result, null);
 	}
 
-	
-	
 	@Override
 	public String loadMaterialByCodeOrName(String codeOrNameText) {
-		String codeOrName = _helper.getValueFromJsonText(codeOrNameText, "codeOrName");
+		String codeOrName = _helper.getValueFromJsonText(codeOrNameText,
+				"codeOrName");
 
-		List<Material> materials = materialMapper.getMaterialByCodeOrName(codeOrName);
+		List<Material> materials = materialMapper
+				.getMaterialByCodeOrName(codeOrName);
 
 		return _helper.toJsonText(materials, null);
 	}
@@ -801,7 +805,5 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 	public void setMaterialMapper(MaterialMapper materialMapper) {
 		this.materialMapper = materialMapper;
 	}
-	
-	
 
 }
