@@ -33,6 +33,7 @@ import com.wos.dao.mapper.InstallDocuCofigMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
+import com.wos.dao.mapper.MaterialMapper;
 import com.wos.dao.mapper.RmsUserMapper;
 import com.wos.dao.mapper.ServiceResponseMapper;
 import com.wos.dao.mapper.TaxOrganizationMapper;
@@ -50,6 +51,7 @@ import com.wos.pojo.InstallDocuCofig;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 import com.wos.pojo.InstallTemplate;
+import com.wos.pojo.Material;
 import com.wos.pojo.RmsUser;
 import com.wos.pojo.ServiceResponse;
 import com.wos.pojo.TaxOrganization;
@@ -92,6 +94,8 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 	private EnterpriseContactsMapper enterpriseContactMapper;
 
 	private AreaClassMapper areaClassMapper;
+
+	private MaterialMapper materialMapper;
 
 	private static final Gson _gson = new GsonBuilder().serializeNulls()
 			.setDateFormat(WosConstant.DATE_TIME_FORMAT).create();
@@ -422,12 +426,16 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		List<InstallDocuDetail> docuDetaillist = _gson.fromJson(
 				installDetailText, type);
 		for (InstallDocuDetail installDocuDetail : docuDetaillist) {
-		    
-			result = installDocuDetailMapper
-					.insertSelective(installDocuDetail);
+			if (StringUtils.isBlank(installDocuDetail.getCguid())) {
+				installDocuDetail.setCguid(_helper.generatePrimaryKey());
+			}
+			result = installDocuDetailMapper.insertSelective(installDocuDetail);
 			if (installDocuDetail.getInstallDocuCofigs() != null) {
 				for (InstallDocuCofig installDocuCofig : installDocuDetail
 						.getInstallDocuCofigs()) {
+					if (StringUtils.isBlank(installDocuCofig.getCguid())) {
+						installDocuCofig.setCguid(_helper.generatePrimaryKey());
+					}
 					installDocuCofigMapper.insertSelective(installDocuCofig);
 				}
 			}
@@ -457,6 +465,17 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		int result = installDocumentMapper
 				.insertSelective(installDocumentUpdate);
 		return _helper.toJsonText(result, null);
+	}
+
+	@Override
+	public String loadMaterialByCodeOrName(String codeOrNameText) {
+		String codeOrName = _helper.getValueFromJsonText(codeOrNameText,
+				"codeOrName");
+
+		List<Material> materials = materialMapper
+				.getMaterialByCodeOrName(codeOrName);
+
+		return _helper.toJsonText(materials, null);
 	}
 
 	/**
@@ -777,6 +796,14 @@ public class InstallDocMgtImpl implements InstallDocMgt {
 		} else {
 			docuDetail.setCcode(_helper.generateInstallDetailCode());
 		}
+	}
+
+	public MaterialMapper getMaterialMapper() {
+		return materialMapper;
+	}
+
+	public void setMaterialMapper(MaterialMapper materialMapper) {
+		this.materialMapper = materialMapper;
 	}
 
 }

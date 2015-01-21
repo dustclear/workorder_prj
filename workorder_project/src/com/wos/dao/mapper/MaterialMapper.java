@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.Material;
 
 public interface MaterialMapper {
@@ -18,4 +20,6 @@ public interface MaterialMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(Material record);
+    
+    List<Material> getMaterialByCodeOrName(String codeOrName);
 }

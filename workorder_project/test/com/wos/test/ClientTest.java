@@ -41,6 +41,7 @@ public class ClientTest {
 		getAddress(service);*/
 //		addEnterpriseAddress(service);
 //		addEnterpriseContact(service);
+//		saveCellPhone(service);
 		SaveInstallDocument(service);
 	}
 	
@@ -68,7 +69,7 @@ public class ClientTest {
 
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("installTemplateId", "905840966170754569");
-		map.put("installDocumentId", "222676258641485788");
+		map.put("installDocumentId", "271441751171043777");
 		String installTemplateText = _helper.toJsonText(map, null);
 
 		String resStr = service.getInstallDetailByTemplate(installTemplateText);
@@ -112,6 +113,19 @@ public class ClientTest {
     }
 	//{"centerpriseid":"108129","cisonjob":1,"isnew":0,"cname":"谢","csex":1,"cage":null,"cphone1":"111222222","ctel1":"63088756","cadress":null,"cbirthday":null,"cidcard":"","cemail":"","cqq":null}
 	
+		private static void  saveCellPhone(InstallDocMgt service)
+    { 
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("cguid", "126493");
+        map.put("cphone2", 666666);
+        map.put("cphone1", "111111111");
+        map.put("cphone3", "333333333");
+        map.put("cphone4", "444444444");
+        map.put("cphone5", "7777");
+        String addressText = _helper.toJsonText(map, null);
+        String resStr = service.saveCellphone(addressText);
+        System.out.println(resStr);
+    }
 	
 	private static void SaveInstallDocument(InstallDocMgt service)
 	{
