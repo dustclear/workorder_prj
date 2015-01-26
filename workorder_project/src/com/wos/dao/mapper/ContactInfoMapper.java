@@ -32,4 +32,6 @@ public interface ContactInfoMapper {
     
     int deleteByPrimaryKey(String cguid);
     
+    ContactInfo findContactInfoByNameAndPhone(ContactInfo record);
+    
 }

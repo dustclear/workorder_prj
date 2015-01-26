@@ -335,4 +335,13 @@
   <select id="getEnterpriseInfoById" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select * from itsm_base_EnterpriseManagement where cguid=#{cguid} 
   </select>
+  
+  <select id="findEnterpriseInfoByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from itsm_base_EnterpriseManagement where cName like '%'||#cName#||'%'
+  </select>
+  
+  <select id="findEnterpriseInfoByTaxCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select top 1 * from itsm_base_EnterpriseManagement where cTaxCode=#{cTaxCode} 
+  </select>
+  
 </mapper>

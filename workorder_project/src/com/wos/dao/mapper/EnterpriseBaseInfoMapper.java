@@ -1,5 +1,7 @@
 package com.wos.dao.mapper;
 
+import java.util.List;
+
 import com.wos.pojo.EnterpriseBaseInfo;
 
 public interface EnterpriseBaseInfoMapper {
@@ -18,4 +20,8 @@ public interface EnterpriseBaseInfoMapper {
      * @mbggenerated Mon Dec 01 16:05:56 CST 2014
      */
     int insertSelective(EnterpriseBaseInfo record);
+    
+    List<EnterpriseBaseInfo> findEnterpriseInfoByName(String cName);
+    
+    EnterpriseBaseInfo findEnterpriseInfoByTaxCode(String cTaxCode);
 }

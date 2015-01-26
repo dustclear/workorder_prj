@@ -527,4 +527,8 @@
     where cGUID = #{cguid,jdbcType=VARCHAR}
   </delete>
   
+  <select id="findContactInfoByNameAndPhone" parameterType="com.wos.pojo.ContactInfo" resultMap="BaseResultMap">
+		select top 1 * FROM itsm_base_Contact WHERE cName = #{cname} and (cPhone1= #{cphone1} or cTel1= #{ctel1})
+  </select>
+  
 </mapper>

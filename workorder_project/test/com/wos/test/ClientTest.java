@@ -42,7 +42,15 @@ public class ClientTest {
 //		addEnterpriseAddress(service);
 //		addEnterpriseContact(service);
 //		saveCellPhone(service);
-		SaveInstallDocument(service);
+//		SaveInstallDocument(service);
+		createAnEmptyInstallDocument(service);
+	}
+	
+	private static String createAnEmptyInstallDocument(InstallDocMgt service)
+	{
+	    String reString = service.createAnEmptyInstallDocument();
+        System.out.println(reString);
+        return reString;
 	}
 	
 	private static String loadInstallDocument(InstallDocMgt service)

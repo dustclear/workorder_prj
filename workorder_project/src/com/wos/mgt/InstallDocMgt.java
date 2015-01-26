@@ -35,6 +35,27 @@ public interface InstallDocMgt
      */
     public String loadInstallDocumentByEventCode(String eventCodeText);
     
+    /**
+     * 创建一份空安装单，当用户没有加载事件编码时也可以输入安装单信息，
+     * @return
+     */
+    public String createAnEmptyInstallDocument();
+    
+    //enterpriseInfo
+    
+    /**
+     * 根据企业名称查询出企业信息 参数：cname
+     * @return
+     */
+    public String getEnterpriseInfoByName(String nameText);
+    
+    /**
+     * 根据税号查询企业信息 参数：ctaxcode
+     * @return
+     */
+    public String getEnterpriseInfoByTaxCode(String taxCodeText);
+    
+    
     //template
     /**
      * 加载所有的安装单模板到下拉框
@@ -145,7 +166,22 @@ public interface InstallDocMgt
     public String saveCellphone(String cellPhonesText);  
     
     /**
-     * 新增一条联系人信息
+     * 判断企业联系人信息是否已存在数据库中，姓名及手机或座机号相同即表示已存在，若已存在，弹出对话框问是否只将现有联系人关联到企业而不新增联系人。是：关联；否：新增并关联
+     * 参数：ContactInfo，结构参考table：itsm_base_Contact
+     * @param contactInfoText
+     * @return 存在返回contact对象，不存在返回null
+     */
+    public String isContactInfoExist(String contactInfoText);   
+    
+    /**
+     * 将现有的联系人关联到企业。不新增联系人信息
+     * @param contactInfoText
+     * @return
+     */
+    public String addContactInfoToEnterprise(String contactInfoText);  
+    
+    /**
+     * 新增一条联系人信息，并关联到企业
      * @param contactInfoText
      * @return
      */
