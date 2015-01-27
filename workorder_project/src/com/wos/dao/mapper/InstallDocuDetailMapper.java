@@ -25,4 +25,6 @@ public interface InstallDocuDetailMapper {
     List<InstallDocuDetail> findInstallDetailByTemplate(Map<String, String> param);
     
     int updateByPrimaryKeySelective(InstallDocuDetail record);
+    
+    InstallDocuDetail findInstallDetailByCode(String ccode);
 }

@@ -35,6 +35,7 @@ import com.wos.dao.mapper.InstallDocuCofigMapper;
 import com.wos.dao.mapper.InstallDocuDetailMapper;
 import com.wos.dao.mapper.InstallDocumentMapper;
 import com.wos.dao.mapper.InstallTemplateMapper;
+import com.wos.dao.mapper.MaintainDocumentMapper;
 import com.wos.dao.mapper.MaterialMapper;
 import com.wos.dao.mapper.RmsUserMapper;
 import com.wos.dao.mapper.ServiceResponseMapper;
@@ -54,6 +55,7 @@ import com.wos.pojo.InstallDocuCofig;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 import com.wos.pojo.InstallTemplate;
+import com.wos.pojo.MaintainDocument;
 import com.wos.pojo.Material;
 import com.wos.pojo.RmsUser;
 import com.wos.pojo.ServiceResponse;
@@ -103,6 +105,8 @@ public class InstallDocMgtImpl implements InstallDocMgt
     
     private EnterpriseBaseInfoMapper enterpriseBaseInfoMapper;
     
+    private MaintainDocumentMapper maintainDocumentMapper;
+    
     private static final Gson _gson = new GsonBuilder().serializeNulls()
             .setDateFormat(WosConstant.DATE_TIME_FORMAT)
             .create();
@@ -112,6 +116,8 @@ public class InstallDocMgtImpl implements InstallDocMgt
     private RmsUser currentUser;
     
     private InstallDocument currentInstallDocument;
+    
+    private MaintainDocument currentMaintainDocument;
     
     @Override
     public String loadInstallDocumentByEventCode(String argEventCodeText)
@@ -139,7 +145,6 @@ public class InstallDocMgtImpl implements InstallDocMgt
             session.setAttribute(WosConstant.CURRENT_INSTALL_DOCUMENT, doc);
         }
         currentInstallDocument = doc;
-        _helper.toJsonText(doc, InstallDocument.class);
         return _helper.toJsonText(doc, InstallDocument.class);
     }
     
@@ -155,6 +160,51 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 InstallDocument.class);
     }
     
+    
+    
+    @Override
+    public String loadMaintainDocumentByEventCode(String argEventCodeText)
+    {
+        String eventCode = _helper.getValueFromJsonText(argEventCodeText,
+                "ccode");
+        String userId = _helper.getValueFromJsonText(argEventCodeText, "cguid"); // 此处的cguid为userid，对应表AOS_RMS_USER的cguid
+        
+        if (StringUtils.isNotEmpty(userId))
+        {
+            currentUser = rmsUserMapper.findUserById(userId);
+        }
+
+        EventInfo eventInfo = eventInfoMapper.loadEventInfoByEventCode(eventCode);
+        MaintainDocument doc = createMaintainDocumentFromEventInfo(eventInfo);
+        
+        currentMaintainDocument = doc;
+        return _helper.toJsonText(doc, MaintainDocument.class);
+    }
+    
+    
+    @Override
+    public String createAnEmptyMaintainDocument()
+    {
+        MaintainDocument newMaintainDocument = new MaintainDocument();
+        newMaintainDocument.setCguid(_helper.generatePrimaryKey());
+        // 纸质单号
+        newMaintainDocument.setCcode(_helper.generateInstallCode());
+        
+        return _helper.toJsonText(newMaintainDocument,
+                MaintainDocument.class);
+    }
+    
+    @Override
+    public String saveMaintainDocument(String argMaintainDocumentText)
+    {
+        MaintainDocument newMaintainDocument = _gson.fromJson(argMaintainDocumentText,
+                MaintainDocument.class);
+        
+        newMaintainDocument.setCcreatedate(new Date());
+        int result = maintainDocumentMapper.insertSelective(newMaintainDocument);
+        return _helper.toJsonText(result, null);
+    }
+
     @Override
     public String getEnterpriseInfoByName(String nameText)
     {
@@ -378,7 +428,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
             }
             catch (Exception e)
             {
-                // TODO: handle exception
+                e.printStackTrace();
             }
             
             // update enterprise contact info too
@@ -525,6 +575,34 @@ public class InstallDocMgtImpl implements InstallDocMgt
         return _helper.toJsonText(extendedAttributes, null);
     }
     
+    
+    
+    @Override
+    public String isInstallDocDetailCodeExist(String installDetailText)
+    {
+        InstallDocuDetail detailRes = null;
+        Type type = new TypeToken<ArrayList<InstallDocuDetail>>()
+        {
+        }.getType();
+        List<InstallDocuDetail> docuDetaillist = _gson.fromJson(installDetailText,
+                type);
+        for (InstallDocuDetail installDocuDetail : docuDetaillist)
+        {
+            if (StringUtils.isBlank(installDocuDetail.getCcode()))
+            {
+                continue;
+            }
+            detailRes = installDocuDetailMapper.findInstallDetailByCode(installDocuDetail.getCcode());
+            if (detailRes!= null)
+            {
+                break;
+            }
+            
+        }
+        
+        return _helper.toJsonText(detailRes, null);
+    }
+
     @Override
     public String saveInstallDocDetail(String installDetailText)
     {
@@ -837,6 +915,69 @@ public class InstallDocMgtImpl implements InstallDocMgt
         return newInstallDocument;
     }
     
+    private MaintainDocument createMaintainDocumentFromEventInfo(
+            EventInfo eventInfo)
+    {
+        MaintainDocument newMaintainDocument = null;
+        if (eventInfo != null)
+        {
+            try
+            {
+                newMaintainDocument = new MaintainDocument();
+                newMaintainDocument.setCguid(_helper.generatePrimaryKey());
+                
+                newMaintainDocument.setCeventid(eventInfo.getCguid());
+                // 纸质单号
+                newMaintainDocument.setCcode(_helper.generateInstallCode());
+                // 企业信息
+                newMaintainDocument.setEnterpriseBaseInfo(eventInfo.getEnterpriseBaseInfo());
+                // 企业信息快照
+                newMaintainDocument.setCenterpriseid(eventInfo.getCenterpriseid());
+                newMaintainDocument.setCenterprisename(eventInfo.getCenterprisename());
+                newMaintainDocument.setCtaxcode(eventInfo.getCtaxcode());
+                
+                newMaintainDocument.setCenterpriseadress(eventInfo.getCenterpriseadress());
+                newMaintainDocument.setCenterprisedepartment(null);
+                newMaintainDocument.setCcontactid(eventInfo.getCcontactid());
+                newMaintainDocument.setCcontactname(eventInfo.getCcontactname());
+                newMaintainDocument.setCcontacttel(eventInfo.getCcontacttel());
+                newMaintainDocument.setCcontactphone(eventInfo.getCcontactphone());
+                newMaintainDocument.setCarea(eventInfo.getAreaClass().getCname());
+                
+                if (currentUser != null && currentUser.getEmployee() != null)
+                {
+                    newMaintainDocument.setEmployee(currentUser.getEmployee());
+                    newMaintainDocument.setCemployeeid(currentUser.getEmployee()
+                            .getCguid());
+                    if (currentUser.getEmployee().getDepartment() != null)
+                    {
+                        newMaintainDocument.setCdepartment(currentUser.getEmployee()
+                                .getDepartment()
+                                .getCname());
+                    }
+                    
+                }
+                
+                if (eventInfo.getEnterpriseBaseInfo() != null
+                        && eventInfo.getEnterpriseBaseInfo()
+                                .getCurrentTaxOrganization() != null)
+                {
+                    newMaintainDocument.setCbelongtax(eventInfo.getEnterpriseBaseInfo()
+                            .getCurrentTaxOrganization()
+                            .getCguid());
+                }
+                
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            
+        }
+        
+        return newMaintainDocument;
+    }
+    
     private List<InstallDocuDetail> createInstallDocDetailsFromInstallDetail(
             List<InstallDetail> argInstallDetails, String installDocumentId)
     {
@@ -1027,5 +1168,18 @@ public class InstallDocMgtImpl implements InstallDocMgt
     {
         this.enterpriseBaseInfoMapper = enterpriseBaseInfoMapper;
     }
+
+    public MaintainDocumentMapper getMaintainDocumentMapper()
+    {
+        return maintainDocumentMapper;
+    }
+
+    public void setMaintainDocumentMapper(
+            MaintainDocumentMapper maintainDocumentMapper)
+    {
+        this.maintainDocumentMapper = maintainDocumentMapper;
+    }
+    
+    
     
 }

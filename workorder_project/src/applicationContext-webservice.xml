@@ -38,6 +38,7 @@
 		<property name="areaClassMapper" ref="areaClassMapper"/>
 		<property name="materialMapper" ref="materialMapper"/>
 		<property name="enterpriseBaseInfoMapper" ref="enterpriseBaseInfoMapper"/>
+		<property name="maintainDocumentMapper" ref="maintainDocumentMapper"/>
 	</bean>
 	
 	<bean id="login" class="com.wos.mgt.impl.LoginMgtImpl" >

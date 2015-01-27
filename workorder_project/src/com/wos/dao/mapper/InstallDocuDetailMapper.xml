@@ -185,6 +185,10 @@
 		from itsm_service_InstallDocuDetail where cMainID = #{cmainid,jdbcType=VARCHAR} and cRelationMatID in (select cMatID from itsm_service_InstallDetail where cmainid = #{installTemplateId,jdbcType=VARCHAR})
   </select>
   
+  <select id="findInstallDetailByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT top 1 * FROM itsm_service_InstallDocuDetail where cCode=#{ccode}
+  </select>
+  
   
   <update id="updateByPrimaryKeySelective" parameterType="com.wos.pojo.InstallDocuDetail">
     <!--

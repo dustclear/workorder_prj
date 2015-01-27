@@ -29,7 +29,7 @@ public interface InstallDocMgt
      * install document base info
      */
     /**
-     * 根据事件编码查询出安装单信息。 此处的cguid对应表AOS_RMS_USER的cguid， ccode对应表itsm_service_EventManagement的cCode，就是事件编码
+     * 根据事件编码生成一张空的安装单信息。 此处的cguid对应表AOS_RMS_USER的cguid， ccode对应表itsm_service_EventManagement的cCode，就是事件编码
      * @param eventCodeText： cguid和ccode。
      * @return string 注意输出结果，这是一个复杂的数据结构，包含：installdocument~enterpriseBaseInfo以及department，area等信息,前端解析时请注意。。
      */
@@ -40,6 +40,31 @@ public interface InstallDocMgt
      * @return
      */
     public String createAnEmptyInstallDocument();
+    
+    /*
+     * maintain document
+     */
+    /**
+     * 根据事件编码生成一张空的维护单信息（主要是根据事件编码查询出企业信息）。 此处的cguid对应表AOS_RMS_USER的cguid， ccode对应表itsm_service_EventManagement的cCode，就是事件编码
+     * @param eventCodeText： cguid和ccode。
+     * @return string
+     * @param eventCodeText
+     * @return
+     */
+    public String loadMaintainDocumentByEventCode(String eventCodeText);
+    
+    /**
+     * 创建一份空维护单，当用户没有加载事件编码时也可以输入维护单信息，
+     * @return
+     */
+    public String createAnEmptyMaintainDocument();
+    
+    /**
+     * 保存维护单信息
+     * @param argMaintainDocumentText
+     * @return
+     */
+    public String saveMaintainDocument(String argMaintainDocumentText);
     
     //enterpriseInfo
     
@@ -219,6 +244,14 @@ public interface InstallDocMgt
      * @return
      */
     public String loadAllServiceResponses();
+    
+    /**
+     * 在调用saveInstallDocDetail保存配置项前必须调用此方法，判断配置项的编码是否和数据库里的数据有重复。
+     * 输入参数同saveInstallDocDetail， 返回：若code重复，返回数据库里的重复数据，若不重复，返回null。
+     * @param installDetailText
+     * @return
+     */
+    public String isInstallDocDetailCodeExist(String installDetailText);
     
     /**
      * 保存配置项信息的修改
