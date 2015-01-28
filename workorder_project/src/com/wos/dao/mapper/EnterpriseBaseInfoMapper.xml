@@ -337,7 +337,8 @@
   </select>
   
   <select id="findEnterpriseInfoByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select * from itsm_base_EnterpriseManagement where cName like '%'||#cName#||'%'
+		select * from itsm_base_EnterpriseManagement 
+		where cName like CONCAT(CONCAT('%',#{cName}),'%' )
   </select>
   
   <select id="findEnterpriseInfoByTaxCode" parameterType="java.lang.String" resultMap="BaseResultMap">

@@ -2,6 +2,7 @@ package com.wos.test;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
+import com.wos.pojo.MaintainDocument;
 
 public class ClientTest {
 	private static WosHelper _helper = WosHelper.getInstance();
@@ -36,14 +38,31 @@ public class ClientTest {
 		((BindingProvider) service2).getRequestContext().put(
 				BindingProvider.SESSION_MAINTAIN_PROPERTY, true);
 
-		/*
-		getInstallDetailByTemplate(service);
-		getAddress(service);*/
+		
+//		getInstallDetailByTemplate(service);
+//      getAddress(service);
 //		addEnterpriseAddress(service);
 //		addEnterpriseContact(service);
 //		saveCellPhone(service);
 //		SaveInstallDocument(service);
-		createAnEmptyInstallDocument(service);
+//		createAnEmptyInstallDocument(service);
+//		createAnEmptyMaintainDocument(service);
+//		loadMaintainDocument(service);
+//		SaveMaintainDocument(service);
+//		getEnterpriseInfoByName(service);
+		isContactInfoExist(service);
+	}
+	
+	private static String isContactInfoExist(InstallDocMgt service)
+	{
+	    Map<String, String> map = new HashMap<String, String>();
+        map.put("cname", "顾美芬");
+        map.put("cphone1", "145293406198134209");
+        map.put("ctel1", "13375157506");
+        String contactStr = _helper.toJsonText(map, null);
+        String reString = service.isContactInfoExist(contactStr);
+        System.out.println(reString);
+        return reString;
 	}
 	
 	private static String createAnEmptyInstallDocument(InstallDocMgt service)
@@ -52,6 +71,24 @@ public class ClientTest {
         System.out.println(reString);
         return reString;
 	}
+	
+	private static String createAnEmptyMaintainDocument(InstallDocMgt service)
+    {
+        String reString = service.createAnEmptyMaintainDocument();
+        System.out.println(reString);
+        return reString;
+    }
+	
+	private static String loadMaintainDocument(InstallDocMgt service)
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("ccode", "1312070104");
+        map.put("cguid", "145293406198134209");
+        String eventCode = _helper.toJsonText(map, null);
+        String reString = service.loadMaintainDocumentByEventCode(eventCode);
+        System.out.println(reString);
+        return reString;
+    }
 	
 	private static String loadInstallDocument(InstallDocMgt service)
 	{
@@ -100,6 +137,26 @@ public class ClientTest {
 		String resStr = service.getEnterpriseAddresses(addressText);
 		System.out.println(resStr);
 	}
+	
+	private static void getEnterpriseInfoByName(InstallDocMgt service)
+	{
+	    Map<String, String> map = new HashMap<String, String>();
+        map.put("cname", "苏州");
+        String nameText = _helper.toJsonText(map, null);
+        
+        String resStr = service.getEnterpriseInfoByName(nameText);
+        System.out.println(resStr);
+	}
+	
+	private static void getEnterpriseInfoByTaxCode(InstallDocMgt service)
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("ctaxcode", "000000000000000001");
+        String nameText = _helper.toJsonText(map, null);
+        
+        String resStr = service.getEnterpriseInfoByName(nameText);
+        System.out.println(resStr);
+    }
 	
 	private static void  addEnterpriseAddress(InstallDocMgt service)
     { 
@@ -155,5 +212,19 @@ public class ClientTest {
 	    service.saveInstallDocument(_gson.toJson(document));
 	    service.saveInstallDocDetail(_gson.toJson(docuDetaillist));
 	}
+	
+	private static void SaveMaintainDocument(InstallDocMgt service)
+    {
+        String maintainDocText = loadMaintainDocument(service);
+        MaintainDocument document = _gson.fromJson(maintainDocText, MaintainDocument.class);
+        //以下三个参数不能为空，these properties should not be null
+        document.setCstatus(1);
+        document.setCcreater("my test");
+        document.setCcreatedate(new Date());
+        
+        //save maintain document
+        service.saveMaintainDocument(_gson.toJson(document));
+    }
+
 
 }
