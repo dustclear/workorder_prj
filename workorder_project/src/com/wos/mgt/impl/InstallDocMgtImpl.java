@@ -156,6 +156,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         // 纸质单号
         newEmptyInstallDocument.setCcode(_helper.generateInstallCode());
         
+        currentInstallDocument = newEmptyInstallDocument;
         return _helper.toJsonText(newEmptyInstallDocument,
                 InstallDocument.class);
     }
@@ -177,7 +178,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
         EventInfo eventInfo = eventInfoMapper.loadEventInfoByEventCode(eventCode);
         MaintainDocument doc = createMaintainDocumentFromEventInfo(eventInfo);
         
-        currentMaintainDocument = doc;
+//        currentMaintainDocument = doc;
         return _helper.toJsonText(doc, MaintainDocument.class);
     }
     
@@ -1015,7 +1016,7 @@ public class InstallDocMgtImpl implements InstallDocMgt
                 newInstallDocuDetail.setCguaranteeenddate(new Date());
                 newInstallDocuDetail.setCisinput(installDetail.getCisinput());
                 
-                if (currentInstallDocument != null)
+                /*if (currentInstallDocument != null)
                 {
                     newInstallDocuDetail.setCmainid(currentInstallDocument.getCguid());
                     newInstallDocuDetail.setCcontactid(currentInstallDocument.getCcontactid());
@@ -1026,9 +1027,9 @@ public class InstallDocMgtImpl implements InstallDocMgt
                     }
                 }
                 else
-                {
+                {*/
                     newInstallDocuDetail.setCmainid(installDocumentId);
-                }
+//                }
                 // 创建扩展属性
                 createExtendedAttrsForInstallDocDetail(newInstallDocuDetail);
                 //初始化服务开始和结束时间
