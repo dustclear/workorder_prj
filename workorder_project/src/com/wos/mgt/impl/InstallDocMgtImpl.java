@@ -144,7 +144,6 @@ public class InstallDocMgtImpl implements InstallDocMgt
         {
             session.setAttribute(WosConstant.CURRENT_INSTALL_DOCUMENT, doc);
         }
-        currentInstallDocument = doc;
         return _helper.toJsonText(doc, InstallDocument.class);
     }
     
@@ -156,7 +155,6 @@ public class InstallDocMgtImpl implements InstallDocMgt
         // 纸质单号
         newEmptyInstallDocument.setCcode(_helper.generateInstallCode());
         
-        currentInstallDocument = newEmptyInstallDocument;
         return _helper.toJsonText(newEmptyInstallDocument,
                 InstallDocument.class);
     }
@@ -178,7 +176,6 @@ public class InstallDocMgtImpl implements InstallDocMgt
         EventInfo eventInfo = eventInfoMapper.loadEventInfoByEventCode(eventCode);
         MaintainDocument doc = createMaintainDocumentFromEventInfo(eventInfo);
         
-//        currentMaintainDocument = doc;
         return _helper.toJsonText(doc, MaintainDocument.class);
     }
     
