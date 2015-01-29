@@ -50,7 +50,11 @@ public class ClientTest {
 //		loadMaintainDocument(service);
 //		SaveMaintainDocument(service);
 //		getEnterpriseInfoByName(service);
-		isContactInfoExist(service);
+//		isContactInfoExist(service);
+	/*	String string = "{\"isauditingqualified\":null,\"cstatus\":1,\"ccode\":\"mobile821347265985\",\"ccreater\":\"1\",\"cinstalltypeid\":null,\"enterpriseBaseInfo\":null,\"remarks\":\"无\",\"ctaxcode\":\"320500692553043\",\"carea\":\"其它\",\"ccontactid\":\"192975\",\"customersignature\":\"王伯强\",\"centerpriseid\":\"103940\",\"ceventid\":null,\"cguid\":\"072157298052947556\",\"clastupdatedate\":null,\"cinstalldate\":\"2015-01-28 17:22:39\",\"centerpriseadress\":\"飞扬\",\"isauditingeffective\":null,\"employee\":null,\"centerprisedepartment\":null,\"ccreatedate\":\"2015-01-28 17:23:07\",\"cemployeeid\":\"145246972521717801\",\"caudittime\":null,\"cunsuccessresult\":\"无\",\"ccontacttel\":\"18951125918\",\"noqualifiedreason\":null,\"cinstalltype\":\"626498449016090763\",\"ctimestamp\":null,\"ccontactname\":\"王伯强\",\"cdepartment\":\"服务部\",\"ccontactphone\":\"18951125918\",\"clastupdater\":null,\"cbelongtax\":\"165120663464490419\",\"centerprisename\":\"苏州丽航国际货运代理有限公司\",\"cauditorguid\":null,\"cinstallresult\":1}";
+		InstallDocument document = _gson.fromJson(string, InstallDocument.class);*/
+		
+//		System.out.println(document);
 	}
 	
 	private static String isContactInfoExist(InstallDocMgt service)

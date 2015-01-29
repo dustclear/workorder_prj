@@ -2,3 +2,4 @@
 /src/applicationContext-common.xml
 /doc/
 /src/com/wos/client
+/test/com/wos/test/TestInstallDocMgt.java
