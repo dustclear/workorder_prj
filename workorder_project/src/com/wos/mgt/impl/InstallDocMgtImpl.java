@@ -647,6 +647,10 @@ public class InstallDocMgtImpl implements InstallDocMgt
                     {
                         installDocuCofig.setCguid(_helper.generatePrimaryKey());
                     }
+                    if (StringUtils.isBlank(installDocuCofig.getCmainid()))
+                    {
+                        installDocuCofig.setCmainid(installDocuDetail.getCguid());
+                    }
                     installDocuCofigMapper.insertSelective(installDocuCofig);
                 }
             }
