@@ -55,7 +55,18 @@ public class ClientTest {
 		InstallDocument document = _gson.fromJson(string, InstallDocument.class);*/
 		
 //		System.out.println(document);
+		loadOrderCodeByEventCode(service);
 	}
+	
+	private static String loadOrderCodeByEventCode(InstallDocMgt service)
+    {
+	    Map<String, String> map = new HashMap<String, String>();
+        map.put("ccode", "1312070022");
+        String ccodeStr = _helper.toJsonText(map, null);
+        String reString = service.loadOrderCodeByEventCode(ccodeStr);
+        System.out.println(reString);
+        return reString;
+    }
 	
 	private static String isContactInfoExist(InstallDocMgt service)
 	{

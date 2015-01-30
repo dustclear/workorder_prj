@@ -147,6 +147,28 @@ public class InstallDocMgtImpl implements InstallDocMgt
         return _helper.toJsonText(doc, InstallDocument.class);
     }
     
+    
+    @Override
+    public String loadOrderCodeByEventCode(String argEventCode)
+    {
+        String eventCode = _helper.getValueFromJsonText(argEventCode,
+                "ccode");
+        
+        EventInfo eventInfo = eventInfoMapper.loadEventInfoByEventCode(eventCode);
+        
+        Map<String, String> orderCodeValue = new HashMap<String, String>();
+        if (eventInfo!=null)
+        {
+            orderCodeValue.put("crmid", eventInfo.getCrmid());
+        }
+        else {
+            orderCodeValue.put("crmid", null);
+        }
+        
+        return _helper.toJsonText(orderCodeValue, null);
+    }
+
+
     @Override
     public String createAnEmptyInstallDocument()
     {

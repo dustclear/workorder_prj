@@ -294,4 +294,11 @@ public interface InstallDocMgt
      */
     public String saveInstallDocument(String installDocumentText);
     
+    /**
+     * 根据事件编码获取派工单号。
+     * 参数：ccode
+     * @return
+     */
+    public String loadOrderCodeByEventCode(String argEventCode);
+    
 }
