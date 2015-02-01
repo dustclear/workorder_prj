@@ -41,6 +41,7 @@
     <result column="isAuditingEffective" property="isauditingeffective" jdbcType="INTEGER" />
     <result column="NoQualifiedReason" property="noqualifiedreason" jdbcType="VARCHAR" />
     <result column="CustomerSignature" property="customersignature" jdbcType="VARCHAR" />
+    <result column="isbill" property="isbill" jdbcType="INTEGER" />
     <association property ="enterpriseBaseInfo" column="cEnterpriseID" select ="com.wos.dao.mapper.EnterpriseBaseInfoMapper.getEnterpriseInfoById"/>	
   </resultMap>
   <insert id="insert" parameterType="com.wos.pojo.InstallDocument" >
@@ -60,7 +61,7 @@
       cAuditTime, cLastUpdater, cLastUpdateDate, 
       cTimeStamp, cInstallType, Remarks, 
       isAuditingQualified, isAuditingEffective, 
-      NoQualifiedReason, CustomerSignature)
+      NoQualifiedReason, CustomerSignature, isbill)
     values (#{cguid,jdbcType=VARCHAR}, #{ceventid,jdbcType=VARCHAR}, #{ccode,jdbcType=VARCHAR}, 
       #{centerpriseid,jdbcType=VARCHAR}, #{ctaxcode,jdbcType=VARCHAR}, #{centerprisename,jdbcType=VARCHAR}, 
       #{cbelongtax,jdbcType=VARCHAR}, #{centerpriseadress,jdbcType=VARCHAR}, #{centerprisedepartment,jdbcType=VARCHAR}, 
@@ -72,7 +73,7 @@
       #{caudittime,jdbcType=TIMESTAMP}, #{clastupdater,jdbcType=VARCHAR}, #{clastupdatedate,jdbcType=TIMESTAMP}, 
       #{ctimestamp,jdbcType=VARCHAR}, #{cinstalltype,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
       #{isauditingqualified,jdbcType=INTEGER}, #{isauditingeffective,jdbcType=INTEGER}, 
-      #{noqualifiedreason,jdbcType=VARCHAR}, #{customersignature,jdbcType=VARCHAR})
+      #{noqualifiedreason,jdbcType=VARCHAR}, #{customersignature,jdbcType=VARCHAR}, #{isbill,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.wos.pojo.InstallDocument" >
     <!--
@@ -184,6 +185,9 @@
       <if test="customersignature != null" >
         CustomerSignature,
       </if>
+      <if test="isbill != null" >
+        isbill,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="cguid != null" >
@@ -287,6 +291,9 @@
       </if>
       <if test="customersignature != null" >
         #{customersignature,jdbcType=VARCHAR},
+      </if>
+      <if test="isbill != null" >
+        #{isbill,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -397,6 +404,9 @@
       </if>
       <if test="customersignature != null" >
         CustomerSignature = #{customersignature,jdbcType=VARCHAR},
+      </if>
+      <if test="isbill != null" >
+        isbill = #{isbill,jdbcType=INTEGER},
       </if>
     </set>
     where cGUID = #{cguid,jdbcType=VARCHAR}

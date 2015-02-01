@@ -7,8 +7,8 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 /**
  * DES加密算法工具类
- * @author RyanCai
- * @date 2014-10-8 下午3:24:14
+ * @author lance kuai
+ * @date 2015-02-01 下午3:24:14
  */
 public class DESUtils {
 private static Key key;
