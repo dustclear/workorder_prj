@@ -1,5 +1,7 @@
 package com.wos.mgt.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -46,7 +48,15 @@ public class LoginMgtImpl implements LoginMgt
         String notEncodedPassword = userInfo.getCpwd();
         if (notEncodedPassword != null)
         {
-            userInfo.setCpwd(MD5Util.GetMD5Code(notEncodedPassword));
+            try {
+				userInfo.setCpwd(MD5Util.getMd5Hash1(notEncodedPassword));
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             List<RmsUser> resList = userDao.userLogin(userInfo);
             if (resList != null && resList.size() > 0)
             {
@@ -60,10 +70,15 @@ public class LoginMgtImpl implements LoginMgt
                     userInfo = resList.get(0);
                     notEncodedPassword = notEncodedPassword + "{"
                             + userInfo.getCguid() + "}";
-                    if(StringUtils.equals(MD5Util.GetMD5Code(notEncodedPassword), userInfo.getCpwd()))
-                    {
-                        return userInfo;
-                    }
+                    try {
+						if(StringUtils.equals(MD5Util.getMd5Hash2(notEncodedPassword), userInfo.getCpwd()))
+						{
+						    return userInfo;
+						}
+					} catch (NoSuchAlgorithmException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                     
                 }
             }

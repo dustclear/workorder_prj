@@ -10,6 +10,27 @@
  		http://cxf.apache.org/schemas/jaxws.xsd
         ">
 
+
+<!-- 
+	<bean id="propertyConfigurer"   class="com.wos.common.EncryptPropertyPlaceholderConfigurer">
+	         <property name="locations">
+	             <list>
+	                 <value>/jdbc.properties</value>
+	             </list>
+	         </property>
+	 </bean>
+
+	<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${driverClassName}">
+		</property>
+		<property name="url"
+			value="${url}">
+		</property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+
+ -->
 	<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver">
 		</property>
