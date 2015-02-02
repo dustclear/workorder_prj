@@ -44,7 +44,7 @@ public class ClientTest {
 //		addEnterpriseAddress(service);
 //		addEnterpriseContact(service);
 //		saveCellPhone(service);
-//		SaveInstallDocument(service);
+		SaveInstallDocument(service);
 //		createAnEmptyInstallDocument(service);
 //		createAnEmptyMaintainDocument(service);
 //		loadMaintainDocument(service);
@@ -55,7 +55,7 @@ public class ClientTest {
 		InstallDocument document = _gson.fromJson(string, InstallDocument.class);*/
 		
 //		System.out.println(document);
-		loadOrderCodeByEventCode(service);
+//		loadOrderCodeByEventCode(service);
 	}
 	
 	private static String loadOrderCodeByEventCode(InstallDocMgt service)
@@ -211,6 +211,7 @@ public class ClientTest {
 	{
 	    String insatllDocument = loadInstallDocument(service);
 	    InstallDocument document = _gson.fromJson(insatllDocument, InstallDocument.class);
+	    document.setIsbill(Short.valueOf("0"));
 	    
 	    String installDetails = getInstallDetailByTemplate(service);
 	    Type type = new TypeToken<ArrayList<InstallDocuDetail>>() {

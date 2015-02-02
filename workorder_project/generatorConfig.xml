@@ -17,19 +17,19 @@
 		</javaTypeResolver>
 		<!-- Model生成配置 targetPackage：生成包路径，可自己生成目录 targetProject：项目路经，我试过写成"\mybatis"，但总是报找不到，不知原因。 
 			我换成写绝对目录，行的通。 -->
-		<javaModelGenerator targetPackage="com.wos.pojo"
+		<javaModelGenerator targetPackage="test"
 			targetProject="src">
 			<property name="enableSubPackages" value="false" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 		<!-- sqlMap配置 重复配置，不再提示，下同 -->
-		<sqlMapGenerator targetPackage="com.wos.dao.mapper"
+		<sqlMapGenerator targetPackage="test.mapper"
 			targetProject="src">
 			<property name="enableSubPackages" value="false" />
 		</sqlMapGenerator>
 		<!-- DAO接口的生成 -->
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.wos.dao.mapper" targetProject="src">
+			targetPackage="test.mapper" targetProject="src">
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
 		<!-- table 数据库table的用户配置，用于配置哪些表需要。 domainObjectName:生成表前缀 -->
@@ -149,15 +149,15 @@
             enableUpdateByExample="true">
 		</table> -->
 		
-		<!-- <table schema="dbo" tableName="itsm_service_InstallDocument" domainObjectName="InstallDocument" enableCountByExample="false"  
+		<table schema="dbo" tableName="itsm_service_InstallDocument" domainObjectName="InstallDocument" enableCountByExample="false"  
+            enableDeleteByExample="false" enableSelectByExample="false"  
+            enableUpdateByExample="false">
+		</table> 
+		
+		<!-- <table schema="dbo" tableName="cm_employee" domainObjectName="Employee" enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="false"  
             enableUpdateByExample="false">
 		</table> -->
-		
-		<table schema="dbo" tableName="cm_employee" domainObjectName="Employee" enableCountByExample="false"  
-            enableDeleteByExample="false" enableSelectByExample="false"  
-            enableUpdateByExample="false">
-		</table>
 	</context>
 </generatorConfiguration>
 

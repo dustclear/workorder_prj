@@ -1,8 +1,11 @@
 package com.wos.common;
 import java.security.Key;
 import java.security.SecureRandom;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
+import javax.crypto.spec.IvParameterSpec;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 /**
@@ -12,8 +15,8 @@ import sun.misc.BASE64Encoder;
  */
 public class DESUtils {
 private static Key key;
-    private static String KEY_STR = "myKey";// 密钥
-    private static String CHARSETNAME = "UTF-8";// 编码
+    private static String KEY_STR = "myKey111";// 密钥
+    private static String CHARSETNAME = "ASCII";// 编码
     private static String ALGORITHM = "DES";// 加密类型
  
     static {
@@ -37,10 +40,13 @@ private static Key key;
         BASE64Encoder base64encoder = new BASE64Encoder();
         try {
             byte[] bytes = str.getBytes(CHARSETNAME);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+            Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+            IvParameterSpec iv = new IvParameterSpec(KEY_STR.getBytes("UTF-8"));
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+//            cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] doFinal = cipher.doFinal(bytes);
-            return base64encoder.encode(doFinal);
+//            return base64encoder.encode(doFinal);
+            return new String(doFinal);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -67,7 +73,19 @@ private static Key key;
     
     public static void main(String[] args)
     {
-    	System.out.println(getEncryptString("sa"));
-    	System.out.println(getDecryptString("m0lwuYw79Bk="));
+    	System.out.println(toHexString(getEncryptString("admin123")));
+        System.out.println(toHexString("/Vpu2Ev2zTEwHk5QMcWBSg=="));
+//    	System.out.println(getDecryptString("hu0E6AeFH/Oasfe3Eqr2jA=="));
+    }
+    
+    //转化字符串为十六进制编码
+    public static String toHexString(String s) {
+       String str = "";
+       for (int i = 0; i < s.length(); i++) {
+        int ch = (int) s.charAt(i);
+        String s4 = Integer.toHexString(ch);
+        str = str + s4;
+       }
+       return str;
     }
 }
