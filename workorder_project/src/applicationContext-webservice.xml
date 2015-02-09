@@ -54,6 +54,7 @@
 	<jaxws:endpoint id="loginMgt" implementor="#login"
 		address="/Login" />
 		
+		<!-- restful start -->
 	<bean id="installDocRestful" class="com.wos.mgt.restful.impl.InstallDocRestfulMgtImpl" >
     	<property name="installTemplateMapper" ref="installTemplateMapper"/>
     </bean>
