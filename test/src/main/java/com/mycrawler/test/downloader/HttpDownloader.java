@@ -2,12 +2,21 @@ package com.mycrawler.test.downloader;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.Random;
 
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -16,6 +25,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.jsoup.helper.StringUtil;
+import org.jsoup.nodes.Document.OutputSettings;
+
+import com.mycrawler.test.downloader.common.FileUtilsEx;
 
 public class HttpDownloader
 {
@@ -26,12 +39,14 @@ public class HttpDownloader
     
     public static void download()
     {
-//        String url = "http://219.146.68.24/ws.cdn.baidupcs.com/file/dadc13c9944da681f5d740333de6410d?bkt=p2-qd-106&xcode=d97142a56f2e64b38a8282e829434935f3a913716a9c9d63f77424e07ee197d9&fid=2687768786-250528-379138095804928&time=1427444845&sign=FDTAXERLBH-DCb740ccc5511e5e8fedcff06b081203-ubysgkQqii540kjLANvZ2J3plOk%3D&to=hc&fm=Nan,B,T,t&sta_dx=499&sta_cs=259&sta_ft=mkv&sta_ct=5&newver=1&newfm=1&flow_ver=3&sl=80347212&expires=8h&rt=pr&r=251493276&mlogid=1020033313&vuk=2687768786&vbdid=3908911242&fin=%5B%E5%A4%A7%E5%AE%8B%E6%8F%90%E5%88%91%E5%AE%98%5D.Dead.Men.Do.Tell.Tales.S01E34.HDTV.720p.x264.AC3-CMCT.mkv&fn=%5B%E5%A4%A7%E5%AE%8B%E6%8F%90%E5%88%91%E5%AE%98%5D.Dead.Men.Do.Tell.Tales.S01E34.HDTV.720p.x264.AC3-CMCT.mkv&wshc_tag=0&wsts_tag=5515146e&wsid_tag=3ad3f5ed&wsiphost=ipdbm";
-        String url = "http://blog.163.com/james_zhangzw/blog/static/794251472009323103232906";
+        String url = "http://183.131.119.46/ws.cdn.baidupcs.com/file/b165c1ceda4ebb3add9a93cd8e178810?bkt=p2-nb-217&xcode=14c1b0d6f36c2453767761741bd35d29cfbb2d2078bbd50eed03e924080ece4b&fid=2687768786-250528-860575552441089&time=1427705507&sign=FDTAXERLBH-DCb740ccc5511e5e8fedcff06b081203-vMS%2B0oxypGyzZW2V%2BvGlUv7%2BeCQ%3D&to=hc&fm=Nin,B,T,t&sta_dx=504&sta_cs=1157&sta_ft=mp4&sta_ct=5&newver=1&newfm=1&flow_ver=3&sl=80347212&expires=8h&rt=pr&r=691493022&mlogid=1524852030&vuk=2687768786&vbdid=3908911242&fin=%5B%E9%AB%98%E6%B8%85%E7%89%88%5DBetter.Call.Saul.S01E01.chs.eng.mp4&fn=%5B%E9%AB%98%E6%B8%85%E7%89%88%5DBetter.Call.Saul.S01E01.chs.eng.mp4&wshc_tag=0&wsts_tag=55190ea3&wsid_tag=3ad3f5ed&wsiphost=ipdbm";
+//        String url = "http://4dx.pc6.com/gm/wireshark_cn.zip";
         InputStream in =null;
         try
         {
-            final File mainFile = new File("H:/myDown", "2345explorer.exe");
+            System.out.println("filename: "+getFileName(url));
+            
+            final File mainFile = new File("H:/myDown", URLDecoder.decode(getFileName(url), "UTF-8"));
             if (!mainFile.exists())
             {
                 if (!mainFile.getParentFile().exists())
@@ -41,6 +56,8 @@ public class HttpDownloader
                 
                 mainFile.createNewFile();
             }
+            
+            
             readMethod1(url, mainFile);
 //            readMethod3(url, mainFile);
             
@@ -74,7 +91,7 @@ public class HttpDownloader
     public static void readMethod1(String url, final File mainFile) throws ClientProtocolException, IOException
     {
         
-        Request.Get(url).addHeader("Range", "bytes=0-500")
+        Request.Get(url)/*.addHeader("Range", "bytes=0-500")*/
                 .connectTimeout(20000)
                 .socketTimeout(20000)
                 .execute().handleResponse(new ResponseHandler<String>()
@@ -82,25 +99,28 @@ public class HttpDownloader
                     public String handleResponse(HttpResponse response)
                             throws ClientProtocolException, IOException
                     {
+                        System.out.println("downloading started.....");
                         BufferedInputStream bis = new BufferedInputStream(response
                                 .getEntity().getContent());
-                        byte[] buffer = new byte[1024*5];
-                        int i=0;
-                        /*while ((bis.read(buffer))!=-1)
-                        {
-                            System.out.println("writing:"+(i++));
-                            FileUtils.writeByteArrayToFile(mainFile, buffer, true);
-                        }*/
+                        byte[] buffer = new byte[1024*6*1024];//looks like a tcp package limits to 64k. 
                         int bytesRead = 0;
-                        RandomAccessFile raf = new RandomAccessFile(mainFile, "rw");
-                        int offset=0;
-                        while ((bytesRead = bis.read(buffer)) != -1) {
-                            raf.seek(offset);
-                            raf.write(buffer, 0, bytesRead);
-                            offset += bytesRead;
-                            System.out.println("----------"+bytesRead);
+                        OutputStream out = new FileOutputStream(mainFile, true);
+                        int max = 0;
+                        while ((bytesRead=bis.read(buffer))!=-1)
+                        {
+                            
+//                            System.out.println("----------"+bytesRead);
+                            if (bytesRead>max)
+                            {
+                               System.out.println(max=bytesRead);
+                            }
+                            out.write(buffer, 0, bytesRead);
                         }
-                        bis.close();
+                       
+                        IOUtils.closeQuietly(bis);
+                        IOUtils.closeQuietly(out);
+                        
+                        System.out.println("downloading finished.....");
                         return null;
                     }
                 })
@@ -197,5 +217,56 @@ public class HttpDownloader
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static String getFileName(String url)
+    {
+        String fileName = null;
+        //first, direct name;
+        try
+        {
+            fileName = new URL(url).getFile();
+            if (!StringUtil.isBlank(fileName)&&!fileName.contains("&"))
+            {
+                return fileName.substring(fileName.lastIndexOf("/")+1);
+            }
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        //sec, in attached header
+        try
+        {
+            fileName  = Request.Head(url).execute().returnResponse().getLastHeader("Content-Disposition").getValue();
+        }
+        catch (ClientProtocolException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        fileName=fileName.substring(fileName.indexOf("\"")+1, fileName.length()-1);
+        if (StringUtil.isBlank(fileName))
+        {
+            return "defaultFile";
+        }
+        try
+        {
+            return URLDecoder.decode(fileName, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return fileName;
     }
 }

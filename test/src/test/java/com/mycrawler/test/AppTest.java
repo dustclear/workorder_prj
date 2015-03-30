@@ -1,6 +1,8 @@
 package com.mycrawler.test;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -67,6 +69,22 @@ public class AppTest extends TestCase
             e.printStackTrace();
         }
         
+        
+    }
+    
+    public void testUrl()
+    {
+        URL url;
+        try
+        {
+            url = new URL("http://lx.cdn.baidupcs.com/file/972f874f4b0f66119c3ab941f5304aee?bkt=p2-qd-106&xcode=ccf76527d99cd71c3ede6f7df8d84d775c2880573b108894a271ffda32bcb45b&fid=2687768786-250528-256932378368518&time=1427703210&sign=FDTAXERLBH-DCb740ccc5511e5e8fedcff06b081203-FJxHxELUzFa2Z9pWXA8XR1hatpE%3D&to=cb&fm=Nan,B,T,t&sta_dx=703&sta_cs=27&sta_ft=mkv&sta_ct=5&newver=1&newfm=1&flow_ver=3&sl=80347212&expires=8h&rt=pr&r=655149386&mlogid=2450992511&vuk=2687768786&vbdid=3908911242&fin=%5BTSHD%5D%E5%A4%A9%E9%BE%99%E5%85%AB%E9%83%A804.%5BD-mkv%20%E5%9B%BD%E8%AF%AD%E4%B8%AD%E5%AD%97%5DDVDRIP%E6%97%A0%E6%B0%B4%E5%8D%B0.%E4%BC%A4%E5%BF%83%E5%A4%A9%E4%BD%BF.mkv&fn=%5BTSHD%5D%E5%A4%A9%E9%BE%99%E5%85%AB%E9%83%A804.%5BD-mkv%20%E5%9B%BD%E8%AF%AD%E4%B8%AD%E5%AD%97%5DDVDRIP%E6%97%A0%E6%B0%B4%E5%8D%B0.%E4%BC%A4%E5%BF%83%E5%A4%A9%E4%BD%BF.mkv");
+            System.out.println(url.getFile());
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
     }
 }
