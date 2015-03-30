@@ -39,14 +39,14 @@ public class HttpDownloader
     
     public static void download()
     {
-        String url = "http://183.131.119.46/ws.cdn.baidupcs.com/file/b165c1ceda4ebb3add9a93cd8e178810?bkt=p2-nb-217&xcode=14c1b0d6f36c2453767761741bd35d29cfbb2d2078bbd50eed03e924080ece4b&fid=2687768786-250528-860575552441089&time=1427705507&sign=FDTAXERLBH-DCb740ccc5511e5e8fedcff06b081203-vMS%2B0oxypGyzZW2V%2BvGlUv7%2BeCQ%3D&to=hc&fm=Nin,B,T,t&sta_dx=504&sta_cs=1157&sta_ft=mp4&sta_ct=5&newver=1&newfm=1&flow_ver=3&sl=80347212&expires=8h&rt=pr&r=691493022&mlogid=1524852030&vuk=2687768786&vbdid=3908911242&fin=%5B%E9%AB%98%E6%B8%85%E7%89%88%5DBetter.Call.Saul.S01E01.chs.eng.mp4&fn=%5B%E9%AB%98%E6%B8%85%E7%89%88%5DBetter.Call.Saul.S01E01.chs.eng.mp4&wshc_tag=0&wsts_tag=55190ea3&wsid_tag=3ad3f5ed&wsiphost=ipdbm";
-//        String url = "http://4dx.pc6.com/gm/wireshark_cn.zip";
+//        String url = "http://183.131.119.46/ws.cdn.baidupcs.com/file/b165c1ceda4ebb3add9a93cd8e178810?bkt=p2-nb-217&xcode=14c1b0d6f36c2453767761741bd35d29cfbb2d2078bbd50eed03e924080ece4b&fid=2687768786-250528-860575552441089&time=1427705507&sign=FDTAXERLBH-DCb740ccc5511e5e8fedcff06b081203-vMS%2B0oxypGyzZW2V%2BvGlUv7%2BeCQ%3D&to=hc&fm=Nin,B,T,t&sta_dx=504&sta_cs=1157&sta_ft=mp4&sta_ct=5&newver=1&newfm=1&flow_ver=3&sl=80347212&expires=8h&rt=pr&r=691493022&mlogid=1524852030&vuk=2687768786&vbdid=3908911242&fin=%5B%E9%AB%98%E6%B8%85%E7%89%88%5DBetter.Call.Saul.S01E01.chs.eng.mp4&fn=%5B%E9%AB%98%E6%B8%85%E7%89%88%5DBetter.Call.Saul.S01E01.chs.eng.mp4&wshc_tag=0&wsts_tag=55190ea3&wsid_tag=3ad3f5ed&wsiphost=ipdbm";
+        String url = "http://4dx.pc6.com/gm/wireshark_cn.zip";
         InputStream in =null;
         try
         {
             System.out.println("filename: "+getFileName(url));
             
-            final File mainFile = new File("H:/myDown", URLDecoder.decode(getFileName(url), "UTF-8"));
+            final File mainFile = new File("e:/myDown", URLDecoder.decode(getFileName(url), "UTF-8"));
             if (!mainFile.exists())
             {
                 if (!mainFile.getParentFile().exists())
@@ -91,7 +91,7 @@ public class HttpDownloader
     public static void readMethod1(String url, final File mainFile) throws ClientProtocolException, IOException
     {
         
-        Request.Get(url)/*.addHeader("Range", "bytes=0-500")*/
+        Request.Get(url).addHeader("Range", "bytes=500-50000")
                 .connectTimeout(20000)
                 .socketTimeout(20000)
                 .execute().handleResponse(new ResponseHandler<String>()
