@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import com.wos.common.WosConstant;
 import com.wos.common.WosHelper;
 import com.wos.mgt.InstallDocMgt;
-import com.wos.mgt.restful.impl.InstallDocRestfulMgtImpl;
 import com.wos.pojo.InstallDocuDetail;
 import com.wos.pojo.InstallDocument;
 
@@ -25,7 +24,7 @@ public class TestInstallDocMgt
 {
     private static InstallDocMgt service;
     
-    private static InstallDocRestfulMgtImpl service_rest;
+//    private static InstallDocRestfulMgtImpl service_rest;
     private WosHelper _helper = WosHelper.getInstance();
     
     private static final Gson _gson = new GsonBuilder().serializeNulls().setDateFormat(WosConstant.DATE_TIME_FORMAT)
@@ -37,7 +36,7 @@ public class TestInstallDocMgt
         ApplicationContext context = new ClassPathXmlApplicationContext(
                 "applicationContext-*.xml");
         service = (InstallDocMgt)context.getBean("installDoc");
-        service_rest = (InstallDocRestfulMgtImpl)context.getBean("installDocRestful");
+//        service_rest = (InstallDocRestfulMgtImpl)context.getBean("installDocRestful");
     }
     
     @Test
