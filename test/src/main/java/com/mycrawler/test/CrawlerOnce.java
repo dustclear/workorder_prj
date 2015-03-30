@@ -1,11 +1,18 @@
 package com.mycrawler.test;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import javax.sound.sampled.Line;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.Header;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Request;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
@@ -54,7 +61,7 @@ public class CrawlerOnce
         File mainFile = new File("H:/myDown", "main.html");
         if (!mainFile.exists())
         {
-            if(!mainFile.getParentFile().exists())
+            if (!mainFile.getParentFile().exists())
             {
                 mainFile.getParentFile().mkdirs();
             }
@@ -79,11 +86,16 @@ public class CrawlerOnce
                 
                 try
                 {
-                    String childHtml = loadHtml("http://www.zhihu.com"+element.attr("href"));
-                    File childFile = new File("H:/myDown", FilenameUtils.normalize(element.text().replaceAll("…", "").replaceAll("，", "")+".html"));
+                    String childHtml = loadHtml("http://www.zhihu.com"
+                            + element.attr("href"));
+                    File childFile = new File("H:/myDown",
+                            FilenameUtils.normalize(element.text()
+                                    .replaceAll("…", "")
+                                    .replaceAll("，", "")
+                                    + ".html"));
                     if (!childFile.exists())
                     {
-                        if(!childFile.getParentFile().exists())
+                        if (!childFile.getParentFile().exists())
                         {
                             childFile.getParentFile().mkdirs();
                         }
@@ -104,7 +116,6 @@ public class CrawlerOnce
                     e.printStackTrace();
                 }
                 
-                
             }
         }
     }
@@ -112,15 +123,35 @@ public class CrawlerOnce
     public static String loadHtml(String url) throws ClientProtocolException,
             IOException
     {
-        return Request.Get(url)
+        Header lengthHeader = Request.Head(url).execute().returnResponse().getLastHeader("Content-Length");
+        if (lengthHeader!=null)
+        {
+            System.out.println("-------------------------------"+lengthHeader);
+        }
+        else {
+            System.out.println("url: "+url);
+        }
+        
+        
+        Content responseContent = Request.Get(url)
                 .connectTimeout(2000)
                 .socketTimeout(2000)
                 .execute()
-                .returnContent()
-                .asString();
+                .returnContent();
+        InputStream in = responseContent.asStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(in);
+        BufferedReader bReader = new BufferedReader(inputStreamReader);
+        StringBuffer sBuffer = new StringBuffer(2000);
+        String line;
+        while ((line = bReader.readLine())!=null)
+        {
+            sBuffer.append(line);
+        }
+       
+//        System.out.println("buffer:----------"+sBuffer);
+        return responseContent.asString();
         
     }
-    
     
     public static String post()
     {
