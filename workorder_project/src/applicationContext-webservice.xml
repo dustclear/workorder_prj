@@ -48,9 +48,9 @@
 		<property name="userDao" ref="rmsUserMapper"/>
 	</bean>
 	
-	<bean id="installDocRestful" class="com.wos.mgt.restful.impl.InstallDocRestfulMgtImpl" >
+	<!-- <bean id="installDocRestful" class="com.wos.mgt.restful.impl.InstallDocRestfulMgtImpl" >
     	<property name="installTemplateMapper" ref="installTemplateMapper"/>
-    </bean>
+    </bean> -->
 
 	<jaxws:endpoint id="installDocMgt" implementor="#installDoc"
 		address="/InstallDocument" />
@@ -58,10 +58,10 @@
 	<jaxws:endpoint id="loginMgt" implementor="#login"
 		address="/Login" />
 		
-	<jaxrs:server id="installDocRestfulMgt" address="/installDocRestfulMgt">
+	<!-- <jaxrs:server id="installDocRestfulMgt" address="/installDocRestfulMgt">
         <jaxrs:serviceBeans>
             <ref bean="installDocRestful" />
         </jaxrs:serviceBeans>
-    </jaxrs:server>    
+    </jaxrs:server>     -->
 
 </beans>
