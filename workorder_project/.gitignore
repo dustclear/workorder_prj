@@ -1,4 +1,5 @@
 /build/
+/src/jdbc.properties
 /src/applicationContext-common.xml
 /doc/
 /src/com/wos/client
