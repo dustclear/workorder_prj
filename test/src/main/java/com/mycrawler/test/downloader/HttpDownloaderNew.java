@@ -31,7 +31,7 @@ import org.jsoup.nodes.Document.OutputSettings;
 
 import com.mycrawler.test.downloader.common.FileUtilsEx;
 
-public class HttpDownloader
+public class HttpDownloaderNew
 {
     public static void main(String[] args)
     {
@@ -143,96 +143,6 @@ public class HttpDownloader
                 ;
         
         
-    }
-    
-  /*  public static void readMethod11(String url, final File mainFile) throws ClientProtocolException, IOException
-    {
-        
-        InputStream in = Request.Get(url).addHeader("Range", "bytes=0-12337000")
-                .connectTimeout(2000)
-                .socketTimeout(2000)
-                .execute().returnContent().asStream()
-                ;
-        
-        BufferedInputStream bis = new BufferedInputStream(in);
-        byte[] buffer = new byte[1024*5];
-        int i=0;
-        while ((bis.read(buffer))!=-1)
-        {
-            System.out.println("writing:"+(i++));
-            FileUtils.writeByteArrayToFile(mainFile, buffer, true);
-        }
-        int bytesRead = 0;
-        RandomAccessFile raf = new RandomAccessFile(mainFile, "rw");
-        int offset=0;
-        while ((bytesRead = bis.read(buffer)) != -1) {
-            raf.seek(offset);
-            raf.write(buffer, 0, bytesRead);
-            offset += bytesRead;
-            System.out.println("----------"+bytesRead);
-        }
-        
-        
-    }
-    */
-    
-    public static void readMethod2(String url, final File mainFile) throws ClientProtocolException, IOException
-    {
-        CloseableHttpClient httpClient;
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-        cm.setMaxTotal(100);
-        httpClient = HttpClients.custom().setConnectionManager(cm).build();
-        
-        HttpGet httpGet = new HttpGet(url);
-        httpGet.addHeader("Range", "bytes=500-5000");
-        httpGet.addHeader("User-Agent","Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)");  
-        HttpResponse response = httpClient.execute(httpGet);
-        BufferedInputStream bis = new BufferedInputStream(response
-                .getEntity().getContent());
-        
-        byte[] buffer = new byte[1024*5];
-        int bytesRead = 0;
-        /*while ((bytesRead=bis.read(buffer))!=-1)
-        {
-            System.out.println("bytesRead:"+bytesRead +"  buffer.size="+buffer.length);
-            System.
-            FileUtils.writeByteArrayToFile(mainFile, buffer, true);
-        }*/
-        RandomAccessFile raf = new RandomAccessFile(mainFile, "rw");
-        int offset=0;
-        while ((bytesRead = bis.read(buffer)) != -1) {
-            raf.seek(offset);
-            raf.write(buffer, 0, bytesRead);
-            offset += bytesRead;
-            System.out.println("----------"+bytesRead);
-        }
-        
-    }
-    
-    public static void readMethod3(String argUrl, File mainFile)
-    {
-        URLConnection urlConnection = null;
-        try {
-            URL url = new URL(argUrl);
-            urlConnection = url.openConnection();
-            urlConnection.setRequestProperty("Range", "bytes=1000-1200");
-            RandomAccessFile randomAccessFile = new RandomAccessFile(mainFile, "rw");
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(
-                    urlConnection.getInputStream());
-            int offset=0;
-            byte[] buffer = new byte[1024*5];
-            int bytesRead = 0;
-            while ((bytesRead = bufferedInputStream.read(buffer)) != -1) {
-                randomAccessFile.seek(offset);
-                randomAccessFile.write(buffer, 0, bytesRead);
-                offset += bytesRead;
-                System.out.println("----------"+bytesRead);
-            }
-            bufferedInputStream.close();
-            randomAccessFile.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     public static String getFileName(String url)
