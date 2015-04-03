@@ -16,10 +16,12 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.util.Args;
+import org.apache.log4j.Logger;
 import org.jsoup.helper.StringUtil;
 
 public class HttpDownloadMission implements DownloadMission
 {
+    private static final Logger LOGGER = Logger.getLogger(HttpDownloadMission.class);
     //the download file url.
     private String url;
     
@@ -38,16 +40,25 @@ public class HttpDownloadMission implements DownloadMission
         this.fileName = getFileNameFromUrlString(url);
     }
     
+    public HttpDownloadMission(String url, String fileName)
+    {
+        this.url = url;
+        this.fileName = fileName;
+    }
+    
     public void run()
     {
         try
         {
-            createLocalFile();
-            downloadStart();
+            File localFile = createLocalFile();
+            if (localFile != null)
+            {
+                downloadStart();
+            }
+            
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -56,6 +67,8 @@ public class HttpDownloadMission implements DownloadMission
     {
         
         Request.Get(url)
+                .addHeader("User-Agent",
+                        "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)")
                 /*.addHeader("Range", "bytes=500-50000")*/
                 .connectTimeout(20000)
                 .socketTimeout(20000)
@@ -66,7 +79,8 @@ public class HttpDownloadMission implements DownloadMission
                             throws ClientProtocolException, IOException
                     {
                         long startTime = System.currentTimeMillis();
-                        System.out.println("downloading started.....");
+                        LOGGER.debug(fileName
+                                + " downloading started.....");
                         BufferedInputStream bis = new BufferedInputStream(
                                 response.getEntity().getContent());
                         
@@ -81,10 +95,10 @@ public class HttpDownloadMission implements DownloadMission
                         while ((bytesRead = bis.read(buffer)) != -1)
                         {
                             
-                            if (bytesRead > max)
-                            {
-                                System.out.println(max = bytesRead);
-                            }
+                            /* if (bytesRead > max)
+                             {
+                                 System.out.println(max = bytesRead);
+                             }*/
                             
                             baos.write(buffer, 0, bytesRead);
                             if (baos.size() > (1024 * 1024 * 5 - 1024 * 64))
@@ -102,11 +116,13 @@ public class HttpDownloadMission implements DownloadMission
                         IOUtils.closeQuietly(bis);
                         IOUtils.closeQuietly(out);
                         IOUtils.closeQuietly(baos);
-                        System.out.println("downloading finished.....");
+                        LOGGER.debug(fileName
+                                + " downloading finished.....");
                         long endTime = System.currentTimeMillis();
                         timeCost = endTime - startTime;
-                        System.out.println("total time cost:" + timeCost
-                                + "milli seconds");
+                        LOGGER.debug(fileName + " total time cost:"
+                                + timeCost / 1000 + "." + timeCost % 1000
+                                + " seconds");
                         return null;
                     }
                 });
@@ -124,7 +140,14 @@ public class HttpDownloadMission implements DownloadMission
         downLoadFile = new File(localPath, fileName);
         if (downLoadFile.exists())
         {
-            downLoadFile.delete();
+            if (downLoadFile.length()>0)
+            {
+                return null;
+            }
+            else {
+                downLoadFile.delete();
+            }
+            
         }
         if (!downLoadFile.getParentFile().exists())
         {
@@ -136,22 +159,22 @@ public class HttpDownloadMission implements DownloadMission
         return downLoadFile;
     }
     
+    //todo: have bugs, need to modify
     private String getFileNameFromUrlString(String url)
     {
         Args.notBlank(url, "Request URI");
         String tempFileName = null;
         
         try
-        {   //get name from attached header
-            
+        { //get name from attached header
+        
             Header nameHeader = Request.Head(url)
                     .execute()
                     .returnResponse()
                     .getLastHeader("Content-Disposition");
-            if (nameHeader!=null)
+            if (nameHeader != null)
             {
-                tempFileName = nameHeader
-                        .getValue();
+                tempFileName = nameHeader.getValue();
             }
             
             if (StringUtil.isBlank(tempFileName))

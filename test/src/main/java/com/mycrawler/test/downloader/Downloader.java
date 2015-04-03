@@ -9,6 +9,7 @@ public class Downloader
 {
     private ExecutorService threadPool = Executors.newFixedThreadPool(5);
     
+    
     private static Downloader downloader = new Downloader();
     
     private List<DownloadMission> missionList = new ArrayList<DownloadMission>();
@@ -17,13 +18,23 @@ public class Downloader
     
     public static Downloader getInstance()
     {
+        Executors.newScheduledThreadPool(5);
         return downloader;
+        
     }
     
     
     public void startDownload(String url)
     {
         HttpDownloadMission downloadMission = new HttpDownloadMission(url);
+        missionList.add(downloadMission);
+        threadPool.execute(downloadMission);
+        
+    }
+    
+    public void startDownload(String url, String fileName)
+    {
+        HttpDownloadMission downloadMission = new HttpDownloadMission(url, fileName);
         missionList.add(downloadMission);
         threadPool.execute(downloadMission);
         
