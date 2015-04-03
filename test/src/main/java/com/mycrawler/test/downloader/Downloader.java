@@ -1,17 +1,42 @@
 package com.mycrawler.test.downloader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Downloader
 {
-    public static void main(String[] args)
+    private ExecutorService threadPool = Executors.newFixedThreadPool(5);
+    
+    private static Downloader downloader = new Downloader();
+    
+    private List<DownloadMission> missionList = new ArrayList<DownloadMission>();
+    
+    private Downloader(){}
+    
+    public static Downloader getInstance()
     {
-        ExecutorService threadPool = Executors.newFixedThreadPool(5);
-        String url = "http://4dx.pc6.com/gm/wireshark_cn.zip";
-        
+        return downloader;
+    }
+    
+    
+    public void startDownload(String url)
+    {
         HttpDownloadMission downloadMission = new HttpDownloadMission(url);
-        
+        missionList.add(downloadMission);
         threadPool.execute(downloadMission);
+        
+    }
+    
+    public void deleteMission(DownloadMission mission)
+    {
+        missionList.remove(mission);
+    }
+    
+    public void exitDownloader()
+    {
+        System.out.println("stop task afer they are finished!");
+        threadPool.shutdown();
     }
 }

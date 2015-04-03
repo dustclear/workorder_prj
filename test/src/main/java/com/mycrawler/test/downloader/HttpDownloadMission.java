@@ -5,13 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -144,11 +143,16 @@ public class HttpDownloadMission implements DownloadMission
         
         try
         {   //get name from attached header
-            tempFileName = Request.Head(url)
+            
+            Header nameHeader = Request.Head(url)
                     .execute()
                     .returnResponse()
-                    .getLastHeader("Content-Disposition")
-                    .getValue();
+                    .getLastHeader("Content-Disposition");
+            if (nameHeader!=null)
+            {
+                tempFileName = nameHeader
+                        .getValue();
+            }
             
             if (StringUtil.isBlank(tempFileName))
             {
@@ -158,7 +162,7 @@ public class HttpDownloadMission implements DownloadMission
             
             if (!StringUtil.isBlank(tempFileName))
             {
-                tempFileName = URLDecoder.decode(tempFileName.substring(tempFileName.indexOf("\"") + 1),
+                tempFileName = URLDecoder.decode(tempFileName.substring(tempFileName.lastIndexOf("/") + 1),
                         "UTF-8");
             }
             else

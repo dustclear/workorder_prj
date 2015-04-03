@@ -11,7 +11,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.http.Header;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Content;
-import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
@@ -27,7 +26,7 @@ public class CrawlerSample
     {
         try
         {
-            loadHtml();
+            new CrawlerSample().startWork();
         }
         catch (ClientProtocolException e)
         {
@@ -40,25 +39,15 @@ public class CrawlerSample
         
     }
     
-    public static void loadHtml() throws ClientProtocolException, IOException
+    public void startWork() throws ClientProtocolException, IOException
     {
         String htmlStr = loadHtml(URL);
+        persistHtml("main.html", htmlStr);
         
-        File mainFile = new File("E:/myDown", "main.html");
-        if (!mainFile.exists())
-        {
-            if (!mainFile.getParentFile().exists())
-            {
-                mainFile.getParentFile().mkdirs();
-            }
-            
-            mainFile.createNewFile();
-            FileUtils.writeStringToFile(mainFile, htmlStr);
-        }
         parseMainHtml(htmlStr);
     }
     
-    public static void parseMainHtml(String htmlStr)
+    public void parseMainHtml(String htmlStr)
     {
         if (!StringUtil.isBlank(htmlStr))
         {
@@ -70,44 +59,31 @@ public class CrawlerSample
                 System.out.println(element.text() + "----------"
                         + element.attr("href"));
                 
-                try
-                {
-                    String childHtml = loadHtml("http://104.236.51.108/"
-                            + element.attr("href"));
-                    File childFile = new File("E:/myDown",
-                            FilenameUtils.normalize(element.text()
-                                    .replaceAll("★", "")
-                                    .replaceAll("㊣", "")
-                                    .replaceAll("♂", "")
-                                    + ".html"));
-                    if (!childFile.exists())
+                    String childHtml;
+                    try
                     {
-                        if (!childFile.getParentFile().exists())
-                        {
-                            childFile.getParentFile().mkdirs();
-                        }
-                        
-                        childFile.createNewFile();
-                        FileUtils.writeStringToFile(childFile, childHtml);
+                        childHtml = loadHtml("http://104.236.51.108/"
+                                + element.attr("href"));
+                        persistHtml(FilenameUtils.normalize(element.text()
+                                .replaceAll("★", "")
+                                .replaceAll("㊣", "")
+                                .replaceAll("♂", "")
+                                + ".html"), childHtml);
                     }
-                    
-                }
-                catch (ClientProtocolException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                catch (IOException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                    catch (ClientProtocolException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                 
             }
         }
     }
     
-    public static String loadHtml(String url) throws ClientProtocolException,
+    public String loadHtml(String url) throws ClientProtocolException,
             IOException
     {
         Header lengthHeader = Request.Head(url).execute().returnResponse().getLastHeader("Content-Length");
@@ -139,6 +115,27 @@ public class CrawlerSample
        
         return responseContent.asString();
         
+    }
+    
+    private void persistHtml(String fileName, String fileContent)
+    {
+        File mainFile = new File("E:/myDown", fileName);
+        if (!mainFile.exists())
+        {
+            if (!mainFile.getParentFile().exists())
+            {
+                mainFile.getParentFile().mkdirs();
+            }
+            try
+            {
+                mainFile.createNewFile();
+                FileUtils.writeStringToFile(mainFile, fileContent);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
     
     public static String post()
