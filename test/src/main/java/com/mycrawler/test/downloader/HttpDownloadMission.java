@@ -65,13 +65,14 @@ public class HttpDownloadMission implements DownloadMission
     
     public void downloadStart() throws ClientProtocolException, IOException
     {
-        
+        LOGGER.debug(fileName
+                + " downloading started.....");
         Request.Get(url)
                 .addHeader("User-Agent",
                         "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)")
                 /*.addHeader("Range", "bytes=500-50000")*/
-                .connectTimeout(20000)
-                .socketTimeout(20000)
+                .connectTimeout(20000) //建立连接超时
+                .socketTimeout(60000)  //下载数据包时间隔超时
                 .execute()
                 .handleResponse(new ResponseHandler<String>()
                 {
@@ -79,8 +80,7 @@ public class HttpDownloadMission implements DownloadMission
                             throws ClientProtocolException, IOException
                     {
                         long startTime = System.currentTimeMillis();
-                        LOGGER.debug(fileName
-                                + " downloading started.....");
+                        
                         BufferedInputStream bis = new BufferedInputStream(
                                 response.getEntity().getContent());
                         

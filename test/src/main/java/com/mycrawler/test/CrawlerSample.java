@@ -143,7 +143,7 @@ public class CrawlerSample
                 .addHeader("User-Agent",
                         "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)")
                 .connectTimeout(20000)
-                .socketTimeout(20000)
+                .socketTimeout(60000)
                 //                .bodyForm(Form.form().add("agreed", "true").build())
                 .execute()
                 .returnContent();
