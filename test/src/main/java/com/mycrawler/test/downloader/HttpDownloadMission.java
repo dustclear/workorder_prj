@@ -103,6 +103,7 @@ public class HttpDownloadMission implements DownloadMission
                             baos.write(buffer, 0, bytesRead);
                             if (baos.size() > (1024 * 1024 * 5 - 1024 * 64))
                             {
+                                System.out.println("persist to disk "+baos.size());
                                 baos.writeTo(out);
                                 baos.reset();
                             }

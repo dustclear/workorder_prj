@@ -9,8 +9,11 @@ public class Downloader
 {
     private ExecutorService threadPool = Executors.newFixedThreadPool(5);
     
+    private static class SingletonHolder {
+        private static final Downloader INSTANCE = new Downloader();
+    }
     
-    private static Downloader downloader = new Downloader();
+    
     
     private List<DownloadMission> missionList = new ArrayList<DownloadMission>();
     
@@ -18,8 +21,8 @@ public class Downloader
     
     public static Downloader getInstance()
     {
-        Executors.newScheduledThreadPool(5);
-        return downloader;
+//        Executors.newScheduledThreadPool(5);
+        return SingletonHolder.INSTANCE;
         
     }
     
