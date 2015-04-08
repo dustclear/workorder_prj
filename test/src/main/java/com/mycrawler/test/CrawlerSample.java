@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.Header;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Request;
@@ -38,33 +37,30 @@ public class CrawlerSample
     
     public static void main(String[] args)
     {
-        try
-        {
-            new CrawlerSample().startWork();
-        }
-        catch (ClientProtocolException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        new CrawlerSample().startWork();
         
     }
     
-    public void startWork() throws ClientProtocolException, IOException
+    public void startWork()
     {
-        for (int i = 2; i < 100; i++)
+        for (int i = 600; i < 2501; i++)
         {
             URL = "http://104.236.51.108/forum-142-" + i + ".html";
-            String htmlStr = loadHtml(URL);
+            String htmlStr;
+			try {
+				htmlStr = loadHtml(URL);
+				parseMainHtml(htmlStr);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             //          persistHtml("main.html", htmlStr);
             
-            parseMainHtml(htmlStr);
             
-            LOGGER.debug("pics---" + picCount);
-            LOGGER.debug("seeds---" + seedCount);
+            LOGGER.debug("total pics---" + picCount);
+            LOGGER.debug("total seeds---" + seedCount);
         }
         downloader.exitDownloader();
     }
@@ -74,6 +70,7 @@ public class CrawlerSample
         if (!StringUtil.isBlank(mainHtml))
         {
             Document htmlDoc = Jsoup.parse(mainHtml);
+//            Elements linkElements = htmlDoc.select("a.xst:contains(步兵)");
             Elements linkElements = htmlDoc.select("a.xst:contains(騎兵)");
             for (Element element : linkElements)
             {
@@ -110,29 +107,37 @@ public class CrawlerSample
             Elements seedElements = htmlDoc.select("a:contains(.torrent)");
             Elements picElements = htmlDoc.select("img[zoomfile]");
             
-            for (Element seedElement : seedElements)
-            {
-                String seedUrl = IP + seedElement.attr("href");
-                String seedName = seedElement.text();
-                if (StringUtils.isNotBlank(seedUrl))
-                {
-                    downloader.startDownload(seedUrl, seedName);
-                }
-                seedCount++;
-            }
+//            downloadSeeds(seedElements);
             
-            for (Element picElement : picElements)
-            {
-                String picUrl = picElement.attr("zoomfile");
-                String picName = picElement.attr("title");
-                if (StringUtils.isNotBlank(picUrl))
-                {
-                    downloader.startDownload(picUrl, picName);
-                }
-                picCount++;
-            }
+            downloadPics(picElements);
         }
     }
+
+	private void downloadPics(Elements picElements) {
+		for (Element picElement : picElements)
+		{
+		    String picUrl = picElement.attr("zoomfile");
+		    String picName = picElement.attr("title");
+		    if (StringUtils.isNotBlank(picUrl))
+		    {
+		        downloader.startDownload(picUrl, picName);
+		    }
+		    picCount++;
+		}
+	}
+
+	private void downloadSeeds(Elements seedElements) {
+		for (Element seedElement : seedElements)
+		{
+		    String seedUrl = IP + seedElement.attr("href");
+		    String seedName = seedElement.text();
+		    if (StringUtils.isNotBlank(seedUrl))
+		    {
+		        downloader.startDownload(seedUrl, seedName);
+		    }
+		    seedCount++;
+		}
+	}
     
     public String loadHtml(String url) throws ClientProtocolException,
             IOException
