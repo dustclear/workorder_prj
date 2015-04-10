@@ -65,9 +65,9 @@ public class LoginWithCookie
     public static void loadHtml() throws ClientProtocolException, IOException
     {
         LOGGER.debug("start");
-        //            String htmlStr = loadHtmlZhiHu("http://www.zhihu.com/login");
+                    String htmlStr = loadHtmlZhiHu("http://www.zhihu.com/login");
         
-        String htmlStr = loadHtmlBaidu("http://www.zhihu.com/login");
+//        String htmlStr = loadHtmlBaidu("http://www.zhihu.com/login");
         
         File mainFile = new File("e:/myDown", "main.html");
         if (!mainFile.exists())
@@ -100,7 +100,7 @@ public class LoginWithCookie
                 .addHeader("User-Agent",
                         "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)")
                 .connectTimeout(2000)
-                .socketTimeout(2000))
+                .socketTimeout(20000))
                 .handleResponse(new ResponseHandler<String>()
                 {
                     public String handleResponse(HttpResponse response)
