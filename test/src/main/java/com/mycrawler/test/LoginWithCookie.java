@@ -217,8 +217,8 @@ public class LoginWithCookie
 		    final HtmlPasswordInput password = form.getInputByName("passwd");
 
 		    // Change the value of the text field
-		    name.setValueAttribute("13914039707");
-		    password.setValueAttribute("`12345");
+		    name.setValueAttribute("**");
+		    password.setValueAttribute("`**");
 
 		    // Now submit the form by clicking the button and get back the second page.
 		    final Page page2 = button.openLinkInNewWindow();
