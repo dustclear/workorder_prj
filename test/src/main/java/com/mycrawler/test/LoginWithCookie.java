@@ -65,7 +65,7 @@ public class LoginWithCookie
         {
             e.printStackTrace();
         }*/
-    	loadHtmlBaidu();
+    	loadHtmlBD();
         
     }
     
@@ -201,7 +201,7 @@ public class LoginWithCookie
         //            return null;
     }
     
-    public static String loadHtmlBaidu()
+    public static String loadHtml115()
             
     {
 //    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
@@ -224,6 +224,44 @@ public class LoginWithCookie
 		    final Page page2 = button.openLinkInNewWindow();
 		    System.out.println("start-------------------------------");
 		    System.out.println(page2);
+			
+		} catch (FailingHttpStatusCodeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return null;
+    }
+    
+    public static String loadHtmlBD()
+    
+    {
+//    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
+    	WebClient webClient = new WebClient(BrowserVersion.FIREFOX_24);
+    	webClient.getOptions().setCssEnabled(false);
+        try {
+			HtmlPage page = webClient.getPage("http://pan.baidu.com");
+			
+			final HtmlForm form = page.getForms().get(0);
+
+		    final HtmlTextInput button = form.getInputByValue("登录");
+		    final HtmlTextInput name = form.getInputByName("account");
+		    final HtmlPasswordInput password = form.getInputByName("password");
+
+		    // Change the value of the text field
+		    name.setValueAttribute("**");
+		    password.setValueAttribute("`**");
+
+		    // Now submit the form by clicking the button and get back the second page.
+		    final HtmlPage page2 = button.click();
+		    System.out.println("start-------------------------------");
+		    System.out.println(page2.asText());
 			
 		} catch (FailingHttpStatusCodeException e) {
 			// TODO Auto-generated catch block
