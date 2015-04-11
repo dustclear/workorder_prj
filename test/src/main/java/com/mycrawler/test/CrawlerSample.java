@@ -43,7 +43,7 @@ public class CrawlerSample
     
     public void startWork()
     {
-        for (int i = 600; i < 2501; i++)
+        for (int i = 400; i < 2501; i++)
         {
             URL = "http://104.236.51.108/forum-142-" + i + ".html";
             String htmlStr;
