@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
@@ -23,15 +24,19 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 
+import com.gargoylesoftware.htmlunit.AjaxController;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 
 public class LoginWithCookie
 {
@@ -66,6 +71,7 @@ public class LoginWithCookie
             e.printStackTrace();
         }*/
     	loadHtmlBD();
+//        loadHtml115();
         
     }
     
@@ -94,8 +100,8 @@ public class LoginWithCookie
             throws ClientProtocolException, IOException
     {
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("email", "dustclear@163.com"));
-        formParams.add(new BasicNameValuePair("password", "1qaz2wsx"));
+        formParams.add(new BasicNameValuePair("email", ""));
+        formParams.add(new BasicNameValuePair("password", ""));
         
         HttpClient httpClient = HttpClientBuilder.create()
                 .setRedirectStrategy(new LaxRedirectStrategy())
@@ -206,7 +212,21 @@ public class LoginWithCookie
     {
 //    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
     	WebClient webClient = new WebClient(BrowserVersion.FIREFOX_24);
+    	webClient.getCookieManager().setCookiesEnabled(true);//enable cookies
     	webClient.getOptions().setCssEnabled(false);
+    	webClient.getOptions().setJavaScriptEnabled(true);  
+    	webClient.setAjaxController(new AjaxController(){
+    	    @Override
+    	    public boolean processSynchron(HtmlPage page, WebRequest request, boolean async)
+    	    {
+    	        return true;
+    	    }
+    	});
+    	webClient.setJavaScriptTimeout(30000);
+    	webClient.getOptions().setTimeout(30000);
+    	webClient.getOptions().setThrowExceptionOnScriptError(false);
+    	webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+    	
         try {
 			HtmlPage page = webClient.getPage("http://www.115.com");
 			
@@ -217,13 +237,32 @@ public class LoginWithCookie
 		    final HtmlPasswordInput password = form.getInputByName("passwd");
 
 		    // Change the value of the text field
-		    name.setValueAttribute("**");
-		    password.setValueAttribute("`**");
-
+		    name.setValueAttribute("");
+		    password.setValueAttribute("");
+		    HtmlCheckBoxInput remberName = (HtmlCheckBoxInput)page.getElementById("js-remember_pwd");
+            
+            remberName.setChecked(true);
 		    // Now submit the form by clicking the button and get back the second page.
-		    final Page page2 = button.openLinkInNewWindow();
+		    HtmlPage page2 = button.click();
+		    
+		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
+		    
+		    for (Cookie cookie : cookies)
+            {
+                System.out.println("cookie: "+cookie.getName());
+                System.out.println("value: " + cookie.getValue());
+            }
+//		    webClient.getCookieManager().clearCookies();
+		    int i =webClient.waitForBackgroundJavaScript(5000);  
+		    
 		    System.out.println("start-------------------------------");
-		    System.out.println(page2);
+		    System.out.println(page2.getWebResponse().getContentAsString()); //source code
+		    System.out.println("go-------------------------------");
+		    
+		    /*HtmlPage page3 = webClient.getPage("http://115.com/?ct=sso&user_id=1151253&ssostr=95E5C0879F65707GD0J9MH0G9IGFFTQ9WTNGSNGFG9N4DED9HWIG9MQ1305885668A1&rsatime=1428910757&rsa=d1da4e3ed168fc81af9daf97cfa896afd6585974&json=");
+		    System.out.println(page3.getUrl()+"=====================================////////////////");
+		    System.out.println(page3.getWebResponse().getContentAsString());
+*/
 			
 		} catch (FailingHttpStatusCodeException e) {
 			// TODO Auto-generated catch block
@@ -242,27 +281,58 @@ public class LoginWithCookie
     public static String loadHtmlBD()
     
     {
-//    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
+    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
     	WebClient webClient = new WebClient(BrowserVersion.FIREFOX_24);
+    	webClient.setAjaxController(new AjaxController(){
+            @Override
+            public boolean processSynchron(HtmlPage page, WebRequest request, boolean async)
+            {
+                return true;
+            }
+        });
     	webClient.getOptions().setCssEnabled(false);
+    	webClient.setJavaScriptTimeout(30000);
+        webClient.getOptions().setTimeout(30000);
         try {
-			HtmlPage page = webClient.getPage("http://pan.baidu.com");
-			
+//			HtmlPage page = webClient.getPage("http://pan.baidu.com");
+			HtmlPage page = webClient.getPage("https://passport.baidu.com/v2/?login");
+//			webClient.waitForBackgroundJavaScript(5000);
 			final HtmlForm form = page.getForms().get(0);
 
-		    final HtmlTextInput button = form.getInputByValue("登录");
-		    final HtmlTextInput name = form.getInputByName("account");
+		    final HtmlSubmitInput button = form.getInputByValue("登录");
+		    final HtmlTextInput name = form.getInputByName("userName");
 		    final HtmlPasswordInput password = form.getInputByName("password");
+		    HtmlCheckBoxInput remberName = form.getInputByName("memberPass");
+		    
+		    remberName.setChecked(true);
 
 		    // Change the value of the text field
-		    name.setValueAttribute("**");
-		    password.setValueAttribute("`**");
+		    page.setFocusedElement(name);
+		    name.setValueAttribute("");
+		    page.setFocusedElement(password);
+		    password.setValueAttribute("");
 
 		    // Now submit the form by clicking the button and get back the second page.
 		    final HtmlPage page2 = button.click();
+		    webClient.waitForBackgroundJavaScript(15000);
+		    
+		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
+            
+            for (Cookie cookie : cookies)
+            {
+                System.out.println(cookie.getName()+" = "+ cookie.getValue());
+            }
+            
+            List<com.gargoylesoftware.htmlunit.util.NameValuePair> headers = 
+                    page2.getWebResponse().getResponseHeaders();
+                for (com.gargoylesoftware.htmlunit.util.NameValuePair header : headers) {
+                    System.out.println(header.getName() + " = " + header.getValue());
+                }
 		    System.out.println("start-------------------------------");
 		    System.out.println(page2.asText());
-			
+		    
+		    System.out.println(page2.getWebResponse().getContentAsString()); //source code
+		    webClient.closeAllWindows();
 		} catch (FailingHttpStatusCodeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
