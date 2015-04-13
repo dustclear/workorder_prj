@@ -70,8 +70,9 @@ public class LoginWithCookie
         {
             e.printStackTrace();
         }*/
-    	loadHtmlBD();
+//    	loadHtmlBD();
 //        loadHtml115();
+        loadHtmlOther();
         
     }
     
@@ -345,6 +346,54 @@ public class LoginWithCookie
 		}
         
         return null;
+    }
+    
+    public static void loadHtmlOther()
+    {
+        
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getCookieManager().setCookiesEnabled(true);//enable cookies
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setAjaxController(new AjaxController()
+        {
+            @Override
+            public boolean processSynchron(HtmlPage page, WebRequest request,
+                    boolean async)
+            {
+                return true;
+            }
+        });
+        webClient.setJavaScriptTimeout(3000);
+        webClient.getOptions().setTimeout(3000);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        
+        HtmlPage page;
+        try
+        {
+            page = webClient.getPage("http://pan.baidu.com/wap/link?shareid=2289386&uk=4230271916&third=0&dir=%2F电影%2F好莱坞大片%2F钢铁侠1-3&page=1&");
+            System.out.println("start-------------------------------");
+            System.out.println(page.getWebResponse().getContentAsString()); //source code
+            webClient.closeAllWindows();
+            
+        }
+        catch (FailingHttpStatusCodeException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
     }
     
 }
