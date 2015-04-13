@@ -2136,7 +2136,7 @@ public class WebClient implements Serializable {
         final int port = cookieManager.getPort(url);
 
         // discard expired cookies
-        cookieManager.clearExpired(new Date());
+//        cookieManager.clearExpired(new Date());
 
         final org.apache.http.cookie.Cookie[] all = Cookie.toHttpClient(cookieManager.getCookies());
         final CookieOrigin cookieOrigin = new CookieOrigin(host, port, path, secure);

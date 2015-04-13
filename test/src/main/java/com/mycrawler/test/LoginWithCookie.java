@@ -71,8 +71,8 @@ public class LoginWithCookie
             e.printStackTrace();
         }*/
 //    	loadHtmlBD();
-//        loadHtml115();
-        loadHtmlOther();
+        loadHtml115();
+//        loadHtmlOther();
         
     }
     
@@ -212,7 +212,7 @@ public class LoginWithCookie
             
     {
 //    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
-    	WebClient webClient = new WebClient(BrowserVersion.FIREFOX_24);
+    	WebClient webClient = new WebClient(BrowserVersion.CHROME);
     	webClient.getCookieManager().setCookiesEnabled(true);//enable cookies
     	webClient.getOptions().setCssEnabled(false);
     	webClient.getOptions().setJavaScriptEnabled(true);  
@@ -225,8 +225,9 @@ public class LoginWithCookie
     	});
     	webClient.setJavaScriptTimeout(30000);
     	webClient.getOptions().setTimeout(30000);
-    	webClient.getOptions().setThrowExceptionOnScriptError(false);
-    	webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+//    	webClient.getOptions().setUseInsecureSSL(true);
+//    	webClient.getOptions().setThrowExceptionOnScriptError(false);
+//    	webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
     	
         try {
 			HtmlPage page = webClient.getPage("http://www.115.com");
@@ -238,32 +239,30 @@ public class LoginWithCookie
 		    final HtmlPasswordInput password = form.getInputByName("passwd");
 
 		    // Change the value of the text field
-		    name.setValueAttribute("");
-		    password.setValueAttribute("");
+		    name.setValueAttribute("13914039707");
+		    password.setValueAttribute("`12345");
 		    HtmlCheckBoxInput remberName = (HtmlCheckBoxInput)page.getElementById("js-remember_pwd");
             
             remberName.setChecked(true);
 		    // Now submit the form by clicking the button and get back the second page.
 		    HtmlPage page2 = button.click();
-		    
+		    webClient.waitForBackgroundJavaScript(25000);
 		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
 		    
 		    for (Cookie cookie : cookies)
             {
-                System.out.println("cookie: "+cookie.getName());
-                System.out.println("value: " + cookie.getValue());
+                System.out.println(cookie.getName()+" = "+ cookie.getValue());
             }
 //		    webClient.getCookieManager().clearCookies();
-		    int i =webClient.waitForBackgroundJavaScript(5000);  
 		    
 		    System.out.println("start-------------------------------");
 		    System.out.println(page2.getWebResponse().getContentAsString()); //source code
 		    System.out.println("go-------------------------------");
 		    
-		    /*HtmlPage page3 = webClient.getPage("http://115.com/?ct=sso&user_id=1151253&ssostr=95E5C0879F65707GD0J9MH0G9IGFFTQ9WTNGSNGFG9N4DED9HWIG9MQ1305885668A1&rsatime=1428910757&rsa=d1da4e3ed168fc81af9daf97cfa896afd6585974&json=");
+		    HtmlPage page3 = webClient.getPage("http://115.com/?mode=wangpan");
 		    System.out.println(page3.getUrl()+"=====================================////////////////");
 		    System.out.println(page3.getWebResponse().getContentAsString());
-*/
+
 			
 		} catch (FailingHttpStatusCodeException e) {
 			// TODO Auto-generated catch block
@@ -282,7 +281,7 @@ public class LoginWithCookie
     public static String loadHtmlBD()
     
     {
-    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
+//    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
     	WebClient webClient = new WebClient(BrowserVersion.FIREFOX_24);
     	webClient.setAjaxController(new AjaxController(){
             @Override
@@ -291,6 +290,8 @@ public class LoginWithCookie
                 return true;
             }
         });
+    	webClient.getCookieManager().setCookiesEnabled(true);//enable cookies
+    	webClient.getOptions().setJavaScriptEnabled(true);  
     	webClient.getOptions().setCssEnabled(false);
     	webClient.setJavaScriptTimeout(30000);
         webClient.getOptions().setTimeout(30000);
@@ -308,10 +309,11 @@ public class LoginWithCookie
 		    remberName.setChecked(true);
 
 		    // Change the value of the text field
-		    page.setFocusedElement(name);
-		    name.setValueAttribute("");
+//		    page.setFocusedElement(name);
+		    name.setValueAttribute("dustclear@163.com");
 		    page.setFocusedElement(password);
-		    password.setValueAttribute("");
+		    webClient.waitForBackgroundJavaScript(5000);
+		    password.setValueAttribute("`1234567");
 
 		    // Now submit the form by clicking the button and get back the second page.
 		    final HtmlPage page2 = button.click();
@@ -324,11 +326,11 @@ public class LoginWithCookie
                 System.out.println(cookie.getName()+" = "+ cookie.getValue());
             }
             
-            List<com.gargoylesoftware.htmlunit.util.NameValuePair> headers = 
+           /* List<com.gargoylesoftware.htmlunit.util.NameValuePair> headers = 
                     page2.getWebResponse().getResponseHeaders();
                 for (com.gargoylesoftware.htmlunit.util.NameValuePair header : headers) {
                     System.out.println(header.getName() + " = " + header.getValue());
-                }
+                }*/
 		    System.out.println("start-------------------------------");
 		    System.out.println(page2.asText());
 		    
