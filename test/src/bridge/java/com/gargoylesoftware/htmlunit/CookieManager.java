@@ -224,16 +224,18 @@ public class CookieManager implements Serializable {
 		if (!isCookiesEnabled()) {
 			return;
 		}
-
+		//by lance
 		if (!cookie.getValue().contains("delete")) {
 			cookies_.remove(cookie);
+			
+			// don't add expired cookie
+	        if (cookie.getExpires() == null
+	                || cookie.getExpires().after(new Date())) {
+	            cookies_.add(cookie);
+	        }
 		}
 
-		// don't add expired cookie
-		if (cookie.getExpires() == null
-				|| cookie.getExpires().after(new Date())) {
-			cookies_.add(cookie);
-		}
+		
 	}
 
 	/**
