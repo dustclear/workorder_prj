@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -27,6 +27,10 @@ import org.apache.log4j.Logger;
 import com.gargoylesoftware.htmlunit.AjaxController;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.HttpMethod;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -71,6 +75,7 @@ public class LoginWithCookie
             e.printStackTrace();
         }*/
 //    	loadHtmlBD();
+//    	loadHtmlBDOther();
         loadHtml115();
 //        loadHtmlOther();
         
@@ -212,6 +217,10 @@ public class LoginWithCookie
             
     {
 //    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
+        BrowserVersion browser_115 = BrowserVersion.CHROME;
+        browser_115.setApplicationVersion("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
+        browser_115.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
+        
     	WebClient webClient = new WebClient(BrowserVersion.CHROME);
     	webClient.getCookieManager().setCookiesEnabled(true);//enable cookies
     	webClient.getOptions().setCssEnabled(false);
@@ -259,9 +268,51 @@ public class LoginWithCookie
 		    System.out.println(page2.getWebResponse().getContentAsString()); //source code
 		    System.out.println("go-------------------------------");
 		    
-		    HtmlPage page3 = webClient.getPage("http://115.com/?mode=wangpan");
+//		    Page page3 = webClient.getPage("http://115.com/?ct=offline&ac=space&_="+System.currentTimeMillis());
+		    Page page3 = webClient.getPage("http://115.com/?ac=offline_tpl&is_wl_tpl=1");
+//		    webClient.waitForBackgroundJavaScript(8000);
 		    System.out.println(page3.getUrl()+"=====================================////////////////");
+		    
+		    
 		    System.out.println(page3.getWebResponse().getContentAsString());
+		    
+		    
+		    /*final HtmlAnchor wenjian = page3.getAnchorByText("文件");
+		    
+		    HtmlPage page4 = wenjian.click();
+            webClient.waitForBackgroundJavaScript(8000);
+            System.out.println(page4.getUrl()+"=====================================////////////////");
+            System.out.println(page4.getWebResponse().getContentAsString());*/
+		    
+		    
+            
+            /*HtmlPage page4 = (HtmlPage)page3.getFrames().get(3).getEnclosedPage();
+            webClient.waitForBackgroundJavaScript(8000);
+            System.out.println(page4.getUrl()+"=====================================////////////////");
+            System.out.println(page4.getWebResponse().getContentAsString());
+		    */
+		    /*WebRequest reqSet = new WebRequest(new URL("http://115.com/lixian/?ct=lixian&ac=add_task_url"));
+		    reqSet.setHttpMethod(HttpMethod.POST);
+
+		    List reqParam = new ArrayList();
+
+		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("url", "magnet:?xt=urn:btih:038BB0584EA2F95747E23297FDBEAC3A8BCF255E&dn=%E9%92%A2%E9%93%81%E4%BE%A03.MP4.720x404.%E5%9B%BD%E8%AF%AD%E4%B8%AD%E5%AD%97"));
+
+		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("uid", "1151253"));
+
+		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("sign", "73e7776fcdf4314694c4ef8bc9179764"));
+		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("time", String.valueOf((System.currentTimeMillis()/1000))));
+
+		    reqSet.setRequestParameters(reqParam);
+
+		    TextPage mypage = (TextPage)webClient.getPage(reqSet);
+		    webClient.waitForBackgroundJavaScript(8000);
+		    System.out.println(mypage.getUrl()+"=====================================////////////////");
+            System.out.println(mypage.getWebResponse().getContentAsString());*/
+		    
+		    
+		    
+		    
 
 			
 		} catch (FailingHttpStatusCodeException e) {
@@ -283,13 +334,14 @@ public class LoginWithCookie
     {
 //    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
     	WebClient webClient = new WebClient(BrowserVersion.FIREFOX_24);
-    	webClient.setAjaxController(new AjaxController(){
+    	/*webClient.setAjaxController(new AjaxController(){
             @Override
             public boolean processSynchron(HtmlPage page, WebRequest request, boolean async)
             {
                 return true;
             }
-        });
+        });*/
+    	webClient.setAjaxController(new NicelyResynchronizingAjaxController());
     	webClient.getCookieManager().setCookiesEnabled(true);//enable cookies
     	webClient.getOptions().setJavaScriptEnabled(true);  
     	webClient.getOptions().setCssEnabled(false);
@@ -298,14 +350,13 @@ public class LoginWithCookie
         try {
 //			HtmlPage page = webClient.getPage("http://pan.baidu.com");
 			HtmlPage page = webClient.getPage("https://passport.baidu.com/v2/?login");
-//			webClient.waitForBackgroundJavaScript(5000);
+			webClient.waitForBackgroundJavaScript(5000);
 			final HtmlForm form = page.getForms().get(0);
 
 		    final HtmlSubmitInput button = form.getInputByValue("登录");
 		    final HtmlTextInput name = form.getInputByName("userName");
 		    final HtmlPasswordInput password = form.getInputByName("password");
 		    HtmlCheckBoxInput remberName = form.getInputByName("memberPass");
-		    
 		    remberName.setChecked(true);
 
 		    // Change the value of the text field
@@ -316,8 +367,11 @@ public class LoginWithCookie
 		    password.setValueAttribute("`1234567");
 
 		    // Now submit the form by clicking the button and get back the second page.
-		    final HtmlPage page2 = button.click();
-		    webClient.waitForBackgroundJavaScript(15000);
+		    HtmlPage page2 = button.click();
+		    webClient.waitForBackgroundJavaScript(8000);
+		    page.refresh();
+		    page2 = button.click();
+		    webClient.waitForBackgroundJavaScript(8000);
 		    
 		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
             
@@ -395,6 +449,95 @@ public class LoginWithCookie
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+    }
+    
+    public static String loadHtmlBDOther()
+            
+    {
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+        formParams.add(new BasicNameValuePair("userName", "dustclear@163.com"));
+        formParams.add(new BasicNameValuePair("password", "`1234567"));
+        
+        HttpClient httpClient = HttpClientBuilder.create()
+                .setRedirectStrategy(new LaxRedirectStrategy())
+                .build();
+        
+        Executor exec = Executor.newInstance(httpClient);
+        try
+        {
+            exec.execute(Request.Post("http://pan.baidu.com")
+                    .bodyForm(formParams)
+                    .addHeader("User-Agent",
+                            "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)")
+                    .connectTimeout(2000)
+                    .socketTimeout(20000))
+                    .handleResponse(new ResponseHandler<String>()
+                    {
+                        public String handleResponse(HttpResponse response)
+                                throws ClientProtocolException, IOException
+                        {
+                            long startTime = System.currentTimeMillis();
+                            long timeCost = 0;
+                            InputStream in = response.getEntity().getContent();
+                            InputStreamReader inputStreamReader = new InputStreamReader(
+                                    in);
+                            BufferedReader bReader = new BufferedReader(
+                                    inputStreamReader);
+                            StringBuffer sBuffer = new StringBuffer(2000);
+                            String line;
+                            while ((line = bReader.readLine()) != null)
+                            {
+                                sBuffer.append(line);
+                            }
+                            System.out.println(sBuffer);
+                            return sBuffer.toString();
+                            
+                        }
+                    });
+            
+            exec.execute(Request.Get("http://pan.baidu.com")
+                    .addHeader("User-Agent",
+                            "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)")
+                    .connectTimeout(2000)
+                    .socketTimeout(2000))
+                    .handleResponse(new ResponseHandler<String>()
+                    {
+                        public String handleResponse(HttpResponse response)
+                                throws ClientProtocolException, IOException
+                        {
+                            long startTime = System.currentTimeMillis();
+                            long timeCost = 0;
+                            InputStream in = response.getEntity().getContent();
+                            InputStreamReader inputStreamReader = new InputStreamReader(
+                                    in);
+                            BufferedReader bReader = new BufferedReader(
+                                    inputStreamReader);
+                            StringBuffer sBuffer = new StringBuffer(2000);
+                            String line;
+                            while ((line = bReader.readLine()) != null)
+                            {
+                                sBuffer.append(line);
+                            }
+                            
+                            System.out.println(sBuffer);
+                            return sBuffer.toString();
+                            
+                        }
+                    });
+        }
+        catch (ClientProtocolException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return null;
         
     }
     
