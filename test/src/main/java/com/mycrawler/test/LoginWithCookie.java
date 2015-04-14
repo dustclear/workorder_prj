@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -41,6 +43,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.util.Cookie;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class LoginWithCookie
 {
@@ -268,10 +272,16 @@ public class LoginWithCookie
 		    System.out.println(page2.getWebResponse().getContentAsString()); //source code
 		    System.out.println("go-------------------------------");
 		    
-//		    Page page3 = webClient.getPage("http://115.com/?ct=offline&ac=space&_="+System.currentTimeMillis());
-		    Page page3 = webClient.getPage("http://115.com/?ac=offline_tpl&is_wl_tpl=1");
+		    Page page3 = webClient.getPage("http://115.com/?ct=offline&ac=space&_="+System.currentTimeMillis());
+//		    Page page3 = webClient.getPage("http://115.com/?ac=offline_tpl&is_wl_tpl=1");
 //		    webClient.waitForBackgroundJavaScript(8000);
 		    System.out.println(page3.getUrl()+"=====================================////////////////");
+		    
+		    
+		     Gson gson = new Gson();
+	        Map<String, String> retMap = gson.fromJson(page3.getWebResponse().getContentAsString(),
+	                new TypeToken<Map<String, String>>()
+	                {}.getType());
 		    
 		    
 		    System.out.println(page3.getWebResponse().getContentAsString());
@@ -291,7 +301,7 @@ public class LoginWithCookie
             System.out.println(page4.getUrl()+"=====================================////////////////");
             System.out.println(page4.getWebResponse().getContentAsString());
 		    */
-		    /*WebRequest reqSet = new WebRequest(new URL("http://115.com/lixian/?ct=lixian&ac=add_task_url"));
+		    WebRequest reqSet = new WebRequest(new URL("http://115.com/lixian/?ct=lixian&ac=add_task_url"));
 		    reqSet.setHttpMethod(HttpMethod.POST);
 
 		    List reqParam = new ArrayList();
@@ -300,7 +310,7 @@ public class LoginWithCookie
 
 		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("uid", "1151253"));
 
-		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("sign", "73e7776fcdf4314694c4ef8bc9179764"));
+		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("sign", retMap.get("sign")));
 		    reqParam.add(new com.gargoylesoftware.htmlunit.util.NameValuePair("time", String.valueOf((System.currentTimeMillis()/1000))));
 
 		    reqSet.setRequestParameters(reqParam);
@@ -308,11 +318,12 @@ public class LoginWithCookie
 		    TextPage mypage = (TextPage)webClient.getPage(reqSet);
 		    webClient.waitForBackgroundJavaScript(8000);
 		    System.out.println(mypage.getUrl()+"=====================================////////////////");
-            System.out.println(mypage.getWebResponse().getContentAsString());*/
+            System.out.println(mypage.getWebResponse().getContentAsString());
 		    
 		    
 		    
-		    
+            webClient.closeAllWindows();
+
 
 			
 		} catch (FailingHttpStatusCodeException e) {
