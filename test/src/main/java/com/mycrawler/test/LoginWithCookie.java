@@ -222,7 +222,7 @@ public class LoginWithCookie
     {
 //    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
         BrowserVersion browser_115 = BrowserVersion.CHROME;
-        browser_115.setApplicationVersion("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
+        browser_115.setApplicationVersion("/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
         browser_115.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
         
     	WebClient webClient = new WebClient(BrowserVersion.CHROME);
@@ -259,19 +259,15 @@ public class LoginWithCookie
             remberName.setChecked(true);
 		    // Now submit the form by clicking the button and get back the second page.
 		    HtmlPage page2 = button.click();
-		    webClient.waitForBackgroundJavaScript(25000);
-		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
+		    webClient.waitForBackgroundJavaScript(5000);
 		    
-		    for (Cookie cookie : cookies)
-            {
-                System.out.println(cookie.getName()+" = "+ cookie.getValue());
-            }
 //		    webClient.getCookieManager().clearCookies();
 		    
 		    System.out.println("start-------------------------------");
 		    System.out.println(page2.getWebResponse().getContentAsString()); //source code
 		    System.out.println("go-------------------------------");
-		    
+		    Page basePage = webClient.getPage("http://115.com/");
+		    webClient.waitForBackgroundJavaScript(5000);
 		    Page page3 = webClient.getPage("http://115.com/?ct=offline&ac=space&_="+System.currentTimeMillis());
 //		    Page page3 = webClient.getPage("http://115.com/?ac=offline_tpl&is_wl_tpl=1");
 //		    webClient.waitForBackgroundJavaScript(8000);
@@ -294,7 +290,12 @@ public class LoginWithCookie
             System.out.println(page4.getUrl()+"=====================================////////////////");
             System.out.println(page4.getWebResponse().getContentAsString());*/
 		    
+		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
 		    
+		    for (Cookie cookie : cookies)
+            {
+                System.out.println(cookie.getName()+" = "+ cookie.getValue());
+            }
             
             /*HtmlPage page4 = (HtmlPage)page3.getFrames().get(3).getEnclosedPage();
             webClient.waitForBackgroundJavaScript(8000);
