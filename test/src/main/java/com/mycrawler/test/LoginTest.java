@@ -59,7 +59,7 @@ public class LoginTest
     	
     	initProperties();
         /*List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("userName", "dustclear@163.com"));
+        formParams.add(new BasicNameValuePair("userName", ""));
         try
         {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
@@ -84,9 +84,9 @@ public class LoginTest
         {
             e.printStackTrace();
         }*/
-//    	loadHtmlBD();
+    	loadHtmlBD();
 //    	loadHtmlBDOther();
-        loadHtml115();
+//        loadHtml115();
 //        loadHtmlOther();
         
     }
@@ -367,7 +367,7 @@ public class LoginTest
         webClient.getOptions().setTimeout(30000);
         try {
 //			HtmlPage page = webClient.getPage("http://pan.baidu.com");
-			HtmlPage page = webClient.getPage("https://passport.baidu.com/v2/?login");
+			HtmlPage page = webClient.getPage("https://pan.baidu.com");
 			webClient.waitForBackgroundJavaScript(5000);
 			final HtmlForm form = page.getForms().get(0);
 
@@ -474,8 +474,8 @@ public class LoginTest
             
     {
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("userName", "dustclear@163.com"));
-        formParams.add(new BasicNameValuePair("password", "`1234567"));
+        formParams.add(new BasicNameValuePair("userName", ""));
+        formParams.add(new BasicNameValuePair("password", ""));
         
         HttpClient httpClient = HttpClientBuilder.create()
                 .setRedirectStrategy(new LaxRedirectStrategy())
