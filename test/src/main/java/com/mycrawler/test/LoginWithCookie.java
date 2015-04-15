@@ -2,6 +2,8 @@ package com.mycrawler.test;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -49,9 +52,12 @@ import com.google.gson.reflect.TypeToken;
 public class LoginWithCookie
 {
     private static final Logger LOGGER = Logger.getLogger(LoginWithCookie.class);
+    private static final Properties sysPro = new Properties();
     
     public static void main(String[] args)
     {
+    	
+    	initProperties();
         /*List<NameValuePair> formParams = new ArrayList<NameValuePair>();
         formParams.add(new BasicNameValuePair("userName", "dustclear@163.com"));
         try
@@ -110,8 +116,8 @@ public class LoginWithCookie
             throws ClientProtocolException, IOException
     {
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("email", ""));
-        formParams.add(new BasicNameValuePair("password", ""));
+        formParams.add(new BasicNameValuePair("email", sysPro.getProperty("")));
+        formParams.add(new BasicNameValuePair("password", sysPro.getProperty("")));
         
         HttpClient httpClient = HttpClientBuilder.create()
                 .setRedirectStrategy(new LaxRedirectStrategy())
@@ -252,8 +258,8 @@ public class LoginWithCookie
 		    final HtmlPasswordInput password = form.getInputByName("passwd");
 
 		    // Change the value of the text field
-		    name.setValueAttribute("13914039707");
-		    password.setValueAttribute("`12345");
+		    name.setValueAttribute(sysPro.getProperty("user_115"));
+		    password.setValueAttribute(sysPro.getProperty("pass_115"));
 		    HtmlCheckBoxInput remberName = (HtmlCheckBoxInput)page.getElementById("js-remember_pwd");
             
             remberName.setChecked(true);
@@ -373,10 +379,10 @@ public class LoginWithCookie
 
 		    // Change the value of the text field
 //		    page.setFocusedElement(name);
-		    name.setValueAttribute("dustclear@163.com");
+		    name.setValueAttribute(sysPro.getProperty("user_bd"));
 		    page.setFocusedElement(password);
 		    webClient.waitForBackgroundJavaScript(5000);
-		    password.setValueAttribute("`1234567");
+		    password.setValueAttribute(sysPro.getProperty("pass_bd"));
 
 		    // Now submit the form by clicking the button and get back the second page.
 		    HtmlPage page2 = button.click();
@@ -553,4 +559,30 @@ public class LoginWithCookie
         
     }
     
+    private static void initProperties()
+    {
+    	InputStream fis = null;
+		try {
+			fis = LoginWithCookie.class.getResourceAsStream("/cert.properties");
+			sysPro.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(fis!=null)
+			{
+				try {
+					fis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+    }
 }
