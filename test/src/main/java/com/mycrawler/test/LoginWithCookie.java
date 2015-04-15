@@ -53,7 +53,7 @@ public class LoginWithCookie
     public static void main(String[] args)
     {
         /*List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("userName", "dustclear@163.com"));
+        formParams.add(new BasicNameValuePair("userName", ""));
         try
         {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
@@ -252,8 +252,8 @@ public class LoginWithCookie
 		    final HtmlPasswordInput password = form.getInputByName("passwd");
 
 		    // Change the value of the text field
-		    name.setValueAttribute("13914039707");
-		    password.setValueAttribute("`12345");
+		    name.setValueAttribute("");
+		    password.setValueAttribute("*");
 		    HtmlCheckBoxInput remberName = (HtmlCheckBoxInput)page.getElementById("js-remember_pwd");
             
             remberName.setChecked(true);
@@ -372,10 +372,10 @@ public class LoginWithCookie
 
 		    // Change the value of the text field
 //		    page.setFocusedElement(name);
-		    name.setValueAttribute("dustclear@163.com");
+		    name.setValueAttribute("*");
 		    page.setFocusedElement(password);
 		    webClient.waitForBackgroundJavaScript(5000);
-		    password.setValueAttribute("`1234567");
+		    password.setValueAttribute("*");
 
 		    // Now submit the form by clicking the button and get back the second page.
 		    HtmlPage page2 = button.click();
@@ -467,8 +467,8 @@ public class LoginWithCookie
             
     {
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("userName", "dustclear@163.com"));
-        formParams.add(new BasicNameValuePair("password", "`1234567"));
+        formParams.add(new BasicNameValuePair("userName", ""));
+        formParams.add(new BasicNameValuePair("password", ""));
         
         HttpClient httpClient = HttpClientBuilder.create()
                 .setRedirectStrategy(new LaxRedirectStrategy())
