@@ -49,9 +49,9 @@ import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class LoginWithCookie
+public class LoginTest
 {
-    private static final Logger LOGGER = Logger.getLogger(LoginWithCookie.class);
+    private static final Logger LOGGER = Logger.getLogger(LoginTest.class);
     private static final Properties sysPro = new Properties();
     
     public static void main(String[] args)
@@ -563,7 +563,7 @@ public class LoginWithCookie
     {
     	InputStream fis = null;
 		try {
-			fis = LoginWithCookie.class.getResourceAsStream("/cert.properties");
+			fis = LoginTest.class.getResourceAsStream("/cert.properties");
 			sysPro.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
