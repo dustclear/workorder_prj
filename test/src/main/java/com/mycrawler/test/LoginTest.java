@@ -367,7 +367,7 @@ public class LoginTest
         webClient.getOptions().setTimeout(30000);
         try {
 //			HtmlPage page = webClient.getPage("http://pan.baidu.com");
-			HtmlPage page = webClient.getPage("https://pan.baidu.com");
+			HtmlPage page = webClient.getPage("http://pan.baidu.com/");
 			webClient.waitForBackgroundJavaScript(5000);
 			final HtmlForm form = page.getForms().get(0);
 
