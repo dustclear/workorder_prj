@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.ws.BindingProvider;
 
@@ -29,22 +30,25 @@ public class ClientTest {
 			WosConstant.DATE_TIME_FORMAT).create();
 
 	public static void main(String[] args) {
+	    setProxy();
 		InstallDocMgt service = new InstallDocMgtImplService()
 				.getInstallDocMgtImplPort();
 		((BindingProvider) service).getRequestContext().put(
 				BindingProvider.SESSION_MAINTAIN_PROPERTY, true);
 
-		LoginMgt service2 = new LoginMgtImplService().getLoginMgtImplPort();
-		((BindingProvider) service2).getRequestContext().put(
-				BindingProvider.SESSION_MAINTAIN_PROPERTY, true);
+//		LoginMgt service2 = new LoginMgtImplService().getLoginMgtImplPort();
+//		((BindingProvider) service2).getRequestContext().put(
+//				BindingProvider.SESSION_MAINTAIN_PROPERTY, true);
+//		login(service2);
+		loadInstallDocument(service);
 
-		
+//		testGetAllTaxOrganizations(service);
 //		getInstallDetailByTemplate(service);
 //      getAddress(service);
 //		addEnterpriseAddress(service);
 //		addEnterpriseContact(service);
 //		saveCellPhone(service);
-		SaveInstallDocument(service);
+//		SaveInstallDocument(service);
 //		createAnEmptyInstallDocument(service);
 //		createAnEmptyMaintainDocument(service);
 //		loadMaintainDocument(service);
@@ -61,7 +65,7 @@ public class ClientTest {
 	private static String loadOrderCodeByEventCode(InstallDocMgt service)
     {
 	    Map<String, String> map = new HashMap<String, String>();
-        map.put("ccode", "1312070022");
+        map.put("ccode", "1504030647");
         String ccodeStr = _helper.toJsonText(map, null);
         String reString = service.loadOrderCodeByEventCode(ccodeStr);
         System.out.println(reString);
@@ -108,8 +112,8 @@ public class ClientTest {
 	private static String loadInstallDocument(InstallDocMgt service)
 	{
 	    Map<String, String> map = new HashMap<String, String>();
-        map.put("ccode", "1312070104");
-        map.put("cguid", "145293406198134209");
+        map.put("ccode", "1504030647");
+        map.put("cguid", "460144675295283861");
         String eventCode = _helper.toJsonText(map, null);
         String reString = service.loadInstallDocumentByEventCode(eventCode);
         System.out.println(reString);
@@ -119,8 +123,8 @@ public class ClientTest {
 	private static void login(LoginMgt service)
 	{
 	    Map<String, String> map2 = new HashMap<String, String>();
-        map2.put("cname", "admin");
-        map2.put("cpwd", "123");
+        map2.put("cname", "316");
+        map2.put("cpwd", "123qwe");
         String loginInfoText = WosHelper.getInstance().toJsonText(map2, null);
         System.out.println(service.login(loginInfoText));
 	}
@@ -242,5 +246,34 @@ public class ClientTest {
         service.saveMaintainDocument(_gson.toJson(document));
     }
 
-
+	private static void setProxy()
+	{
+	    Properties prop = System.getProperties();
+        // 设置http访问要使用的代理服务器的地址
+        prop.setProperty("http.proxyHost", "127.0.0.1");
+        // 设置http访问要使用的代理服务器的端口
+        prop.setProperty("http.proxyPort", "8087");
+        // 设置不需要通过代理服务器访问的主机，可以使用*通配符，多个地址用|分隔
+//        prop.setProperty("http.nonProxyHosts", "localhost|192.168.0.*");
+        // 设置安全访问使用的代理服务器地址与端口
+        // 它没有https.nonProxyHosts属性，它按照http.nonProxyHosts 中设置的规则访问
+        prop.setProperty("https.proxyHost", "127.0.0.1");
+        prop.setProperty("https.proxyPort", "8087");
+        // 使用ftp代理服务器的主机、端口以及不需要使用ftp代理服务器的主机
+//        prop.setProperty("ftp.proxyHost", "192.168.0.254");
+//        prop.setProperty("ftp.proxyPort", "2121");
+//        prop.setProperty("ftp.nonProxyHosts", "localhost|192.168.0.*");
+        // socks代理服务器的地址与端口
+        prop.setProperty("socksProxyHost", "127.0.0.1");
+        prop.setProperty("socksProxyPort", "8087");
+	}
+	
+    public static void testGetAllTaxOrganizations(InstallDocMgt service)
+    {
+//        String resStr=service.getAllTaxOrganizations();
+//        System.out.println(resStr);     //[{"cguid":"165120663464490419","ccode":"szsguqgffj","cname":"苏州市姑苏区国税分局","corganizationcode":"1","cparentid":"2001","cinnercode":"jssgjswj!jssszsgjswj!szsguqgffj","ileaf":1,"ccreater":"1","ccreatedate":"Dec 9, 2013 3:11:52 PM","ctimestamp":"165120663464490418"},{"cguid":"102102","ccode":"szsdefj","cname":"苏州市第二国税分局","corganizationcode":"111","cparentid":"2001","cinnercode":"jssgjswj!jssszsgjswj!szsdefj","ileaf":1,"ccreater":"1","ccreatedate":"Dec 25, 2013 2:54:55 PM","ctimestamp":"102780964199954128","cfullname":"苏州市第二分局"},{"cguid":"920623803615892447","ccode":"00001","cname":"其他","corganizationcode":"0001","cparentid":"000000","cinnercode":"00001","ileaf":1,"ccreater":"1","ccreatedate":"Jan 17, 2014 2:16:27 PM","ctimestamp":"920623803615892446","cfullname":"其他"},{"cguid":"8329","ccode":"tcsgslfj","cname":"太仓市国税六分局","cparentid":"2032","cinnercode":"jssgjswj!jssszsgjswj!tcsgjswj!tcsgslfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"8330","ccode":"cssgsbfj","cname":"常熟市国税八分局","cparentid":"2013","cinnercode":"jssgjswj!jssszsgjswj!cssgjswj!cssgsbfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7785","ccode":"kssgsyfj","cname":"昆山市国税一分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgsyfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7786","ccode":"kssgsefj","cname":"昆山市国税二分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgsefj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7787","ccode":"kssgssfj","cname":"昆山市国税三分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgssfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7788","ccode":"kssgssfj","cname":"昆山市国税四分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgssfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"},{"cguid":"7789","ccode":"kssgswfj","cname":"昆山市国税五分局","cparentid":"2023","cinnercode":"jssgjswj!jssszsgjswj!kssgjswj!kssgswfj","ileaf":1,"ccreater":"1","ccreatedate":"Nov 18, 2013 8:23:12 PM"}]
+        
+       System.out.println(service.getAllInstallTemplates());
+        
+    }
 }

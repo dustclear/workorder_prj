@@ -2,6 +2,8 @@ package com.mycrawler.test;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -46,12 +49,15 @@ import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class LoginWithCookie
+public class LoginTest
 {
-    private static final Logger LOGGER = Logger.getLogger(LoginWithCookie.class);
+    private static final Logger LOGGER = Logger.getLogger(LoginTest.class);
+    private static final Properties sysPro = new Properties();
     
     public static void main(String[] args)
     {
+    	
+    	initProperties();
         /*List<NameValuePair> formParams = new ArrayList<NameValuePair>();
         formParams.add(new BasicNameValuePair("userName", ""));
         try
@@ -78,9 +84,9 @@ public class LoginWithCookie
         {
             e.printStackTrace();
         }*/
-//    	loadHtmlBD();
+    	loadHtmlBD();
 //    	loadHtmlBDOther();
-        loadHtml115();
+//        loadHtml115();
 //        loadHtmlOther();
         
     }
@@ -110,8 +116,8 @@ public class LoginWithCookie
             throws ClientProtocolException, IOException
     {
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("email", ""));
-        formParams.add(new BasicNameValuePair("password", ""));
+        formParams.add(new BasicNameValuePair("email", sysPro.getProperty("")));
+        formParams.add(new BasicNameValuePair("password", sysPro.getProperty("")));
         
         HttpClient httpClient = HttpClientBuilder.create()
                 .setRedirectStrategy(new LaxRedirectStrategy())
@@ -222,7 +228,7 @@ public class LoginWithCookie
     {
 //    	System.setProperty("apache.commons.httpclient.cookiespec", CookieSpecs.DEFAULT);
         BrowserVersion browser_115 = BrowserVersion.CHROME;
-        browser_115.setApplicationVersion("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
+        browser_115.setApplicationVersion("/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
         browser_115.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 115Browser/5.1.6");
         
     	WebClient webClient = new WebClient(BrowserVersion.CHROME);
@@ -252,26 +258,22 @@ public class LoginWithCookie
 		    final HtmlPasswordInput password = form.getInputByName("passwd");
 
 		    // Change the value of the text field
-		    name.setValueAttribute("");
-		    password.setValueAttribute("*");
+		    name.setValueAttribute(sysPro.getProperty("user_115"));
+		    password.setValueAttribute(sysPro.getProperty("pass_115"));
 		    HtmlCheckBoxInput remberName = (HtmlCheckBoxInput)page.getElementById("js-remember_pwd");
             
             remberName.setChecked(true);
 		    // Now submit the form by clicking the button and get back the second page.
 		    HtmlPage page2 = button.click();
-		    webClient.waitForBackgroundJavaScript(25000);
-		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
+		    webClient.waitForBackgroundJavaScript(5000);
 		    
-		    for (Cookie cookie : cookies)
-            {
-                System.out.println(cookie.getName()+" = "+ cookie.getValue());
-            }
 //		    webClient.getCookieManager().clearCookies();
 		    
 		    System.out.println("start-------------------------------");
 		    System.out.println(page2.getWebResponse().getContentAsString()); //source code
 		    System.out.println("go-------------------------------");
-		    
+		    Page basePage = webClient.getPage("http://115.com/");
+		    webClient.waitForBackgroundJavaScript(5000);
 		    Page page3 = webClient.getPage("http://115.com/?ct=offline&ac=space&_="+System.currentTimeMillis());
 //		    Page page3 = webClient.getPage("http://115.com/?ac=offline_tpl&is_wl_tpl=1");
 //		    webClient.waitForBackgroundJavaScript(8000);
@@ -294,7 +296,12 @@ public class LoginWithCookie
             System.out.println(page4.getUrl()+"=====================================////////////////");
             System.out.println(page4.getWebResponse().getContentAsString());*/
 		    
+		    Set<Cookie> cookies = webClient.getCookieManager().getCookies();
 		    
+		    for (Cookie cookie : cookies)
+            {
+                System.out.println(cookie.getName()+" = "+ cookie.getValue());
+            }
             
             /*HtmlPage page4 = (HtmlPage)page3.getFrames().get(3).getEnclosedPage();
             webClient.waitForBackgroundJavaScript(8000);
@@ -360,7 +367,7 @@ public class LoginWithCookie
         webClient.getOptions().setTimeout(30000);
         try {
 //			HtmlPage page = webClient.getPage("http://pan.baidu.com");
-			HtmlPage page = webClient.getPage("https://passport.baidu.com/v2/?login");
+			HtmlPage page = webClient.getPage("http://pan.baidu.com/");
 			webClient.waitForBackgroundJavaScript(5000);
 			final HtmlForm form = page.getForms().get(0);
 
@@ -372,10 +379,10 @@ public class LoginWithCookie
 
 		    // Change the value of the text field
 //		    page.setFocusedElement(name);
-		    name.setValueAttribute("*");
+		    name.setValueAttribute(sysPro.getProperty("user_bd"));
 		    page.setFocusedElement(password);
 		    webClient.waitForBackgroundJavaScript(5000);
-		    password.setValueAttribute("*");
+		    password.setValueAttribute(sysPro.getProperty("pass_bd"));
 
 		    // Now submit the form by clicking the button and get back the second page.
 		    HtmlPage page2 = button.click();
@@ -552,4 +559,30 @@ public class LoginWithCookie
         
     }
     
+    private static void initProperties()
+    {
+    	InputStream fis = null;
+		try {
+			fis = LoginTest.class.getResourceAsStream("/cert.properties");
+			sysPro.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(fis!=null)
+			{
+				try {
+					fis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+    }
 }
