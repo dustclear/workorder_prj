@@ -12,7 +12,7 @@ var casper = require("casper").create({
 });
 
 phantom.outputEncoding="GBK";
-phantom.scriptEncoding="GBK";
+//phantom.scriptEncoding="GBK";
 
 var fs = require('fs');
 var data = fs.read("cookies/cookie_bd_success");
@@ -90,10 +90,10 @@ casper
 casper.then(function() {
 	//The element A is different in different user-agent
 	this
-	.waitForSelector('a[id="_disk_id_24"]',
+	.waitForSelector('//*[@id="_disk_id_30"]',
 			function() {
-			require('utils').dump(this.getElementInfo('a[id="_disk_id_24"]'));
-			this.click('a[id="_disk_id_24"]');
+			require('utils').dump(this.getElementInfo('//*[@id="_disk_id_30"]'));
+			this.click('//*[@id="_disk_id_30"]');
 				
 			},
 			function() {
